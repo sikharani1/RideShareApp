@@ -46,8 +46,7 @@ import * as firebase from 'firebase';
         return (
           <div>
           <Link to={'/post/'+post.id}>
-          <PostSummary post={post} key={post.id} />
-          
+            <PostSummary post={post} key={post.id} />
           </Link>
           
           <div className="input-field">
