@@ -14,10 +14,10 @@ import * as firebase from 'firebase';
  const PostList = (props) => {
   
   const {posts,onLike,onBookmark,deletePost}=props;
-  console.log(props);
+ //console.log(props);
   posts && posts.sort(function(x, y){
-    console.log(x.createdAt);
-    console.log(y.createdAt);
+    //console.log(x.createdAt);
+    //console.log(y.createdAt);
     return y.createdAt - x.createdAt;
 })
   
