@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import PostSummary from './PostSummary'
-import {Link} from 'react-router-dom'
+import {Link,Route} from 'react-router-dom'
 import Like from '../dashboard/Like.js'
 import Bookmark from '../dashboard/Bookmark.js'
 import {deletePost} from '../../store/actions/postActions'
@@ -9,9 +9,7 @@ import {compose} from'redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import * as firebase from 'firebase';
 
-
-
- const PostList = (props) => {
+const PostList = (props) => {
   
   const {posts,onLike,onBookmark,deletePost}=props;
  //console.log(props);
@@ -31,21 +29,22 @@ import * as firebase from 'firebase';
 
   
   return (
-
+<Route>
     <div className="post-list section">
       { 
       //(
         
-        (posts && posts.sort(function(x, y){
-          return x.createdAt.timestamp - y.createdAt.timestamp;
-      })) && posts.map(post => {
+      //   (posts!==undefined && posts.sort(function(x, y){
+      //     return x.createdAt.timestamp - y.createdAt.timestamp;
+      // }))
+      (posts) && posts.map(post => {
         console.log(post.liked);
         let user = firebase.auth().currentUser;    
           if(post.authorId==user.uid)
           {
         return (
           <div>
-          <Link to={'/post/'+post.id}>
+          <Link to={'/post/'+post.id} target="_blank" >
             <PostSummary post={post} key={post.id} />
           </Link>
           
@@ -61,7 +60,7 @@ import * as firebase from 'firebase';
       else{
         return(
           <div>
-          <Link to={'/post/'+post.id}>
+          <Link target="_blank" to={'/post/'+post.id}>
           <PostSummary post={post} key={post.id} />
           {(post.privacy=="public")?<div>Email{post.email}</div>:<div></div>}
           </Link>
@@ -82,6 +81,7 @@ import * as firebase from 'firebase';
   
       }  
     </div>
+    </Route>
   )
 
     
@@ -118,6 +118,6 @@ const mapDispatchToProps = dispatch => {
 
 
 export default compose(connect(null,mapDispatchToProps),firestoreConnect([
-  { collection: 'posts'}
+  { collection: 'posts', orderBy:['createdAt','desc']}
  ])
 )(PostList)

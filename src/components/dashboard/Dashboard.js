@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component ,createRef} from 'react'
 import PostList from '../posts/PostList'
 import Notifications from './Notifications'
 import { connect } from 'react-redux'
@@ -18,13 +18,33 @@ import PostSummary from '../posts/PostSummary'
 import {Link} from 'react-router-dom'
 import {updatePost} from '../../store/actions/postActions'
 import { bookmarkPost } from '../../store/actions/bookmarkAction'
+import Geocode from "react-geocode";
+import {isPointInPolygon} from "geolib"
+
+import {MapContainer} from '../dashboard/MapContainer'
+var originValue;
+var arrivalValue;
+var origlat="";
+var origlng="";
+var filtdestlat="";
+var filtdestlng="";
+var destlat="";
+var destlng="";
+var orig="";
+
+ Geocode.setApiKey("AIzaSyDjzMckE87fEvdaWGFcv7lsGNVhJY9-zNM");
 const INITIAL_STATE={
   searchString:[]
 }
 var flag=false;
-
+const mapStyles = {
+  width: '100%',
+  height: '100%',
+};
+var myPosition={lat: 40.73, lng: -73.93};
 class Dashboard extends Component 
 {
+  googleMapRef = React.createRef()
   
   constructor(props){
     super(props);
@@ -32,7 +52,11 @@ class Dashboard extends Component
     this.handleLike=this.handleLike.bind(this);
     this.handleChange=this.handleChange.bind(this);
     this.handleEnter=this.handleEnter.bind(this);
-  
+    
+  }
+  static defaultProps = {
+    center: {lat: 40.73, lng: -73.93}, 
+    zoom: 12
   }
  componentWillMount() {
    console.log(this.props);
@@ -47,6 +71,7 @@ class Dashboard extends Component
         
       })
   }
+  
  async componentDidMount() {
    await(this.props.allposts)
    console.log(this.props);
@@ -54,9 +79,65 @@ class Dashboard extends Component
       filteredposts:this.props.allposts
     })
     console.log(this.state.filteredposts);
-
+  //this.initialize();
     
- }
+  const googleMapScript = document.createElement('script');
+  googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDjzMckE87fEvdaWGFcv7lsGNVhJY9-zNM&libraries=geometry`;
+    window.document.body.appendChild(googleMapScript);
+ 
+    googleMapScript.addEventListener('load',()=>{
+      this.googleMap = this.createGoogleMap()
+     this.marker =this.createMarker()
+    })
+  }
+  
+  createGoogleMap = () =>
+    new window.google.maps.Map(this.googleMapRef.current, {
+      zoom: 16,
+      center: 
+        myPosition
+      ,
+      disableDefaultUI: true,
+    })
+
+  createMarker = () =>
+    new window.google.maps.Marker({
+      position: myPosition,
+      map: this.googleMap,
+    })
+
+ //google.maps.event.addDomListener(window, 'load', initialize);
+//  initialize=()=> {
+//   var myPosition = new google.maps.LatLng(42.0987, -75.9180);
+
+//   var mapOptions = {
+//       zoom: 5,
+//       center: myPosition,
+//       mapTypeId: 'terrain'
+//   };
+
+//   var map = new google.maps.Map(document.getElementById('map'),
+//       mapOptions);
+
+//   var cascadiaFault = new google.maps.Polyline({
+//       path: [
+//           new google.maps.LatLng(40.728157, -74.077644),
+//           new google.maps.LatLng(43.161030, -77.610924),
+
+//       ]
+//   });
+
+//   cascadiaFault.setMap(map);
+
+//   if (google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadiaFault, 10e-1)) {
+//       alert("On my route!");
+//   }
+//   else{
+//       alert("donot");
+//       console.log("donot");
+//   }
+// }
+
  onSearchInputChange = (event) => {
     const oldsearchString='';
     if(this.state.searchString.title){
@@ -81,6 +162,16 @@ class Dashboard extends Component
    
   }
   handleChange=(event)=>{
+    // (event.target.id=="origin")? originValue=event.target.value: arrivalValue=event.target.value;
+    // Geocode.fromAddress(origin).then(
+    //   response => {
+    //     const { lat, lng } = response.results[0].geometry.location;
+    //     console.log(lat, lng);
+    //   },
+    //   error => {
+    //     console.error(error);
+    //   }
+    // );
     console.log(event.keyCode);
     if (flag && (event.keyCode === 8 || event.keyCode === 46)) {
       event.preventDefault();
@@ -151,29 +242,70 @@ class Dashboard extends Component
   })
     //this.setState({initialValue:''});
   }
-  getposts = (searchString) => {
+
+getposts = (searchString) => {
     // console.log(id);
+    
     console.log(this.props.allposts);
     console.log(searchString.entries());
     const iterator1 = Object.entries(searchString);
     console.log(iterator1);
     var filteredposts1=[{}];
+    originValue=searchString.origin;
+    console.log(originValue);
     iterator1.forEach(elem=>{
        var val1=elem[1];
        var id1=elem[0];
        console.log(val1);
        console.log(id1);
-      if(!isNaN(val1) && id1!="title"){
+       
+       console.log(("origin" in searchString));
+      if(originValue && isNaN(val1) && id1!="title")  {
         if(this.state.value=="Post")
          {
+          if(isNaN(val1) && id1=="arrival" && ("origin" in searchString))
+          {
+            console.log(this.state.requests);
+            this.state.requests.map(x=>{
+              console.log(val1);
+              console.log(originValue);
+              console.log(x.arrival);
+            if(this.onTheRoute(x.arrival,val1,originValue))
+              {
+                console.log("ontheroute");
+                filteredposts1.push(this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==x.arrival):this.state.posts.filter(post => post[id1]==val1));
+              }
+            });
+          }
         // filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.props.allposts.filter(post => post[id1]==val1);
-        filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
+        else{
+          filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
         this.setState({filteredposts:filteredposts1});
+        }
       }
+      
+       
+         
+      else{
+        if(isNaN(val1) && id1=="arrival" && ("origin" in searchString)){
+          console.log(this.state.requests);
+          this.state.requests.map(x=>{
+            console.log(val1);
+            console.log(originValue);
+            console.log(x.arrival);
+          if(this.onTheRoute(x.arrival,val1,originValue))
+            {
+              console.log("ontheroute");
+              filteredposts1.push(this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==x.arrival):this.state.requests.filter(post => post[id1]==val1));
+            }
+          });
+          
+         }
          else{
           filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.state.requests.filter(post => post[id1]==val1);
           this.setState({filteredposts:filteredposts1});
          }
+        }
         //this.state.filteredposts=filteredposts1;
         this.setState({filteredposts:filteredposts1});
         console.log(this.state.filteredposts);
@@ -201,6 +333,107 @@ class Dashboard extends Component
      });
     
   }
+  calculateLatLng=(dest,filtdest,orig)=>{
+ 
+    return new Promise(resolve=>{
+  Geocode.fromAddress(orig).then(
+    response => {
+      const { lat, lng } = response.results[0].geometry.location;
+     origlat=lat;
+     origlng=lng;
+
+      console.log(origlat, origlng);
+      
+    },
+    error => {
+      console.error(error);
+    }
+    
+    
+  );
+  Geocode.fromAddress(filtdest).then(
+    response => {
+      const { lat, lng } = response.results[0].geometry.location;
+       filtdestlat=lat;
+       filtdestlng=lng;
+      console.log(filtdestlat, filtdestlng);
+    },
+    error => {
+      console.error(error);
+    }
+  );
+  Geocode.fromAddress(dest).then(
+    response => {
+      const { lat, lng } = response.results[0].geometry.location;
+      destlat=lat;
+      destlng=lng;
+      console.log(destlat, destlng);
+    },
+    error => {
+      console.error(error);
+    }
+  );
+    });
+  }
+  onTheRoute=(dest,filtdest,orig)=>{
+    
+    var promise= new Promise((resolve, reject) => {
+             this.calculateLatLng(dest,filtdest,orig)?resolve(true):reject('error')
+    })
+    // then(()=>{
+    //   dispatch({ type: 'CREATE_COMMENT',comment,postId });
+    // }).catch((err)=>{
+    //   dispatch({ type: 'CREATE_COMMENT_ERROR', err });
+    // })
+    promise.then(()=>{
+
+
+
+    
+ 
+   
+    
+     
+    // const geocoder=new window.google.maps.Geocoder();
+    // console.log(geocoder)
+    // //geocoder.geocode("Albany");
+    // geocoder.geocode({ address: "Albany" }, (results, status) => {
+    //   if (status === "OK") {
+    //     console.log(results)
+    //     }
+    //     else{
+    //       console.log("results not loaded");
+    //     }
+    //   });
+  myPosition = new window.google.maps.LatLng(origlat,origlng);
+  console.log(myPosition)
+  var map=this.createGoogleMap();
+    const polyline=new window.google.maps.Polyline({
+            path: [
+                new window.google.maps.LatLng(filtdestlng, filtdestlng),
+                new window.google.maps.LatLng(destlat, destlng),
+      
+            ]
+        });
+       polyline.setMap(map);
+const onmyroute=window.google.maps.geometry.poly.isLocationOnEdge(myPosition, polyline, 10e-1);
+console.log(onmyroute);
+  if (window.google.maps.geometry.poly.isLocationOnEdge(myPosition, polyline, 10e-1)) {
+     
+      console.log("on my route");
+      return true;
+  }
+  else{
+      
+      console.log("donot");
+      return false;
+  }
+}).catch((err)=>{
+      console.log("error");
+    })
+}
+
+
   handleLike = (post) => {
     const posts = !this.state.searchEmpty?this.state.filteredposts: this.props.allposts ;
     console.log(posts);
@@ -241,7 +474,7 @@ class Dashboard extends Component
   {
     // this.requests=[];
     // this.posts=[];
-    
+    const { history } = this.props;
     console.log(this.props);
     console.log(this.state);
     console.log(this.state.value);
@@ -262,6 +495,18 @@ class Dashboard extends Component
     if(!auth.uid) return <Redirect to='/signin'/>
     return (
       <div className="main container">
+        {/* <Map
+          google={this.props.google}
+          zoom={8}
+          style={mapStyles}
+          initialCenter={{ lat: 47.444, lng: -122.176}}
+        /> */}
+        <div
+        id="google-map"
+        ref={this.googleMapRef}
+        style={{ width: '400px', height: '300px' }}
+      />
+        {/* <MapContainer/> */}
         <div className="row">
           <div className="col s12 m6 dashboard">
           {/* <SearchForm /> */}
@@ -388,4 +633,4 @@ export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConn
   { collection: 'posts',orderBy:['createdAt','desc']},
   { collection: 'notifications', limit: 3,orderBy:['time','desc']}
  ])
-)(Dashboard)
+)(Dashboard)                                                                                
