@@ -22,14 +22,22 @@ import Geocode from "react-geocode";
 import {isPointInPolygon} from "geolib"
 
 import {MapContainer} from '../dashboard/MapContainer'
+import { yellow } from '@material-ui/core/colors'
+import { Result } from 'react-lodash'
 var originValue;
 var arrivalValue;
-var origlat="";
-var origlng="";
-var filtdestlat="";
-var filtdestlng="";
-var destlat="";
-var destlng="";
+var origlat=" ";
+var origlng=" ";
+var filtdestlat=" ";
+var filtdestlng=" ";
+var destlat=" ";
+var destlng=" ";
+var originArr={};
+var filtdestArr={};
+var destArr={};
+var finalArr=[];
+
+
 var orig="";
 
  Geocode.setApiKey("AIzaSyDjzMckE87fEvdaWGFcv7lsGNVhJY9-zNM");
@@ -42,6 +50,7 @@ const mapStyles = {
   height: '100%',
 };
 var myPosition={lat: 40.73, lng: -73.93};
+
 class Dashboard extends Component 
 {
   googleMapRef = React.createRef()
@@ -52,6 +61,8 @@ class Dashboard extends Component
     this.handleLike=this.handleLike.bind(this);
     this.handleChange=this.handleChange.bind(this);
     this.handleEnter=this.handleEnter.bind(this);
+    this.calculateLatLng=this.calculateLatLng.bind(this);
+   
     
   }
   static defaultProps = {
@@ -66,8 +77,6 @@ class Dashboard extends Component
         filteredposts:[],
         searchEmpty:true,
         initialValue:''
-       
-       // elementsTriggered:[]
         
       })
   }
@@ -76,7 +85,7 @@ class Dashboard extends Component
    await(this.props.allposts)
    console.log(this.props);
     this.setState({
-      filteredposts:this.props.allposts
+      filteredposts:''
     })
     console.log(this.state.filteredposts);
   //this.initialize();
@@ -106,38 +115,6 @@ class Dashboard extends Component
       map: this.googleMap,
     })
 
- //google.maps.event.addDomListener(window, 'load', initialize);
-//  initialize=()=> {
-//   var myPosition = new google.maps.LatLng(42.0987, -75.9180);
-
-//   var mapOptions = {
-//       zoom: 5,
-//       center: myPosition,
-//       mapTypeId: 'terrain'
-//   };
-
-//   var map = new google.maps.Map(document.getElementById('map'),
-//       mapOptions);
-
-//   var cascadiaFault = new google.maps.Polyline({
-//       path: [
-//           new google.maps.LatLng(40.728157, -74.077644),
-//           new google.maps.LatLng(43.161030, -77.610924),
-
-//       ]
-//   });
-
-//   cascadiaFault.setMap(map);
-
-//   if (google.maps.geometry.poly.isLocationOnEdge(myPosition, cascadiaFault, 10e-1)) {
-//       alert("On my route!");
-//   }
-//   else{
-//       alert("donot");
-//       console.log("donot");
-//   }
-// }
-
  onSearchInputChange = (event) => {
     const oldsearchString='';
     if(this.state.searchString.title){
@@ -162,16 +139,7 @@ class Dashboard extends Component
    
   }
   handleChange=(event)=>{
-    // (event.target.id=="origin")? originValue=event.target.value: arrivalValue=event.target.value;
-    // Geocode.fromAddress(origin).then(
-    //   response => {
-    //     const { lat, lng } = response.results[0].geometry.location;
-    //     console.log(lat, lng);
-    //   },
-    //   error => {
-    //     console.error(error);
-    //   }
-    // );
+  
     console.log(event.keyCode);
     if (flag && (event.keyCode === 8 || event.keyCode === 46)) {
       event.preventDefault();
@@ -211,21 +179,17 @@ class Dashboard extends Component
       //this.setState({...this.state.elementsTriggered,id});
       console.log(this.state.searchString);
    
-       
-      
-      
     } else {
       this.state.searchString=oldsearchString;
       // this.setState({searchString:this.state.searchString })
      
     }
     console.log(this.state.searchString.length);
-   
-    // this.getposts(this.state.searchString)
+   // this.getposts(this.state.searchString)
   }
   }
   handleApply=(e)=>{
-    const searchEmpty1=Object.keys(this.state.searchString).length===0;
+   const searchEmpty1=Object.keys(this.state.searchString).length===0;
     this.setState({searchEmpty:searchEmpty1});
     this.getposts(this.state.searchString);
   }
@@ -243,9 +207,179 @@ class Dashboard extends Component
     //this.setState({initialValue:''});
   }
 
+
+ // calculateLatLng=(dest,filtdest,orig)=>{
+ 
+ //   return new Promise(resolve=>{
+     
+  calculateLatLng=(dest,filtdest,orig)=>{
+    return new Promise((resolve)=>{
+
+        Geocode.fromAddress(orig).then(
+          response => {
+      
+      const { lat, lng } = response.results[0].geometry.location;
+      origlat=lat;
+      origlng=lng;
+
+      console.log(origlat, origlng);
+      finalArr[0]=[origlat,origlng];
+     
+      console.log(finalArr);
+        },
+       error => {
+      console.error(error);
+       }
+    
+    
+       );
+  
+    Geocode.fromAddress(filtdest).then(
+    response => {
+      console.log(finalArr);
+      const { lat, lng } = response.results[0].geometry.location;
+        filtdestlat=lat;
+        filtdestlng=lng;
+      console.log(filtdestlat, filtdestlng);
+      filtdestArr=[filtdestlat,filtdestlng];
+      finalArr[1]=filtdestArr;
+      
+     resolve(finalArr)
+    },
+    error => {
+      console.error(error);
+    }
+   );
+ 
+ 
+   Geocode.fromAddress(dest).then(
+      response => {
+     
+      const { lat, lng } = response.results[0].geometry.location;
+      destlat=lat;
+      destlng=lng;
+      console.log(destlat, destlng);
+     destArr=[destlat,destlng]
+     console.log(destArr);
+     finalArr[2]=destArr;
+     resolve(finalArr)
+      },
+      error => {
+      console.error(error);
+      }
+   );
+    resolve(finalArr);
+ // resolve(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
+  
+  // (origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)
+  
+    //console.log(origlat+" "+origlng+" "+filtdestlat+" "+filtdestlng+" "+destlat+" "+destlng);
+    //resolve(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
+       // let onmyway=this.onTheRoute(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
+       // return onmyway;
+  })
+.then((finalArr)=>{
+  // console.log(result);
+  // finalArr=result;
+  console.log(finalArr);
+  // origlat=finalArr[0].origlat;
+  // origlng=finalArr[0].origlng;
+  // filtdestlat=finalArr[1].filtdestlat;
+  // filtdestlng=finalArr[1].filtdestlng;
+  // destlat=finalArr[2].destlat;
+  // destlng=finalArr[2].destlng;
+  //const origlat=finalArr[0][0];
+  //console.log(origlat);
+  //let onmyway=this.onTheRoute(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
+  let onmyway=this.onTheRoute(finalArr);
+  console.log(onmyway);
+}
+)
+  }
+
+  
+  
+  
+       
+//}
+
+//);
+//  }
+
+
+
+
+
+  
+   
+    
+    // var promise= new Promise((resolve, reject) => {
+    //          this.calculateLatLng(dest,filtdest,orig).then((origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)=>
+    //            resolve(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)).catch((error)=>reject('error'));
+    // })
+
+
+    // then(()=>{
+    //   dispatch({ type: 'CREATE_COMMENT',comment,postId });
+    // }).catch((err)=>{
+    //   dispatch({ type: 'CREATE_COMMENT_ERROR', err });
+    // })
+   
+    // const geocoder=new window.google.maps.Geocoder();
+    // console.log(geocoder)
+    // //geocoder.geocode("Albany");
+    // geocoder.geocode({ address: "Albany" }, (results, status) => {
+    //   if (status === "OK") {
+    //     console.log(results)
+    //     }
+    //     else{
+    //       console.log("results not loaded");
+    //     }
+    //   });
+   
+
+ // onTheRoute=(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)=>{
+  onTheRoute=(finalArr)=>{
+  return new Promise(resolve=>{
+//     console.log("origin"+origlat+" "+origlng)
+//     console.log("filtdest"+filtdestlat+" "+filtdestlng)
+//     console.log("dest"+destlat+" "+destlng)
+//  myPosition = new window.google.maps.LatLng(origlat,origlng);
+//  console.log(myPosition)
+//  var map=this.createGoogleMap();
+//    const polyline=new window.google.maps.Polyline({
+//            path: [
+//                new window.google.maps.LatLng(filtdestlat, filtdestlng),
+//                new window.google.maps.LatLng(destlat, destlng),
+     
+//            ]
+//        });
+//       polyline.setMap(map);
+// const onmyroute=window.google.maps.geometry.poly.isLocationOnEdge(myPosition, polyline, 10e-1);
+// console.log(onmyroute);
+//  if (window.google.maps.geometry.poly.isLocationOnEdge(myPosition, polyline, 10e-1)) {
+    
+//      console.log("on my route");
+//      return true;
+//  }
+//  else{
+     
+//      console.log("donot");
+//      return false;
+//  }
+    console.log(finalArr);
+      return true;
+ 
+}).then((onmyroute)=>{ return onmyroute }).catch((err)=>{
+     console.log("error");
+   })
+
+}
+
 getposts = (searchString) => {
     // console.log(id);
-    
+    this.state.searchEmpty=false;
+    this.setState({searchEmpty:false});
     console.log(this.props.allposts);
     console.log(searchString.entries());
     const iterator1 = Object.entries(searchString);
@@ -260,181 +394,142 @@ getposts = (searchString) => {
        console.log(id1);
        
        console.log(("origin" in searchString));
-      if(originValue && isNaN(val1) && id1!="title")  {
+      if(id1!="title")  {
         if(this.state.value=="Post")
          {
-          if(isNaN(val1) && id1=="arrival" && ("origin" in searchString))
+          console.log(this.state.posts);
+          console.log(id1);
+          console.log(originValue);
+          if(originValue && id1=="arrival")
           {
-            console.log(this.state.requests);
-            this.state.requests.map(x=>{
+            console.log(this.state.posts);
+            this.state.posts.map(x=>{
               console.log(val1);
               console.log(originValue);
               console.log(x.arrival);
-            if(this.onTheRoute(x.arrival,val1,originValue))
+              this.calculateLatLng(x.arrival,val1,originValue).then((result)=>{
+              console.log(result);
+            if(result)
               {
                 console.log("ontheroute");
-                filteredposts1.push(this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==x.arrival):this.state.posts.filter(post => post[id1]==val1));
+                console.log(filteredposts1);
+                console.log(this.state.filteredposts);
+                console.log(this.state.searchEmpty);
+                if(this.state.filteredposts=="") this.state.filteredposts=this.state.posts;
+                filteredposts1.push(!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==x.arrival):this.state.posts.filter(post => post[id1]==val1));
+
               }
+            }).catch(()=>{
+              console.log("on the route error");
+            })
             });
+            console.log(filteredposts1);
+            this.state.filteredposts=filteredposts1;
+            this.setState({filteredposts:filteredposts1});
+            console.log(this.state.filteredposts);
           }
         // filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.props.allposts.filter(post => post[id1]==val1);
+        else if(!isNaN(val1)){
+          console.log(this.state.filteredposts);
+          console.log(this.state.searchEmpty);
+          filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]>=val1);
+          console.log(filteredposts1);
+          this.state.filteredposts=filteredposts1;
+          this.setState({filteredposts:filteredposts1});
+          
+        }
         else{
-          filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
-        this.setState({filteredposts:filteredposts1});
+          console.log(this.state.filteredposts);
+          console.log(this.state.searchEmpty);
+          filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
+          console.log(filteredposts1);
+          this.state.filteredposts=filteredposts1;
+          this.setState({filteredposts:filteredposts1});
+          
+       
         }
       }
-      
-       
-         
       else{
-        if(isNaN(val1) && id1=="arrival" && ("origin" in searchString)){
+        if(originValue && id1=="arrival"){
           console.log(this.state.requests);
           this.state.requests.map(x=>{
             console.log(val1);
             console.log(originValue);
             console.log(x.arrival);
+            console.log(this.onTheRoute(x.arrival,val1,originValue));
           if(this.onTheRoute(x.arrival,val1,originValue))
             {
               console.log("ontheroute");
-              filteredposts1.push(this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==x.arrival):this.state.requests.filter(post => post[id1]==val1));
+              console.log(filteredposts1);
+              console.log(this.state.filteredposts);
+              console.log(this.state.searchEmpty);
+              filteredposts1.push(!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==x.arrival):this.state.requests.filter(post => post[id1]==val1));
             }
           });
+          this.state.filteredposts=filteredposts1;
+          this.setState({filteredposts:filteredposts1});
+          console.log(this.state.filteredposts);
+
           
          }
-         else{
-          filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.state.requests.filter(post => post[id1]==val1);
+         else if(!isNaN(val1)){
+          console.log(this.state.filteredposts);
+          console.log(this.state.searchEmpty);
+          filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]>=val1);
+          this.state.filteredposts=filteredposts1;
           this.setState({filteredposts:filteredposts1});
+          console.log(this.state.filteredposts);
+          console.log("number") 
+
+        }
+         else{
+          console.log(this.state.filteredposts);
+          console.log(this.state.searchEmpty);
+          filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.requests.filter(post => post[id1]==val1);
+          this.state.filteredposts=filteredposts1;
+          this.setState({filteredposts:filteredposts1});
+          console.log(this.state.filteredposts);
+          
          }
         }
         //this.state.filteredposts=filteredposts1;
         this.setState({filteredposts:filteredposts1});
         console.log(this.state.filteredposts);
-        console.log("number") 
+       
           //this.props.allposts.map(currentpost => (console.log(currentpost[id])));
         }
         else{
-        //  filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1].includes(val1)):this.props.allposts.filter(post => post[id1].includes(val1));
-         if(this.state.value=="Post")
-         {
-           filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
-           this.setState({filteredposts:filteredposts1});
+          if(this.state.value=="Post")
+          {
+            console.log(this.state.filteredposts);
+            filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1].includes(val1)):this.state.posts.filter(post => post[id1].includes(val1));
+       
+          //  filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
+          this.state.filteredposts=filteredposts1; 
+          this.setState({filteredposts:filteredposts1});
+          console.log(this.state.filteredposts);
+
          }
          else{
-          filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.state.requests.filter(post => post[id1]==val1);
+          console.log(this.state.filteredposts);
+          filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1].includes(val1)):this.state.requests.filter(post => post[id1].includes(val1));
+          this.state.filteredposts=filteredposts1;
           this.setState({filteredposts:filteredposts1});
+          console.log(this.state.filteredposts);
+
          }
 
          console.log(filteredposts1);
          //this.state.filteredposts=filteredposts1;
-         this.setState({filteredposts:filteredposts1});
+        //  this.setState({filteredposts:filteredposts1});
          console.log(this.state);
          console.log("title");
        }
      });
     
   }
-  calculateLatLng=(dest,filtdest,orig)=>{
- 
-    return new Promise(resolve=>{
-  Geocode.fromAddress(orig).then(
-    response => {
-      const { lat, lng } = response.results[0].geometry.location;
-     origlat=lat;
-     origlng=lng;
-
-      console.log(origlat, origlng);
-      
-    },
-    error => {
-      console.error(error);
-    }
-    
-    
-  );
-  Geocode.fromAddress(filtdest).then(
-    response => {
-      const { lat, lng } = response.results[0].geometry.location;
-       filtdestlat=lat;
-       filtdestlng=lng;
-      console.log(filtdestlat, filtdestlng);
-    },
-    error => {
-      console.error(error);
-    }
-  );
-  Geocode.fromAddress(dest).then(
-    response => {
-      const { lat, lng } = response.results[0].geometry.location;
-      destlat=lat;
-      destlng=lng;
-      console.log(destlat, destlng);
-    },
-    error => {
-      console.error(error);
-    }
-  );
-    });
-  }
-  onTheRoute=(dest,filtdest,orig)=>{
-    
-    var promise= new Promise((resolve, reject) => {
-             this.calculateLatLng(dest,filtdest,orig)?resolve(true):reject('error')
-    })
-    // then(()=>{
-    //   dispatch({ type: 'CREATE_COMMENT',comment,postId });
-    // }).catch((err)=>{
-    //   dispatch({ type: 'CREATE_COMMENT_ERROR', err });
-    // })
-    promise.then(()=>{
-
-
-
-    
- 
-   
-    
-     
-    // const geocoder=new window.google.maps.Geocoder();
-    // console.log(geocoder)
-    // //geocoder.geocode("Albany");
-    // geocoder.geocode({ address: "Albany" }, (results, status) => {
-    //   if (status === "OK") {
-    //     console.log(results)
-    //     }
-    //     else{
-    //       console.log("results not loaded");
-    //     }
-    //   });
-  myPosition = new window.google.maps.LatLng(origlat,origlng);
-  console.log(myPosition)
-  var map=this.createGoogleMap();
-    const polyline=new window.google.maps.Polyline({
-            path: [
-                new window.google.maps.LatLng(filtdestlng, filtdestlng),
-                new window.google.maps.LatLng(destlat, destlng),
-      
-            ]
-        });
-       polyline.setMap(map);
-const onmyroute=window.google.maps.geometry.poly.isLocationOnEdge(myPosition, polyline, 10e-1);
-console.log(onmyroute);
-  if (window.google.maps.geometry.poly.isLocationOnEdge(myPosition, polyline, 10e-1)) {
-     
-      console.log("on my route");
-      return true;
-  }
-  else{
-      
-      console.log("donot");
-      return false;
-  }
-}).catch((err)=>{
-      console.log("error");
-    })
-}
-
-
-  handleLike = (post) => {
+  
+handleLike = (post) => {
     const posts = !this.state.searchEmpty?this.state.filteredposts: this.props.allposts ;
     console.log(posts);
     if(posts) {
@@ -566,10 +661,10 @@ console.log(onmyroute);
                     </AppBar>
                     
                     
-                      <TabPanel value="Post"><PostList onLike={this.handleLike.bind(this)} posts={!this.state.searchEmpty?this.state.filteredposts:this.state.posts} onBookmark={this.handleBookmark.bind(this)} /></TabPanel> 
+                      <TabPanel value="Post"><PostList onLike={this.handleLike.bind(this)} posts={this.state.posts} onBookmark={this.handleBookmark.bind(this)} /></TabPanel> 
 
                       <TabPanel value="Request"> 
-                      <PostList onLike={this.handleLike.bind(this)} posts={!this.state.searchEmpty?this.state.filteredposts:this.state.requests} onBookmark={this.handleBookmark.bind(this)} />
+                      <PostList onLike={this.handleLike.bind(this)} posts={this.state.requests} onBookmark={this.handleBookmark.bind(this)} />
                       </TabPanel>
                       </TabContext>
                       ):<TabContext value={this.state.value}>
@@ -588,11 +683,7 @@ console.log(onmyroute);
                   //     </TabList>
                   //   </AppBar><TabPanel value="Post"><PostList onLike={this.handleLike.bind(this)} posts={!this.state.searchEmpty?this.state.filteredposts:this.state.posts} onBookmark={this.handleBookmark.bind(this)} /></TabPanel> 
                   // </TabContext>
-
-              
-  
-
-                      }
+          }
               </div>
             </div>
           </div>
@@ -627,8 +718,6 @@ const mapDispatchToProps=(dispatch)=>{
   }
   
 }
-
-
 export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect([
   { collection: 'posts',orderBy:['createdAt','desc']},
   { collection: 'notifications', limit: 3,orderBy:['time','desc']}
