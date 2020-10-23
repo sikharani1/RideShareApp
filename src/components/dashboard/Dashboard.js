@@ -62,7 +62,7 @@ class Dashboard extends Component
     this.handleChange=this.handleChange.bind(this);
     this.handleEnter=this.handleEnter.bind(this);
     this.calculateLatLng=this.calculateLatLng.bind(this);
-   
+   this.onmyway=this.onmyway.bind(this);
     
   }
   static defaultProps = {
@@ -213,7 +213,7 @@ class Dashboard extends Component
  //   return new Promise(resolve=>{
      
   calculateLatLng=(dest,filtdest,orig)=>{
-    return new Promise((resolve)=>{
+    var promise = new Promise((resolve,reject)=>{
 
         Geocode.fromAddress(orig).then(
           response => {
@@ -224,11 +224,12 @@ class Dashboard extends Component
 
       console.log(origlat, origlng);
       finalArr[0]=[origlat,origlng];
-     
+      resolve(finalArr)
       console.log(finalArr);
         },
        error => {
       console.error(error);
+      reject(error)
        }
     
     
@@ -248,6 +249,7 @@ class Dashboard extends Component
     },
     error => {
       console.error(error);
+      reject(error)
     }
    );
  
@@ -266,6 +268,7 @@ class Dashboard extends Component
       },
       error => {
       console.error(error);
+      reject(error)
       }
    );
     resolve(finalArr);
@@ -277,25 +280,56 @@ class Dashboard extends Component
     //resolve(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
        // let onmyway=this.onTheRoute(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
        // return onmyway;
-  })
-.then((finalArr)=>{
+  });
+
+let thenProm=promise.then(async(finalArr)=>{
   // console.log(result);
   // finalArr=result;
   console.log(finalArr);
-  // origlat=finalArr[0].origlat;
-  // origlng=finalArr[0].origlng;
-  // filtdestlat=finalArr[1].filtdestlat;
-  // filtdestlng=finalArr[1].filtdestlng;
-  // destlat=finalArr[2].destlat;
-  // destlng=finalArr[2].destlng;
-  //const origlat=finalArr[0][0];
-  //console.log(origlat);
+  return await finalArr;
   //let onmyway=this.onTheRoute(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
-  let onmyway=this.onTheRoute(finalArr);
-  console.log(onmyway);
+  
+  // if(finalArr)
+  // {
+    
+  // }
+  
+ 
+    }
+    ).catch((error)=>
+    console.log(error)
+    )
+    console.log(thenProm);
+    setTimeout(()=>{
+      console.log(thenProm);
+    })
+    return  finalArr;
 }
-)
+  // onmyway=async(dest,filtdest,orig) =>{
+  //   console.log(dest,filtdest,orig);
+  //   console.log(this.calculateLatLng(dest,filtdest,orig));
+  //     const finalArr=await this.calculateLatLng(dest,filtdest,orig);
+  //     console.log(finalArr);
+  //   if(finalArr) this.onTheRoute(finalArr);
+    
+  // }
+
+  onmyway=async(dest,filtdest,orig) =>{
+    console.log(dest,filtdest,orig);
+    console.log(this.calculateLatLng(dest,filtdest,orig));
+      const finalArr=this.calculateLatLng(dest,filtdest,orig);
+      
+      
+      console.log(finalArr);
+    
+      setTimeout(()=>{
+        this.onTheRoute(finalArr)},3000).then((result)=>{
+      console.log(result);
+    }).catch(error=>
+      console.log(error));
+    
   }
+ 
 
   
   
@@ -340,10 +374,22 @@ class Dashboard extends Component
 
  // onTheRoute=(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)=>{
   onTheRoute=(finalArr)=>{
-  return new Promise(resolve=>{
-//     console.log("origin"+origlat+" "+origlng)
-//     console.log("filtdest"+filtdestlat+" "+filtdestlng)
-//     console.log("dest"+destlat+" "+destlng)
+    origlat=finalArr[0][0];
+    console.log(origlat);
+  // return new Promise(resolve=>{
+  //   console.log(finalArr);
+    
+  origlng=finalArr[0][1];
+  filtdestlat=finalArr[1][0];
+  filtdestlng=finalArr[1][1];
+  destlat=finalArr[2][0];
+  destlng=finalArr[2][1];
+  console.log("origin"+origlat+" "+origlng)
+    console.log("filtdest"+filtdestlat+" "+filtdestlng)
+    console.log("dest"+destlat+" "+destlng)
+ 
+    return true;
+    
 //  myPosition = new window.google.maps.LatLng(origlat,origlng);
 //  console.log(myPosition)
 //  var map=this.createGoogleMap();
@@ -367,14 +413,14 @@ class Dashboard extends Component
 //      console.log("donot");
 //      return false;
 //  }
-    console.log(finalArr);
-      return true;
+   
  
-}).then((onmyroute)=>{ return onmyroute }).catch((err)=>{
-     console.log("error");
-   })
+// }).then((onmyroute)=>{ return onmyroute }).catch((err)=>{
+//      console.log("error");
+//    })
 
-}
+//})
+  }
 
 getposts = (searchString) => {
     // console.log(id);
@@ -407,7 +453,7 @@ getposts = (searchString) => {
               console.log(val1);
               console.log(originValue);
               console.log(x.arrival);
-              this.calculateLatLng(x.arrival,val1,originValue).then((result)=>{
+              this.onmyway(x.arrival,val1,originValue).then((result)=>{
               console.log(result);
             if(result)
               {
