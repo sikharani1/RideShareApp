@@ -489,7 +489,7 @@ getposts = (searchString) => {
           if(originValue && id1=="arrival")
           {
             console.log(this.state.posts);
-             this.state.posts.map(x=>{
+            setTimeout(()=>{   this.state.posts.map(x=>{
           //   var x=this.state.posts[12];
               console.log("my dest "+val1);
               console.log("my origin "+originValue);
@@ -501,7 +501,7 @@ getposts = (searchString) => {
                //console.log(this.onmyway(x.arrival,val1,originValue));
 
              // const onmywayresult= await this.onmyway(x.arrival,val1,originValue).then((result)=>{
-               if(x.origin==originValue){
+            if(x.origin==originValue){
               const onmywayresult=(arrivalvalue,val1,originValue)=>
               {
                 var promise=new Promise((resolve,reject)=>
@@ -526,26 +526,35 @@ getposts = (searchString) => {
                 console.log(this.state.filteredposts);
                 console.log(this.state.searchEmpty);
                 if(this.state.filteredposts=="") this.state.filteredposts=this.state.posts;
-                filteredposts1.push(!this.state.searchEmpty?this.state.filteredposts.filter(post => post["arrival"]==x.arrival):this.state.posts.filter(post => post["arrival"]==x.arrival));
+                var filteredvalues=!this.state.searchEmpty?this.state.filteredposts.filter(post => post["arrival"]==x.arrival):this.state.posts.filter(post => post["arrival"]==x.arrival);
+                filteredvalues.map(x=>{
+                filteredposts1.push(x);
+                });
                 console.log(filteredposts1);
               }
             }).catch((reject)=>{
               console.log("on the route error");
-            })
+            });
             //setTimeout(()=>{console.log(onmywayresult);},6000);
           
           
-        };
+        }
+     
       
         
     /* map loop */
    }) 
+   console.log(filteredposts1);
+   this.setState({filteredposts:filteredposts1});
+   console.log(this.state.filteredposts);
+   return this.state.filteredposts;
+  },3000);
    
         
       
             console.log(filteredposts1);
             this.state.filteredposts=filteredposts1;
-            this.setState({filteredposts:filteredposts1});
+            
             console.log(this.state.filteredposts);
           }
 
@@ -708,6 +717,7 @@ handleLike = (post) => {
     console.log(this.state.searchEmpty);
     console.log(this.state.requests);
     console.log(this.state.posts);
+    console.log(this.state.filteredposts);
     //console.log(allrequests);
     if(!auth.uid) return <Redirect to='/signin'/>
     return (
