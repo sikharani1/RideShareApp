@@ -191,7 +191,7 @@ class Dashboard extends Component
   handleApply=(e)=>{
    const searchEmpty1=Object.keys(this.state.searchString).length===0;
     this.setState({searchEmpty:searchEmpty1});
-    this.getposts(this.state.searchString);
+    this.state.filteredposts1=this.getposts(this.state.searchString);
   }
   handleReset=(e)=>{
   const allrefs=this.refs;
@@ -486,7 +486,7 @@ getposts = (searchString) => {
           if(originValue && id1=="arrival")
           {
             console.log(this.state.posts);
-         this.state.posts.map(x=>{const myfunc=(x)=>{
+         this.state.posts.map(x=>{
             // var x=this.state.posts[10];
               console.log("my dest "+val1);
               console.log("my origin "+originValue);
@@ -498,6 +498,7 @@ getposts = (searchString) => {
                //console.log(this.onmyway(x.arrival,val1,originValue));
 
              // const onmywayresult= await this.onmyway(x.arrival,val1,originValue).then((result)=>{
+               if(x.origin==originValue){
               const onmywayresult=(arrivalvalue,val1,originValue)=>
               {
                 var promise=new Promise((resolve,reject)=>
@@ -522,8 +523,8 @@ getposts = (searchString) => {
                 console.log(this.state.filteredposts);
                 console.log(this.state.searchEmpty);
                 if(this.state.filteredposts=="") this.state.filteredposts=this.state.posts;
-                filteredposts1.push(!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==x.arrival):this.state.posts.filter(post => post[id1]==val1));
-
+                filteredposts1.push(!this.state.searchEmpty?this.state.filteredposts.filter(post => post["arrival"]==x.arrival):this.state.posts.filter(post => post["arrival"]==x.arrival));
+                console.log(filteredposts1);
               }
             }).catch((reject)=>{
               console.log("on the route error");
@@ -532,7 +533,8 @@ getposts = (searchString) => {
           
           
         };
-        setTimeout(myfunc,3000,x);
+      
+        
       })
         
       
@@ -640,6 +642,7 @@ getposts = (searchString) => {
          console.log("title");
        }
      });
+     return this.state.filteredposts1;
     
   }
   
