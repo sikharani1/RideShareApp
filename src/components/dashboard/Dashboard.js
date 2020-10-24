@@ -404,14 +404,17 @@ let thenProm=promise.then(async(finalArr)=>{
   //  var marker2=this.createMarker();
    myPosition={lat:origlat,lng:origlng}  ;
    console.log(myPosition);
- var myPosition1 =  new window.google.maps.LatLng(origlat,origlng)
+// var myPosition1 =  new window.google.maps.LatLng(origlat,origlng)
+var myPosition1 = new window.google.maps.LatLng(filtdestlat, filtdestlng)
  //myPosition =  new window.google.maps.LatLng(40.73, -73.93);
  console.log(myPosition1)
  var map=this.createGoogleMap();
    const polyline=new window.google.maps.Polyline({
            path: [
-               new window.google.maps.LatLng(filtdestlat, filtdestlng),
-               new window.google.maps.LatLng(destlat, destlng),
+                new window.google.maps.LatLng(origlat, origlng),
+                 // new window.google.maps.LatLng(filtdestlat, filtdestlng),
+               new window.google.maps.LatLng(destlat, destlng)
+             
      
            ]
        });
@@ -486,8 +489,8 @@ getposts = (searchString) => {
           if(originValue && id1=="arrival")
           {
             console.log(this.state.posts);
-         this.state.posts.map(x=>{
-            // var x=this.state.posts[10];
+             this.state.posts.map(x=>{
+          //   var x=this.state.posts[12];
               console.log("my dest "+val1);
               console.log("my origin "+originValue);
               console.log("post dest "+x.arrival);
@@ -535,7 +538,9 @@ getposts = (searchString) => {
         };
       
         
-      })
+    /* map loop */
+   }) 
+   
         
       
             console.log(filteredposts1);
