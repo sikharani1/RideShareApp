@@ -35,7 +35,7 @@ var destlng=" ";
 var originArr={};
 var filtdestArr={};
 var destArr={};
-var finalArr=[];
+// var finalArr=[];
 
 
 var orig="";
@@ -213,7 +213,9 @@ class Dashboard extends Component
  //   return new Promise(resolve=>{
      
   calculateLatLng=(dest,filtdest,orig)=>{
+    var finalArr=[];
     var promise = new Promise((resolve,reject)=>{
+     
 
         Geocode.fromAddress(orig).then(
           response => {
@@ -303,7 +305,7 @@ let thenProm=promise.then(async(finalArr)=>{
     setTimeout(()=>{
       console.log(thenProm);
     })
-    return  finalArr;
+     return  finalArr;
 }
   // onmyway=async(dest,filtdest,orig) =>{
   //   console.log(dest,filtdest,orig);
@@ -314,40 +316,38 @@ let thenProm=promise.then(async(finalArr)=>{
     
   // }
 
-  onmyway=async(dest,filtdest,orig) =>{
+  onmyway=(dest,filtdest,orig) =>{
+    var promise=new Promise((resolve,reject)=>{
     console.log(dest,filtdest,orig);
-    console.log(this.calculateLatLng(dest,filtdest,orig));
+   // console.log(this.calculateLatLng(dest,filtdest,orig));
       const finalArr=this.calculateLatLng(dest,filtdest,orig);
-      
       
       console.log(finalArr);
     
       setTimeout(()=>{
-        this.onTheRoute(finalArr)},3000).then((result)=>{
-      console.log(result);
-    }).catch(error=>
-      console.log(error));
-    
+        const resultontheroute=this.onTheRoute(finalArr);
+        console.log(resultontheroute);
+          resolve(resultontheroute);
+        
+        
+      },3000);
+      
+    })
+        
+        
+    //     .then((result)=>{
+    //   console.log(result);
+    //   return result;
+    // }).catch(error=>
+    //   console.log(error));
+    return promise;
   }
  
-
-  
-  
-  
-       
 //}
 
 //);
 //  }
-
-
-
-
-
-  
-   
-    
-    // var promise= new Promise((resolve, reject) => {
+// var promise= new Promise((resolve, reject) => {
     //          this.calculateLatLng(dest,filtdest,orig).then((origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)=>
     //            resolve(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)).catch((error)=>reject('error'));
     // })
@@ -373,8 +373,9 @@ let thenProm=promise.then(async(finalArr)=>{
    
 
  // onTheRoute=(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)=>{
-  onTheRoute=(finalArr)=>{
-    origlat=finalArr[0][0];
+  onTheRoute=async (finalArr)=>{
+    return new Promise((resolve,reject)=>{
+      origlat=finalArr[0][0];
     console.log(origlat);
   // return new Promise(resolve=>{
   //   console.log(finalArr);
@@ -388,31 +389,67 @@ let thenProm=promise.then(async(finalArr)=>{
     console.log("filtdest"+filtdestlat+" "+filtdestlng)
     console.log("dest"+destlat+" "+destlng)
  
-    return true;
+   // return true;
+  //  var postdest= {lat:destlat,lng:destlng} ;
+  //  myPosition=postdest;
     
-//  myPosition = new window.google.maps.LatLng(origlat,origlng);
-//  console.log(myPosition)
-//  var map=this.createGoogleMap();
-//    const polyline=new window.google.maps.Polyline({
-//            path: [
-//                new window.google.maps.LatLng(filtdestlat, filtdestlng),
-//                new window.google.maps.LatLng(destlat, destlng),
+  //  var map1=this.createGoogleMap();
+  //  var marker1=this.createMarker();
+  //  var mydest={lat:filtdestlat,lng:filtdestlng};
+ 
+  //  var mydest={lat:filtdestlat,lng:filtdestlng};
+  //  myPosition=mydest;
+  //  var map2=this.createGoogleMap();
+  
+  //  var marker2=this.createMarker();
+   myPosition={lat:origlat,lng:origlng}  ;
+   console.log(myPosition);
+ var myPosition1 =  new window.google.maps.LatLng(origlat,origlng)
+ //myPosition =  new window.google.maps.LatLng(40.73, -73.93);
+ console.log(myPosition1)
+ var map=this.createGoogleMap();
+   const polyline=new window.google.maps.Polyline({
+           path: [
+               new window.google.maps.LatLng(filtdestlat, filtdestlng),
+               new window.google.maps.LatLng(destlat, destlng),
      
-//            ]
-//        });
-//       polyline.setMap(map);
-// const onmyroute=window.google.maps.geometry.poly.isLocationOnEdge(myPosition, polyline, 10e-1);
-// console.log(onmyroute);
-//  if (window.google.maps.geometry.poly.isLocationOnEdge(myPosition, polyline, 10e-1)) {
+           ]
+       });
+       console.log(polyline.getPath());
+       console.log(map);
+      // polyline.getPath();
+      polyline.setMap(map,(results,status)=>{
+        if(status==='OK')
+        {
+          resolve(results)
+        }
+        else{
+          reject(status)
+        }
+      });
+const onmyroute=window.google.maps.geometry.poly.isLocationOnEdge(myPosition1, polyline,10e-1);
+console.log(onmyroute);
+ if (window.google.maps.geometry.poly.isLocationOnEdge(myPosition1, polyline,10e-1)) {
     
-//      console.log("on my route");
-//      return true;
-//  }
-//  else{
+     console.log("on my route");
+     resolve(true);
+ }
+ else{
      
-//      console.log("donot");
-//      return false;
-//  }
+     console.log("donot");
+     resolve(false);
+ }
+ 
+    
+    
+    
+    
+    
+    }).then((resolve)=>{
+      console.log(resolve);
+    return resolve;
+    });
+    
    
  
 // }).then((onmyroute)=>{ return onmyroute }).catch((err)=>{
@@ -449,13 +486,36 @@ getposts = (searchString) => {
           if(originValue && id1=="arrival")
           {
             console.log(this.state.posts);
-            this.state.posts.map(x=>{
-              console.log(val1);
-              console.log(originValue);
-              console.log(x.arrival);
-              this.onmyway(x.arrival,val1,originValue).then((result)=>{
+         this.state.posts.map(x=>{const myfunc=(x)=>{
+            // var x=this.state.posts[10];
+              console.log("my dest "+val1);
+              console.log("my origin "+originValue);
+              console.log("post dest "+x.arrival);
+              console.log("post origin "+x.origin);
+              // setTimeout(()=>{
+               //  this.onmyway(x.arrival,val1,originValue)},3000);
+             //const onmywayresult= await this.onmyway(x.arrival,val1,originValue).then((result)=>{
+               //console.log(this.onmyway(x.arrival,val1,originValue));
+
+             // const onmywayresult= await this.onmyway(x.arrival,val1,originValue).then((result)=>{
+              const onmywayresult=(arrivalvalue,val1,originValue)=>
+              {
+                var promise=new Promise((resolve,reject)=>
+                {
+                 
+                    const result=this.onmyway(arrivalvalue,val1,originValue);
+                    console.log(result);
+                    resolve(result);
+                
+                  
+                });
+                return promise;
+              }
+           
+          onmywayresult(x.arrival,val1,originValue)
+              .then((result)=>{
               console.log(result);
-            if(result)
+              if(result)
               {
                 console.log("ontheroute");
                 console.log(filteredposts1);
@@ -465,15 +525,23 @@ getposts = (searchString) => {
                 filteredposts1.push(!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==x.arrival):this.state.posts.filter(post => post[id1]==val1));
 
               }
-            }).catch(()=>{
+            }).catch((reject)=>{
               console.log("on the route error");
             })
-            });
+            //setTimeout(()=>{console.log(onmywayresult);},6000);
+          
+          
+        };
+        setTimeout(myfunc,3000,x);
+      })
+        
+      
             console.log(filteredposts1);
             this.state.filteredposts=filteredposts1;
             this.setState({filteredposts:filteredposts1});
             console.log(this.state.filteredposts);
           }
+
         // filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.props.allposts.filter(post => post[id1]==val1);
         else if(!isNaN(val1)){
           console.log(this.state.filteredposts);
