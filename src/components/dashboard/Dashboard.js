@@ -19,7 +19,9 @@ import {Link} from 'react-router-dom'
 import {updatePost} from '../../store/actions/postActions'
 import { bookmarkPost } from '../../store/actions/bookmarkAction'
 import Geocode from "react-geocode";
-import {isPointInPolygon} from "geolib"
+import * as geolib from 'geolib';
+import {SphericalUtil, PolyUtil} from "node-geometry-library";
+
 
 import {MapContainer} from '../dashboard/MapContainer'
 import { yellow } from '@material-ui/core/colors'
@@ -50,7 +52,7 @@ const mapStyles = {
   width: '100%',
   height: '100%',
 };
-var myPosition={lat: 40.73, lng: -73.93};
+// var myPosition={lat: 40.73, lng: -73.93};
 
 class Dashboard extends Component 
 {
@@ -64,6 +66,7 @@ class Dashboard extends Component
     this.handleEnter=this.handleEnter.bind(this);
     this.calculateLatLng=this.calculateLatLng.bind(this);
    this.onmyway=this.onmyway.bind(this);
+   this.ispointwithinradius=this.ispointwithinradius.bind(this);
     
   }
   static defaultProps = {
@@ -90,37 +93,25 @@ class Dashboard extends Component
     })
     console.log(this.state.filteredposts);
   //this.initialize();
-    
-  const googleMapScript = document.createElement('script');
-  googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDjzMckE87fEvdaWGFcv7lsGNVhJY9-zNM&libraries=geometry`;
- //const proxyurl = `https://cors-anywhere.herokuapp.com/`;
-//const url=`maps.googleapis.com/maps/api/js?key=AIzaSyB6ZjYlDa6DTHnDh-9kuUO22BRaRRhFVW0&libraries=geometry`;
- 
-// const finalurl=proxyurl+url;
-// console.log(finalurl);
-//googleMapScript.src = finalurl;
-    window.document.body.appendChild(googleMapScript);
- 
-    googleMapScript.addEventListener('load',()=>{
-      this.googleMap = this.createGoogleMap()
-     this.marker =this.createMarker()
-    })
+   console.log(this.ispointwithinradius()); 
+
+   
   }
   
-  createGoogleMap = () =>
-    new window.google.maps.Map(this.googleMapRef.current, {
-      zoom: 16,
-      center: 
-        myPosition
-      ,
-      disableDefaultUI: true,
-    })
+  // createGoogleMap = () =>
+  //   new window.google.maps.Map(this.googleMapRef.current, {
+  //     zoom: 16,
+  //     center: 
+  //       myPosition
+  //     ,
+  //     disableDefaultUI: true,
+  //   })
 
-  createMarker = () =>
-    new window.google.maps.Marker({
-      position: myPosition,
-      map: this.googleMap,
-    })
+  // createMarker = () =>
+  //   new window.google.maps.Marker({
+  //     position: myPosition,
+  //     map: this.googleMap,
+  //   })
 
  onSearchInputChange = (event) => {
     const oldsearchString='';
@@ -213,12 +204,6 @@ class Dashboard extends Component
   })
     //this.setState({initialValue:''});
   }
-
-
- // calculateLatLng=(dest,filtdest,orig)=>{
- 
- //   return new Promise(resolve=>{
-     
   calculateLatLng=(dest,filtdest,orig)=>{
     var finalArr=[];
     var promise = new Promise((resolve,reject)=>{
@@ -335,13 +320,8 @@ let thenProm=promise.then(async(finalArr)=>{
         const resultontheroute=this.onTheRoute(finalArr);
         console.log(this.onTheRoute(finalArr));
          resolve(resultontheroute);
-        
-        
-      },3000);
-      
+        },3000);
     })
-        
-        
     //     .then((result)=>{
     //   console.log(result);
     //   return result;
@@ -350,33 +330,6 @@ let thenProm=promise.then(async(finalArr)=>{
     return promise;
   }
  
-//}
-
-//);
-//  }
-// var promise= new Promise((resolve, reject) => {
-    //          this.calculateLatLng(dest,filtdest,orig).then((origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)=>
-    //            resolve(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)).catch((error)=>reject('error'));
-    // })
-
-
-    // then(()=>{
-    //   dispatch({ type: 'CREATE_COMMENT',comment,postId });
-    // }).catch((err)=>{
-    //   dispatch({ type: 'CREATE_COMMENT_ERROR', err });
-    // })
-   
-    // const geocoder=new window.google.maps.Geocoder();
-    // console.log(geocoder)
-    // //geocoder.geocode("Albany");
-    // geocoder.geocode({ address: "Albany" }, (results, status) => {
-    //   if (status === "OK") {
-    //     console.log(results)
-    //     }
-    //     else{
-    //       console.log("results not loaded");
-    //     }
-    //   });
    
 
  // onTheRoute=(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)=>{
@@ -396,59 +349,28 @@ let thenProm=promise.then(async(finalArr)=>{
     console.log("filtdest"+filtdestlat+" "+filtdestlng)
     console.log("dest"+destlat+" "+destlng)
  
-   // return true;
-  //  var postdest= {lat:destlat,lng:destlng} ;
-  //  myPosition=postdest;
+
+
+
+
+
+ let response =  PolyUtil.isLocationOnEdge(
+  {'lat':42.05745022, 'lng': -75.88256836}, // point object {lat, lng}
+  [
+    // poligon arrays of object {lat, lng}
+    {'lat': 43.16512263, 'lng': -77.54150391},
+    {'lat': 42.72280376, 'lng': -73.76220703}
     
-  //  var map1=this.createGoogleMap();
-  //  var marker1=this.createMarker();
-  //  var mydest={lat:filtdestlat,lng:filtdestlng};
+    
+   
+    
+  ],10e10
+);
+console.log(response);
+resolve(response);
+
+
  
-  //  var mydest={lat:filtdestlat,lng:filtdestlng};
-  //  myPosition=mydest;
-  //  var map2=this.createGoogleMap();
-  
-  //  var marker2=this.createMarker();
-   myPosition={lat:origlat,lng:origlng}  ;
-   console.log(myPosition);
-// var myPosition1 =  new window.google.maps.LatLng(origlat,origlng)
-var myPosition1 = new window.google.maps.LatLng(filtdestlat, filtdestlng)
- //myPosition =  new window.google.maps.LatLng(40.73, -73.93);
- console.log(myPosition1)
- var map=this.createGoogleMap();
-   const polyline=new window.google.maps.Polyline({
-           path: [
-                new window.google.maps.LatLng(origlat, origlng),
-                 // new window.google.maps.LatLng(filtdestlat, filtdestlng),
-               new window.google.maps.LatLng(destlat, destlng)
-             
-     
-           ]
-       });
-       console.log(polyline.getPath());
-       console.log(map);
-      // polyline.getPath();
-      polyline.setMap(map,(results,status)=>{
-        if(status==='OK')
-        {
-          resolve(results)
-        }
-        else{
-          reject(status)
-        }
-      });
-const onmyroute=window.google.maps.geometry.poly.isLocationOnEdge(myPosition1, polyline,10e-1);
-console.log(onmyroute);
- if (window.google.maps.geometry.poly.isLocationOnEdge(myPosition1, polyline,10e-1)) {
-    
-     console.log("on my route");
-     resolve(true);
- }
- else{
-     
-     console.log("donot");
-     resolve(false);
- }
  
     
     
@@ -467,6 +389,16 @@ console.log(onmyroute);
 //    })
 
 //})
+}
+  ispointwithinradius=()=>{
+    var origlat=51.525;
+    var origlng=7.4575;
+    return geolib.isPointWithinRadius(
+      { latitude: origlat, longitude: origlng },
+      { latitude: 51.5175, longitude: 7.4578 },
+      {latitude: 51.5005, longitude: 7.4578},
+      50000
+  );
   }
 
 getposts = (searchString) => {
