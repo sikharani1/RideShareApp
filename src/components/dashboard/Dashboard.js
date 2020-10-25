@@ -40,7 +40,8 @@ var destArr={};
 
 var orig="";
 
- Geocode.setApiKey("AIzaSyDjzMckE87fEvdaWGFcv7lsGNVhJY9-zNM");
+ //Geocode.setApiKey("AIzaSyDjzMckE87fEvdaWGFcv7lsGNVhJY9-zNM");
+ Geocode.setApiKey("AIzaSyB6ZjYlDa6DTHnDh-9kuUO22BRaRRhFVW0");
 const INITIAL_STATE={
   searchString:[]
 }
@@ -92,6 +93,12 @@ class Dashboard extends Component
     
   const googleMapScript = document.createElement('script');
   googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDjzMckE87fEvdaWGFcv7lsGNVhJY9-zNM&libraries=geometry`;
+ //const proxyurl = `https://cors-anywhere.herokuapp.com/`;
+//const url=`maps.googleapis.com/maps/api/js?key=AIzaSyB6ZjYlDa6DTHnDh-9kuUO22BRaRRhFVW0&libraries=geometry`;
+ 
+// const finalurl=proxyurl+url;
+// console.log(finalurl);
+//googleMapScript.src = finalurl;
     window.document.body.appendChild(googleMapScript);
  
     googleMapScript.addEventListener('load',()=>{
@@ -319,15 +326,15 @@ let thenProm=promise.then(async(finalArr)=>{
   onmyway=(dest,filtdest,orig) =>{
     var promise=new Promise((resolve,reject)=>{
     console.log(dest,filtdest,orig);
-   // console.log(this.calculateLatLng(dest,filtdest,orig));
+    console.log(this.calculateLatLng(dest,filtdest,orig));
       const finalArr=this.calculateLatLng(dest,filtdest,orig);
       
       console.log(finalArr);
     
       setTimeout(()=>{
         const resultontheroute=this.onTheRoute(finalArr);
-        console.log(resultontheroute);
-          resolve(resultontheroute);
+        console.log(this.onTheRoute(finalArr));
+         resolve(resultontheroute);
         
         
       },3000);
@@ -568,7 +575,7 @@ getposts = (searchString) => {
           this.setState({filteredposts:filteredposts1});
           
         }
-        else{
+        else if(id1=="via"){
           console.log(this.state.filteredposts);
           console.log(this.state.searchEmpty);
           filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
