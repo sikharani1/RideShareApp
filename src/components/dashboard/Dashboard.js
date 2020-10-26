@@ -26,7 +26,7 @@ import {SphericalUtil, PolyUtil} from "node-geometry-library";
 import {MapContainer} from '../dashboard/MapContainer'
 import { yellow } from '@material-ui/core/colors'
 import { Result } from 'react-lodash'
-var originValue;
+
 var arrivalValue;
 var origlat=" ";
 var origlng=" ";
@@ -189,7 +189,8 @@ class Dashboard extends Component
   handleApply=(e)=>{
    const searchEmpty1=Object.keys(this.state.searchString).length===0;
     this.setState({searchEmpty:searchEmpty1});
-    this.state.filteredposts1=this.getposts(this.state.searchString);
+   var resultfilteredsposts=this.getposts(this.state.searchString);
+   console.log(resultfilteredsposts);
   }
   handleReset=(e)=>{
   const allrefs=this.refs;
@@ -355,16 +356,16 @@ let thenProm=promise.then(async(finalArr)=>{
 
 
  let response =  PolyUtil.isLocationOnEdge(
-  {'lat':42.05745022, 'lng': -75.88256836}, // point object {lat, lng}
+  {'lat':filtdestlat, 'lng': filtdestlng}, // point object {lat, lng}
   [
     // poligon arrays of object {lat, lng}
-    {'lat': 43.16512263, 'lng': -77.54150391},
-    {'lat': 42.72280376, 'lng': -73.76220703}
+    {'lat': origlat, 'lng': origlng},
+    {'lat': destlat, 'lng': destlng}
     
     
    
     
-  ],10e10
+  ],10e4
 );
 console.log(response);
 resolve(response);
@@ -402,6 +403,8 @@ resolve(response);
   }
 
 getposts = (searchString) => {
+  var filteredpostsonmyroute=[];
+  var promise3= new Promise((resolve,reject)=>{
     // console.log(id);
     this.state.searchEmpty=false;
     this.setState({searchEmpty:false});
@@ -409,8 +412,12 @@ getposts = (searchString) => {
     console.log(searchString.entries());
     const iterator1 = Object.entries(searchString);
     console.log(iterator1);
-    var filteredposts1=[{}];
-    originValue=searchString.origin;
+    
+    var originValue=searchString.origin;
+    var luggageValue=searchString.luggage;
+    var seatValue=searchString.seat;
+    var titleValue=searchString.title;
+    var viaValue=searchString.via;
     console.log(originValue);
     iterator1.forEach(elem=>{
        var val1=elem[1];
@@ -427,9 +434,10 @@ getposts = (searchString) => {
           console.log(originValue);
           if(originValue && id1=="arrival")
           {
+            var filteredposts1=[];
             console.log(this.state.posts);
-            setTimeout(()=>{   this.state.posts.map(x=>{
-          //   var x=this.state.posts[12];
+             this.state.posts.map(x=>{
+              //   var x=this.state.posts[12];
               console.log("my dest "+val1);
               console.log("my origin "+originValue);
               console.log("post dest "+x.arrival);
@@ -456,20 +464,50 @@ getposts = (searchString) => {
               }
            
           onmywayresult(x.arrival,val1,originValue)
-              .then((result)=>{
+              .then(async(result)=>{
+               // return await result;
               console.log(result);
-              if(result)
+              if(await result)
               {
                 console.log("ontheroute");
                 console.log(filteredposts1);
                 console.log(this.state.filteredposts);
                 console.log(this.state.searchEmpty);
-                if(this.state.filteredposts=="") this.state.filteredposts=this.state.posts;
-                var filteredvalues=!this.state.searchEmpty?this.state.filteredposts.filter(post => post["arrival"]==x.arrival):this.state.posts.filter(post => post["arrival"]==x.arrival);
+               
+                var filteredvalues=!this.state.searchEmpty?this.state.posts.filter(post => post["arrival"]==x.arrival):this.state.posts.filter(post => post["arrival"]==x.arrival);
+                console.log(filteredvalues);
                 filteredvalues.map(x=>{
                 filteredposts1.push(x);
                 });
                 console.log(filteredposts1);
+                filteredposts1=[... new Set(filteredposts1)];
+                //this.setState({filteredposts:filteredposts1});
+                setTimeout(()=>{
+                if(luggageValue){
+                 // var filteredposts1=[];
+                  console.log(this.state.filteredposts);
+                  console.log(this.state.searchEmpty);
+                  
+                  
+                  filteredposts1= !this.state.searchEmpty?filteredposts1.filter(post => post["luggage"]>=luggageValue):this.state.posts.filter(post => post["luggage"]>=luggageValue);
+                  console.log(filteredposts1);
+                  this.setState({filteredposts:filteredposts1});
+                  console.log(this.state.filteredposts);
+                  
+                  
+                }
+                if(viaValue){
+                 
+                  console.log(this.state.filteredposts);
+                  console.log(this.state.searchEmpty);
+                  filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==viaValue);
+                  console.log(filteredposts1);
+                  this.state.filteredposts=filteredposts1;
+                  this.setState({filteredposts:filteredposts1});
+                  
+               
+                }
+              },6000);
               }
             }).catch((reject)=>{
               console.log("on the route error");
@@ -483,40 +521,45 @@ getposts = (searchString) => {
         
     /* map loop */
    }) 
-   console.log(filteredposts1);
-   this.setState({filteredposts:filteredposts1});
-   console.log(this.state.filteredposts);
-   return this.state.filteredposts;
-  },3000);
+  //  console.log(filteredposts1);
+   
+  //  console.log(this.state.filteredposts);
+   
+  // if(luggageValue || seatValue){
+  //   var filteredposts1=[];
+  //   console.log(this.state.filteredposts);
+  //   console.log(this.state.searchEmpty);
+  //   this.state.filteredposts=filteredposts1;
+  //   this.setState({filteredposts:filteredposts1});
+  //   filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]>=val1);
+  //   console.log(filteredposts1);
+    
+  //   console.log(this.state.filteredposts);
+    
+  // }
+  // if(viaValue){
+  //   var filteredposts1=[];
+  //   console.log(this.state.filteredposts);
+  //   console.log(this.state.searchEmpty);
+  //   filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
+  //   console.log(filteredposts1);
+  //   this.state.filteredposts=filteredposts1;
+  //   this.setState({filteredposts:filteredposts1});
+    
+ 
+  // }
    
         
       
-            console.log(filteredposts1);
-            this.state.filteredposts=filteredposts1;
+  //           console.log(filteredposts1);
+  //           this.state.filteredposts=filteredposts1;
             
-            console.log(this.state.filteredposts);
+  //           console.log(this.state.filteredposts);
           }
 
         // filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.props.allposts.filter(post => post[id1]==val1);
-        else if(!isNaN(val1)){
-          console.log(this.state.filteredposts);
-          console.log(this.state.searchEmpty);
-          filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]>=val1);
-          console.log(filteredposts1);
-          this.state.filteredposts=filteredposts1;
-          this.setState({filteredposts:filteredposts1});
-          
-        }
-        else if(id1=="via"){
-          console.log(this.state.filteredposts);
-          console.log(this.state.searchEmpty);
-          filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
-          console.log(filteredposts1);
-          this.state.filteredposts=filteredposts1;
-          this.setState({filteredposts:filteredposts1});
-          
+        
        
-        }
       }
       else{
         if(originValue && id1=="arrival"){
@@ -542,6 +585,7 @@ getposts = (searchString) => {
           
          }
          else if(!isNaN(val1)){
+           setTimeout(()=>{
           console.log(this.state.filteredposts);
           console.log(this.state.searchEmpty);
           filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]>=val1);
@@ -549,6 +593,7 @@ getposts = (searchString) => {
           this.setState({filteredposts:filteredposts1});
           console.log(this.state.filteredposts);
           console.log("number") 
+           },12000);
 
         }
          else{
@@ -595,9 +640,26 @@ getposts = (searchString) => {
          console.log("title");
        }
      });
-     return this.state.filteredposts1;
+     filteredpostsonmyroute=this.state.filteredposts;
+     resolve(filteredpostsonmyroute);
+  });
+  let thenProm3=promise3.then(async(filteredpostsonmyroute)=>{
+    console.log(filteredpostsonmyroute);
+    return await filteredpostsonmyroute;
     
+  }).catch((error)=>
+  console.log(error)
+  )
+  console.log(thenProm3);
+  setTimeout(()=>{
+    console.log(thenProm3);
+  },6000)
+
+   
+  this.state.filteredposts=filteredpostsonmyroute;
+return this.state.filteredposts;
   }
+
   
 handleLike = (post) => {
     const posts = !this.state.searchEmpty?this.state.filteredposts: this.props.allposts ;
