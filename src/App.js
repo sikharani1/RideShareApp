@@ -7,6 +7,7 @@ import SignIn from './components/auth/SignIn'
 import SignUp from './components/auth/SignUp'
 import CreatePost from './components/posts/CreatePost'
 import MyAccount from './components/auth/MyAccount'
+import Fallback from './components/dashboard/Fallback'
 
 
 class App extends Component {
@@ -17,6 +18,7 @@ class App extends Component {
           <Navbar />
           <Switch>
             <Route exact path='/'component={Dashboard} />
+            <Route path='/fallback'component={Fallback} />
             <Route path='/post/:id' component={PostDetails} />
             <Route path='/signin' component={SignIn} />
             <Route path='/signup' component={SignUp} />

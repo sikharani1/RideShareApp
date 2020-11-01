@@ -9,6 +9,9 @@ class Comments extends Component {
         super()
         this.handleSubmit = this.handleSubmit.bind(this)
     }
+    async componentDidMount() {
+        await(this.props.comments)
+    }
     handleSubmit(event) {
         event.preventDefault()
         console.log(event);
@@ -21,10 +24,13 @@ class Comments extends Component {
     }
 
     render() {
-        const comments=this.props.comments;
+        
+       const comments=this.props.comments;
         const commentsArrayList=[];
-        const commentsArray=[{}];
-        if(Array.isArray(comments))
+        const commentsArray=[];
+      
+           
+                if(Array.isArray(comments))
         {
             console.log(comments);
           comments.map(sgp=>{
@@ -63,20 +69,23 @@ class Comments extends Component {
                 return commentsArray;
            })
             console.log(commentsArray);
+            // if(commentsArray && commentsArray.length==0){
+        
+            //     console.log("no comments");
+               
+                 
+            //     //     <div>
+            //     commentsArray.push("No Comments");
+            //     }
         }
 
-    else{
-        
-        console.log("no comments");
-       
-         
-        //     <div>
-        commentsArray.push("No Comments");
-        }
+    
+    
         return (    
         <div>
          
-            {commentsArray.map((comment,index)=>(
+            {
+            commentsArray.map((comment,index)=>(
                  <p key={comment.index}> {comment.authorName} - {comment.comment} </p>
                  ))}
             <p id="commentcount">{commentsArray.length} Comments</p>

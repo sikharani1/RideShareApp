@@ -17,13 +17,13 @@ import AppBar from '@material-ui/core/AppBar'
 import PostSummary from '../posts/PostSummary'
 import {Link} from 'react-router-dom'
 import {updatePost} from '../../store/actions/postActions'
-import { bookmarkPost } from '../../store/actions/bookmarkAction'
+import { bookmarkPost,deleteBookmark } from '../../store/actions/bookmarkAction'
 import Geocode from "react-geocode";
 import * as geolib from 'geolib';
 import {SphericalUtil, PolyUtil} from "node-geometry-library";
 
 
-import {MapContainer} from '../dashboard/MapContainer'
+
 import { yellow } from '@material-ui/core/colors'
 import { Result } from 'react-lodash'
 
@@ -89,7 +89,8 @@ class Dashboard extends Component
    await(this.props.allposts)
    console.log(this.props);
     this.setState({
-      filteredposts:''
+      filteredposts:'',
+      posts:this.props.allposts
     })
     console.log(this.state.filteredposts);
   //this.initialize();
@@ -764,10 +765,14 @@ handleLike = (post) => {
     //posts[index] = posts[index];
     posts[index].liked = !posts[index].liked;
     // posts[index] = { post };
+    
     this.setState({filteredposts:posts});
+    this.setState({posts:posts});
     this.props.likePost(id,posts[index]);
+    
     }
     //this.setState({post});
+    this.forceUpdate();
   };
   handleBookmark=(post)=>{
     const posts = !this.state.searchEmpty?this.state.filteredposts: this.props.allposts ;
@@ -782,9 +787,15 @@ handleLike = (post) => {
     // posts[index] = { post };
     
     this.setState({filteredposts:posts});
+    this.setState({posts:posts});
     console.log(posts[index]);
+    if(posts[index].starred)
     this.props.bookmarkPost(id,posts[index]);
+    else
+    this.props.deleteBookmark(id,posts[index]);
+    
     }
+    this.forceUpdate();
   }
   
   handleChange1 = (event, newValue) => {
@@ -822,11 +833,11 @@ handleLike = (post) => {
           style={mapStyles}
           initialCenter={{ lat: 47.444, lng: -122.176}}
         /> */}
-        <div
+        {/* <div
         id="google-map"
         ref={this.googleMapRef}
         style={{ width: '400px', height: '300px' }}
-      />
+      /> */}
         {/* <MapContainer/> */}
         <div className="row">
           <div className="col s12 m6 dashboard">
@@ -834,12 +845,14 @@ handleLike = (post) => {
           {/* {loading ? <Spinner /> :  */}
           {this.props.allposts ? (
             <div>
+              <i className="fas fa-search"></i>
               <TextField style={{padding: 10}}
                 autoFocus
                 className="searchInput"
                 placeholder="Search for posts"
                 margin="normal"
                 onInput={this.onSearchInputChange} onKeyPress={this.keyPressed}/>
+               
             </div>
 
           ) : "No posts found" }
@@ -869,11 +882,13 @@ handleLike = (post) => {
         
                 </div>
                 <div className="input-field">
-                  <button className="btn pink lighten-1" onClick={this.handleApply} >Apply</button>
+                  <button className="btn pink lighten-1 buttons filter-buttons" onClick={this.handleApply} >Apply</button>
                 </div>
+                
                 <div className="input-field">
-                  <button className="btn pink lighten-1" onClick={this.handleReset} >Reset</button>
+                  <button className="btn pink lighten-1 buttons filter-buttons" onClick={this.handleReset} >Reset</button>
                 </div>
+                
               </div>
               <div className="posts-container">
               {this.state.searchEmpty?(
@@ -940,12 +955,13 @@ const mapDispatchToProps=(dispatch)=>{
   return {
   likePost: (postId,likedpost) => dispatch(updatePost(postId,likedpost)),
   bookmarkPost:(postId,starredpost)=>dispatch(bookmarkPost(postId,starredpost)),
-  
+  deleteBookmark:(postId,starredpost)=>dispatch(deleteBookmark(postId,starredpost)),
   }
   
 }
 export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect([
   { collection: 'posts',orderBy:['createdAt','desc']},
-  { collection: 'notifications', limit: 3,orderBy:['time','desc']}
+  { collection: 'notifications', limit: 3,orderBy:['time','desc']},
+  { collection: 'users'}
  ])
 )(Dashboard)                                                                                

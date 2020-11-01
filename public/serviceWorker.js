@@ -138,20 +138,42 @@
 
 
 
-const staticCacheName = 'site-static-v1';
-const dynamicCacheName = 'site-dynamic-v1';
+const staticCacheName = 'site-static-v5';
+const dynamicCacheName = 'site-dynamic-v5';
 const assets = [
   '/',
   '/index.html',
+  '/manifest.json',
   '../src/App.js',
   '../src/index.js',
+  '../src/components/dashoboard/Dashoboard.js',
+  '../src/components/dashoboard/PostDetails.js',
+  '../src/components/posts/PostList.js',
+  '../src/components/posts/PostSummary.js',
+  '../src/components/posts/CreatePost.js',
+  '../src/components/posts/PostDetails.js',
+  '../src/components/posts/Comments.js',
+  '../src/components/layout/Navbar.js',
+  '../src/components/layout/SignedOutLinks.js',
+  '../src/components/layout/SignedInLinks.js',
+  '../src/components/store/actions',
+  '../src/components/store/reducers',
   '../src/index.css',
   '/image/ridesharebg.gif',
   'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js',
   'https://fonts.googleapis.com/icon?family=Material+Icons',
   'https://kit.fontawesome.com/fbe9fc69ff.js',
+  'https://kit-free.fontawesome.com/releases/latest/css/free-v4-shims.min.css',
+  // 'https://ka-f.fontawesome.com',
   'https://fonts.googleapis.com/css2?family=Roboto&display=swap',
   'https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2',
+  'https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
+  'https://kit-free.fontawesome.com/releases/latest/webfonts/free-fa-regular-400.ttf',
+  'https://kit-free.fontawesome.com/releases/latest/webfonts/free-fa-regular-400.woff',
+  'https://kit-free.fontawesome.com/releases/latest/webfonts/free-fa-regular-400.woff2',
+
+
+
   '/pages/fallback.html'
 ];
 
@@ -193,16 +215,16 @@ self.addEventListener('activate', evt => {
 
 // fetch events
 self.addEventListener('fetch', evt => {
+  if (!(evt.request.url.indexOf('http') === 0)) return;
   if(evt.request.url.indexOf('firestore.googleapis.com') === -1){
     evt.respondWith(
       caches.match(evt.request).then(cacheRes => {
-        return cacheRes || fetch(evt.request).then(fetchRes => {
-          return caches.open(dynamicCacheName).then(cache => {
-            cache.put(evt.request.url, fetchRes.clone());
-            // check cached items size
-            limitCacheSize(dynamicCacheName, 15);
-            return fetchRes;
-          })
+        return cacheRes || fetch(evt.request).then(async fetchRes => {
+          const cache = await caches.open(dynamicCacheName);
+          cache.put(evt.request.url, fetchRes.clone());
+          // check cached items size
+          limitCacheSize(dynamicCacheName, 25);
+          return fetchRes;
         });
       }).catch(() => {
         if(evt.request.url.indexOf('.html') > -1){

@@ -4,7 +4,7 @@
     const {data}=action;
     switch (action.type) {
       case 'BOOKMARK_POST':
-        console.log('Bookmarked post', action.post);
+        console.log('added Bookmarked post to favourites', action.post);
         // const totalposts=Object.entries(action.post);
         // console.log(totalposts);
         // //totalposts.push(action.post);
@@ -16,7 +16,7 @@
         console.log('bookmark post error',action.err);
         return state;
       case 'DELETE_BOOKMARK':
-        console.log('deleted post',action.postId);
+        console.log('deleted bookmark from favourites',action.postId);
         return state;
       case 'DELETE_BOOKMARK_ERROR':
           console.log('deleted post',action.err);

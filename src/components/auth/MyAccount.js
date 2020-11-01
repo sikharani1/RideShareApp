@@ -10,6 +10,7 @@ import MyRides from './MyRides';
 import PostList from '../posts/PostList'
 import { TextInput, Button, Alert } from 'react'
 
+
 class MyAccount extends Component {
     constructor(props){
     super(props);
@@ -24,11 +25,15 @@ componentWillMount() {
     currentPassword:''
     })
 }
-componentDidMount() {
+async componentDidMount() {
   console.log(this.props);
-   this.setState({
+   
+  let user= this.props.firebaseauth.currentUser;  
 
-     myposts:this.props.myposts
+    console.log(user.uid);
+   this.setState({
+    currentUser:user,
+     myposts:await this.props.myposts
  
    })
    console.log(this.state.myposts);
@@ -81,14 +86,29 @@ onSignoutPress = () => {
 
   render() {
     console.log(this.props);
-    const {authError,auth,firebaseauth,myposts}=this.props;
+    const {authError,auth,firebaseauth,myposts,users}=this.props;
     
     //const myposts=Object.entries(posts);
     console.log(myposts);
-    let user = firebase.auth().currentUser;   
-    console.log(user.uid);
+    console.log(users);
+    let user=this.state.currentUser;
+    user = firebase.auth().currentUser;
     const posts=this.props.myposts.filter(post=>post.authorId==user.uid);
+
+    const posts1=[];
+    
+    const currentuser=this.props.users.filter(u=>u.id==user.uid);
+    console.log(currentuser);
+    (this.props.users.filter(u=>u.id==user.uid))[0].favourites.map((fav)=>
+    {
+      console.log(fav);
+      const favouriteposts=this.props.myposts.filter(post=>post.id==fav)
+      console.log(favouriteposts);
+    if(favouriteposts!=[]) posts1.push(favouriteposts[0]);
+    }
+    )
     console.log(posts);
+    console.log(posts1);
     
    
   
@@ -97,8 +117,9 @@ onSignoutPress = () => {
     
       
         <div className="container">
+         
           <button className="myaccount-btn signout btn pink lighten-1 z-depth-0" onClick={this.onSignoutPress}>Sign out</button> 
-          
+          <i class="fas fa-user-edit"></i>
           <h5 className="grey-text text-darken-3">Password Reset</h5>
           <div className="input-field">
        
@@ -119,10 +140,18 @@ onSignoutPress = () => {
       <button title="Change Email" onClick={this.onChangeEmailPress}>Change Email</button> */}
       {/* <MyRides myposts={this.props.posts} /> */}
       <div className="main-container shadow">
-      <b><h6 id="myrides">MyRides</h6></b>
-<div className="posts-container">
+      <b><h6 id="myrides-header">MY RIDES</h6></b>
+<div className="posts-container" id="myrides">
      {/* <PostList posts={this.props.myposts.filter(this.checkUser(user.uid))} /> */}
      <PostList posts={posts} />
+      </div>
+
+</div>
+<div className="main-container shadow">
+      <b><h6 id="myrides-header">MY FAVOURITES</h6></b>
+<div className="posts-container" id="myfavourites">
+     {/* <PostList posts={this.props.myposts.filter(this.checkUser(user.uid))} /> */}
+     <PostList posts={posts1} />
       </div>
 
 </div>
@@ -137,6 +166,7 @@ const mapStateToProps=(state)=>{
   console.log(state);
   return{
     myposts: state.firestore.ordered.posts,
+    users: state.firestore.ordered.users,
     authError:state.auth.authError,
   
     auth:firebase.auth,
@@ -160,6 +190,8 @@ return {
 
 
   export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect([
-    { collection: 'posts'}
+    { collection: 'posts'}, { collection: 'users'}
    ])
   )(MyAccount)
+
+  

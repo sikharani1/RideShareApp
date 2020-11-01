@@ -32,13 +32,13 @@ code {
     monospace;
 }
  .side-filters{
-  margin: 1vw;
+  margin:4vw 1vw;
   align-self: flex-start;
   width: max-content;
 }
 .posts-container{
   align-self: flex-start;
-  margin: 2vw;
+  margin: 4vw 4vw 4vw 0vw;
   width: 100%;
 } 
 .main-container{
@@ -119,14 +119,21 @@ z-index: -2;
   margin-top:10px;
 }
 .myaccount-btn{
-  width:180px !important;
+  border-radius: 24px;
+  width: 200px !important;
   margin:30px 0;
 }
-#myrides{
+#myrides-header{
   display: block;
- 
+ border:1px solid white;
+margin-bottom:20px !important;
+ background-color:#26a69a;
+ color:white;
   margin:20px 0;
-
+  padding: 10px 10px;
+  width:180px !important;
+  text-align:center;
+  line-height: 0.8;
 }
 #bookmark{
   margin-left:10px;
@@ -140,4 +147,90 @@ z-index: -2;
 } */
 #asterisk{
   color:red;
+}
+.input-field label{
+  margin-top: -10px !important;
+}
+#dl{
+  font-weight:bold;
+}
+.email{
+  display:inline-block;
+  padding-right:10px;
+}
+.searchInput{
+display: inline-block;
+width:90% !important;
+margin-top:0 !important;
+padding-top:0 !important;
+
+}
+.fa-search{
+display: inline-block;
+margin-top:15px !important;
+}
+.fa-envelope{
+  color:black;
+}
+.buttons{
+  border-radius:24px !important;
+  width:160px !important;
+}
+.fa-user-edit{
+  margin-top:20px;
+  margin-left:20px;
+display: block;
+}
+.fa-trash{
+  background: none;
+  color:black;
+  background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59)) !important;
+}
+.post-link{
+  display: inline-block;
+  width:85%;
+}
+#delete{
+  display: inline-block;
+  margin-bottom:0 !important; 
+  margin-left:10px;
+  vertical-align:middle;
+}
+#delete-btn{
+  /* position: relative; */
+  
+  background: none;
+  
+}
+.click-options{
+  display:block;
+
+}
+#myfavourites .click-options{
+  display: none !important;
+}
+#myrides .click-options{
+  display: none !important;
+  
+}
+.post-box{
+  width:100%;
+  display: flex;
+}
+.post-link{
+/* width:70%;
+float:left; */
+margin-right:20px;
+
+}
+/* #delete{
+  /* width:20%;
+  float:left; */
+/* } */ 
+.post-content{
+  flex:4 1;
+}
+.signin,.signup{
+  margin-bottom:30px;
+  font-weight:bold;
 }

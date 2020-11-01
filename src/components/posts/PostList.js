@@ -38,20 +38,23 @@ const PostList = (props) => {
       //     return x.createdAt.timestamp - y.createdAt.timestamp;
       // }))
       (posts) && posts.map(post => {
+        const email="mailto:"+post.email;
         console.log(post.liked);
         let user = firebase.auth().currentUser;    
           if(post.authorId==user.uid)
           {
         return (
           <div>
-          <Link to={'/post/'+post.id} target="_blank" >
+          <div class="post-box">
+          <Link class="post-link post-content" to={'/post/'+post.id} target="_blank" >
             <PostSummary post={post} key={post.id} />
           </Link>
           
-          <div className="input-field">
-            <button className="btn pink lighten-1" onClick={() =>  deletePost(post.id) } >Delete</button>
+          <div id="delete" class="post-content" className="input-field">
+            <button id="delete-btn" className="btn lighten-1" onClick={() =>  deletePost(post.id) } ><i className="fas fa-trash"/></button>
           </div>
-          {(post.privacy=="public")?<div>Email: {post.email}</div>:<div></div>}
+          </div>
+          {(post.privacy=="public")?<div>Ride Posted By Me</div>:<div></div>}
           
           
           </div>
@@ -60,12 +63,13 @@ const PostList = (props) => {
       else{
         return(
           <div>
-          <Link target="_blank" to={'/post/'+post.id}>
+          <Link  class="link" target="_blank" to={'/post/'+post.id}>
           <PostSummary post={post} key={post.id} />
-          {(post.privacy=="public")?<div>Email{post.email}</div>:<div></div>}
           </Link>
+          <div className="click-options">{(post.privacy=="public")?<div class="email"><a  href={email}><i className="fas fa-envelope"/></a></div>:<div></div>}
           <Like liked={post.liked} onClick={()=>onLike(post)} />
           <Bookmark starred={post.starred} onClick={()=>onBookmark(post)} />
+          </div>
        
       
      

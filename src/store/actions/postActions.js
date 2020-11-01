@@ -2,7 +2,31 @@
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
-
+// export const dbchange=(getFirestore)=>{
+//   const firestore=getFirestore();
+      
+//       firestore.enablePersistence()
+//   .catch(function(err) {
+//     if (err.code == 'failed-precondition') {
+//       // probably multible tabs open at once
+//       console.log('persistance failed');
+//     } else if (err.code == 'unimplemented') {
+//       // lack of browser support for the feature
+//       console.log('persistance not available');
+//     }
+//   });
+//   firestore.collection('posts').onSnapshot(snapshot => {
+//     console.log(snapshot.docChanges());
+//     snapshot.docChanges().forEach(change => {
+//       if(change.type === 'added'){
+//         createPost(change.doc.data());
+//       }
+//       if(change.type === 'removed'){
+//         deletePost(change.doc.id);
+//       }
+//     });
+//   });
+// }
 export const createPost = (post) => {
   console.log(post);
     return (dispatch, getState,{getFirebase,getFirestore}) => {
@@ -13,8 +37,18 @@ export const createPost = (post) => {
       console.log(getState().firebase.auth)
       const authorId=getState().firebase.auth.uid;
       console.log(authorId);
+      const user=firestore.collection('users').filter(u=>u.id==user.uid);
+      var verified=false;
+     verified=()=>
+     {
+       if(user.image)
+       return true;
+     }
+     const phoneNumber=user.phoneNumber;
+     
       const email=getState().firebase.auth.email;
-     const phoneNumber=getState().firebase.auth.phoneNumber;
+      console.log(phoneNumber,email,verified);
+     
  firestore.collection('posts').add({
             ...post,
             liked:false,
@@ -23,8 +57,9 @@ export const createPost = (post) => {
             authorLastName:profile.lastName,
             authorId:authorId,
             createdAt:new Date(),
-           email:email,
-           phoneNumber:phoneNumber
+            email:email,
+            phoneNumber:phoneNumber,
+            verified:verified
       
             
 

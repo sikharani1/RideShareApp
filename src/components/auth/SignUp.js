@@ -58,11 +58,12 @@ class SignUp extends Component {
   }
   render() {
     const style = {
-      height: '100vh',
+      height: '50vh',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      marginTop:'20px'
     };
     const {auth}=this.props;
     if(auth.uid) return <Redirect to='/'/>
@@ -70,7 +71,7 @@ class SignUp extends Component {
       
       <div className="container">
         <form className="white" onSubmit={this.handleSubmit}>
-          <h5 className="grey-text text-darken-3">Sign Up</h5>
+          <h5 className="grey-text text-darken-3 signup">Sign Up</h5>
           <div className="input-field">
             <label htmlFor="email"><span id="asterisk">*</span> Email</label>
             <input type="email" id='email' onChange={this.handleChange} />
@@ -92,16 +93,16 @@ class SignUp extends Component {
             <input type="number" id='phoneNumber' onChange={this.handleChange} />
           </div>
           <div style={style}>
-          <label htmlFor="DL">Please Upload You Valid Drivers Licence</label>
+          <label htmlFor="DL" id="dl">Please Upload You Valid Drivers Licence</label>
       <progress value={this.state.progress} max="100"/>
       <br/>
         <input type="file" onChange={this.handleImageAsFile}/>
-        <button onClick={this.handleUpload}>Upload</button>
+        <button class="buttons btn pink lighten-1 z-depth-0" onClick={this.handleUpload}>Upload</button>
         <br/>
         <img src={this.state.url || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400"/>
       </div>
           <div className="input-field">
-            <button className="btn pink lighten-1 z-depth-0">Sign Up</button>
+            <button className="btn pink lighten-1 z-depth-0 buttons">Sign Up</button>
           </div>
         </form>
       </div>

@@ -91,11 +91,11 @@ class CreatePost extends Component {
             <label htmlFor="arrival">Arrival City</label>
           </div>
           <div className="input-field">
-          <input type="time" id="dep-time" name="dep-time"
+          <input type="time" id="deptime" name="dep-time"
        min="09:00" max="18:00" required onChange={this.handleChange}/>
          </div>
          <div className="input-field">
-          <input type="time" id="return-time" name="return-time"
+          <input type="time" id="returntime" name="return-time"
        min="09:00" max="18:00" onChange={this.handleChange} />
          </div>
          
@@ -185,7 +185,7 @@ class CreatePost extends Component {
           onChange={(val) => this.selectRegion(val)} />
       </div> */}
           <div className="input-field">
-            <button className="btn pink lighten-1" >Create</button>
+            <button className="btn pink lighten-1 buttons" >Create</button>
           </div>
         </form>
       </div>

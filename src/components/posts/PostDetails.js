@@ -93,8 +93,9 @@ render() {
             <label htmlFor="title">Post Title</label>
           </div>
           <div className="input-field">
+          <label htmlFor="content">Post Content</label>
             <textarea id="content" className="materialize-textarea" defaultValue={posts.content} onChange={this.handleChange}></textarea>
-            <label htmlFor="content">Post Content</label>
+            
           </div>
           <div className="input-field">
             <textarea id="origin" className="materialize-textarea" defaultValue={posts.origin} onChange={this.handleChange}></textarea>
@@ -105,25 +106,27 @@ render() {
             <label htmlFor="arrival">Arrival City</label>
           </div>
           <div className="input-field">
-          <input type="time" id="deptime" name="dep-time"
+          <label htmlFor="start">Dep time:</label>
+          <input type="time" id="deptime" name="deptime"
        min="09:00" max="18:00" defaultValue={posts.deptime} required/>
          </div>
          <div className="input-field">
-          <input type="time" id="returntime" name="return-time"
+         <label htmlFor="start">Return time:</label>
+          <input type="time" id="returntime" name="returntime"
        min="09:00" max="18:00" defaultValue={posts.returntime} />
          </div>
          
          <label htmlFor="start">Start date:</label>
          <div className="input-field">
          <input type="date" id="startdate" name="trip-start"
-       value={posts.startdate}
+       defaultValue={posts.startdate}
        min="2020-01-01" max="2020-12-31"></input>
        </div>
       
          <label htmlFor="start">Return date:</label>
          <div className="input-field">
          <input type="date" id="returndate" name="trip-start"
-       value={posts.returndate}
+       defaultValue={posts.returndate}
        min="2020-01-01" max="2020-12-31"></input>
        </div>
           <div className="input-field">
