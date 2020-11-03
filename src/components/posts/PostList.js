@@ -39,6 +39,8 @@ const PostList = (props) => {
       // }))
       (posts) && posts.map(post => {
         const email="mailto:"+post.email;
+        const phonenumber="tel:"+post.phoneNumber;
+        const message="sms:"+post.phoneNumber;
         console.log(post.liked);
         let user = firebase.auth().currentUser;    
           if(post.authorId==user.uid)
@@ -66,7 +68,7 @@ const PostList = (props) => {
           <Link  class="link" target="_blank" to={'/post/'+post.id}>
           <PostSummary post={post} key={post.id} />
           </Link>
-          <div className="click-options">{(post.privacy=="public")?<div class="email"><a  href={email}><i className="fas fa-envelope"/></a></div>:<div></div>}
+        <div className="click-options">{(post.verified==true)?<div class="verified"><i class="fas fa-user-check"></i></div>:<div></div>}{(post.privacy=="public")?<div class="email"><a  href={email}><i className="fas fa-envelope"/></a></div>:<div></div>}{(post.phoneNumber)?<div class="phonenumber"><a  href={phonenumber}><i className="fas fa-phone"/></a></div>:<div></div>}{(post.phoneNumber)?<div class="message"><a  href={message}><i className="fas fa-sms"/></a></div>:<div></div>}
           <Like liked={post.liked} onClick={()=>onLike(post)} />
           <Bookmark starred={post.starred} onClick={()=>onBookmark(post)} />
           </div>

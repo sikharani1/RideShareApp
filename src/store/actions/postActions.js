@@ -37,19 +37,19 @@ export const createPost = (post) => {
       console.log(getState().firebase.auth)
       const authorId=getState().firebase.auth.uid;
       console.log(authorId);
-      const user=firestore.collection('users').filter(u=>u.id==user.uid);
       var verified=false;
-     verified=()=>
-     {
-       if(user.image)
-       return true;
-     }
-     const phoneNumber=user.phoneNumber;
+      firestore.collection('users').doc(authorId).get().then((doc) => {
+        if(doc.exists){
+         const user = doc.data();
+         console.log(user);
+         if(user.image)
+          verified=true;
      
-      const email=getState().firebase.auth.email;
-      console.log(phoneNumber,email,verified);
+          const phoneNumber=user.phoneNumber;
      
- firestore.collection('posts').add({
+          const email=getState().firebase.auth.email;
+          console.log(phoneNumber,email,verified);
+          firestore.collection('posts').add({
             ...post,
             liked:false,
             starred:false,
@@ -68,6 +68,16 @@ export const createPost = (post) => {
       }).catch((err)=>{
         dispatch({ type: 'CREATE_POST_ERROR', err });
       })
+     
+        }
+        else{
+          console.log("user error");
+        }
+      });
+      
+     
+       
+
 
 
     }
@@ -100,7 +110,7 @@ export const createPost = (post) => {
       const authorId=getState().firebase.auth.uid;
       let newposts='';
 
-    firestore.collection('posts').doc(postId).set({...updatedState})
+    firestore.collection('posts').doc(postId).set({...updatedState},{ merge: true })
     //}) 
           .then(()=>{
         dispatch({ type: 'UPDATE_POST', postId,updatedState});

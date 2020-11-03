@@ -126,7 +126,7 @@ render() {
          <label htmlFor="start">Return date:</label>
          <div className="input-field">
          <input type="date" id="returndate" name="trip-start"
-       defaultValue={posts.returndate}
+       value={posts.returndate}
        min="2020-01-01" max="2020-12-31"></input>
        </div>
           <div className="input-field">
@@ -226,25 +226,7 @@ render() {
   }
 }
 
-// const mapStateToProps=(state,ownProps)=>
-// {
-//   console.log(state);
-//   const id=ownProps.match.params.id;
-  
-  
-//   const oldposts=state.firestore.data.posts;
-  
-//   const post=oldposts?oldposts[id]:null;
-//   const comments=oldposts?oldposts[id].comments:null;
-  
-//   return{
-//       id:id,
-//       post:post,
-//       auth:state.firebase.auth,
-//       comments:comments,
-//       oldposts:oldposts
-//   }
-// }
+
 
  const mapStateToProps = (state,ownProps) => {
    console.log(state);

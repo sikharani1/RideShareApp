@@ -91,10 +91,13 @@ class CreatePost extends Component {
             <label htmlFor="arrival">Arrival City</label>
           </div>
           <div className="input-field">
+          <label htmlFor="start">Dep time:</label>
           <input type="time" id="deptime" name="dep-time"
        min="09:00" max="18:00" required onChange={this.handleChange}/>
          </div>
          <div className="input-field">
+         
+            <label htmlFor="start">Return time:</label>
           <input type="time" id="returntime" name="return-time"
        min="09:00" max="18:00" onChange={this.handleChange} />
          </div>

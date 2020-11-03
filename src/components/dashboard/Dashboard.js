@@ -26,6 +26,7 @@ import {SphericalUtil, PolyUtil} from "node-geometry-library";
 
 import { yellow } from '@material-ui/core/colors'
 import { Result } from 'react-lodash'
+import { resolve } from 'path'
 
 var arrivalValue;
 var origlat=" ";
@@ -62,7 +63,7 @@ class Dashboard extends Component
     super(props);
     this.keyPressed = this.keyPressed.bind(this);
     this.handleLike=this.handleLike.bind(this);
-    this.handleChange=this.handleChange.bind(this);
+    // this.handleChange=this.handleChange.bind(this);
     this.handleEnter=this.handleEnter.bind(this);
     this.calculateLatLng=this.calculateLatLng.bind(this);
    this.onmyway=this.onmyway.bind(this);
@@ -122,36 +123,38 @@ class Dashboard extends Component
       const val=event.target.value;
       
       if (val) {
-        this.state.searchString.title=val;
+        this.state.searchString["title"]=val.toLowerCase();;
+        // this.state.searchString[id]=val.toLowerCase();
         // this.setState({searchString:this.state.searchString});
       } else {
-        this.state.searchString=oldsearchString;
+        this.state.searchString["title"]=oldsearchString;
         // this.setState({searchString: this.state.searchString});
       }
-      this.getposts(this.state.searchString,"title");
+      this.getposts(this.state.searchString);
   }
   keyPressed(event) {
     if (event.key === "Enter" && !event.shiftKey) { 
       event.preventDefault();
-      this.getposts(this.state.searchString,"title")
+      this.getposts(this.state.searchString)
       }
    
   }
-  handleChange=(event)=>{
+  // handleChange=(event)=>{
   
-    console.log(event.keyCode);
-    if (flag && (event.keyCode === 8 || event.keyCode === 46)) {
-      event.preventDefault();
-    }
-    flag = event.keyCode === 13 || event.keyCode === 8 ; 
+  //   console.log(event.keyCode);
+  //   if (flag && (event.keyCode === 8 || event.keyCode === 46)) {
+  //     event.preventDefault();
+  //   }
+  //   flag = event.keyCode === 13 || event.keyCode === 8 ; 
 
-  } 
+  // } 
   handleEnter=(event)=>{
-    
-    const val=event.target.value;
     
     if (event.key === "Enter" && !event.shiftKey) { 
     event.preventDefault();
+    if(event.target.value) 
+   {
+    const val=event.target.value;
     
 
     const oldsearchString='';
@@ -169,7 +172,7 @@ class Dashboard extends Component
     
       const searchString=this.state.searchString;
       if(searchString && searchString.map(x=>typeof x[id] !== "undefined")){
-        this.state.searchString[id]=val;
+        this.state.searchString[id]=val.toLowerCase();
       }
       else{
       this.state.searchString=[...searchString,{[id]:val}];
@@ -184,14 +187,27 @@ class Dashboard extends Component
      
     }
     console.log(this.state.searchString.length);
+  }
+  else{
+    alert("please enter a valid value to filter");
+  }
    // this.getposts(this.state.searchString)
   }
   }
   handleApply=(e)=>{
    const searchEmpty1=Object.keys(this.state.searchString).length===0;
     this.setState({searchEmpty:searchEmpty1});
-   var resultfilteredsposts=this.getposts(this.state.searchString);
+    var result;
+   var resultfilteredsposts=(this.getposts(this.state.searchString)).then((x)=>
+   {
+      result=x;
+     return x;
+    });
    console.log(resultfilteredsposts);
+   setTimeout((x)=>{
+   console.log("filtered fetch complete");
+   this.setState({filteredposts:result});
+  },3000);
   }
   handleReset=(e)=>{
   const allrefs=this.refs;
@@ -406,6 +422,9 @@ resolve(response);
 getposts = (searchString) => {
   var filteredpostsonmyroute=[];
   var promise3= new Promise((resolve,reject)=>{
+    this.setState({
+      filteredposts:this.props.allposts
+    })
     // console.log(id);
     this.state.searchEmpty=false;
     this.setState({searchEmpty:false});
@@ -413,33 +432,35 @@ getposts = (searchString) => {
     console.log(searchString.entries());
     const iterator1 = Object.entries(searchString);
     console.log(iterator1);
-    
+    var arrivalValue=searchString.arrival;
     var originValue=searchString.origin;
     var luggageValue=searchString.luggage;
     var seatValue=searchString.seats;
     var titleValue=searchString.title;
     var viaValue=searchString.via;
     console.log(originValue);
-    iterator1.forEach(elem=>{
+   iterator1.forEach(elem=>{
        var val1=elem[1];
        var id1=elem[0];
        console.log(val1);
        console.log(id1);
        
        console.log(("origin" in searchString));
+       var filteredposts1=[];
       if(id1!="title")  {
         if(this.state.value=="Post")
          {
           console.log(this.state.posts);
-          console.log(id1);
+          console.log(arrivalValue);
           console.log(originValue);
+         
           if(originValue && id1=="arrival")
           {
-            var filteredposts1=[];
+            
             console.log(this.state.posts);
              this.state.posts.map(x=>{
               //   var x=this.state.posts[12];
-              console.log("my dest "+val1);
+              console.log("my dest "+arrivalValue);
               console.log("my origin "+originValue);
               console.log("post dest "+x.arrival);
               console.log("post origin "+x.origin);
@@ -449,13 +470,13 @@ getposts = (searchString) => {
                //console.log(this.onmyway(x.arrival,val1,originValue));
 
              // const onmywayresult= await this.onmyway(x.arrival,val1,originValue).then((result)=>{
-            if(x.origin==originValue){
-              const onmywayresult=(arrivalvalue,val1,originValue)=>
+            if(x.origin==originValue.toLowerCase()){
+              const onmywayresult=(postarrival,arrivalValue,originValue)=>
               {
                 var promise=new Promise((resolve,reject)=>
                 {
                  
-                    const result=this.onmyway(arrivalvalue,val1,originValue);
+                    const result=this.onmyway(postarrival,arrivalValue,originValue);
                     console.log(result);
                     resolve(result);
                 
@@ -464,7 +485,7 @@ getposts = (searchString) => {
                 return promise;
               }
            
-          onmywayresult(x.arrival,val1,originValue)
+            onmywayresult(x.arrival,arrivalValue,originValue)
               .then(async(result)=>{
                // return await result;
               console.log(result);
@@ -500,74 +521,80 @@ getposts = (searchString) => {
                   
                   
                 }
-                if(viaValue){
+
+                else if(viaValue){
                  
                   console.log(this.state.filteredposts);
                   console.log(this.state.searchEmpty);
-                  filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==viaValue);
+                  
+                    if(!this.state.searchEmpty)
+                    {
+                      filteredposts1=this.state.filteredposts.filter(post => 
+                     {
+                       return (post["via"])?(post["via"].toLowerCase()==viaValue):('')
+                      }
+                      )
+                    }
+                    else
+                  {
+                    filteredposts1=this.state.posts.filter(post => 
+                      {
+                        return (post["via"])?(post["via"].toLowerCase()==viaValue):('');
+                       }
+                    )
+                  
+                  }
+                  
+
+
+                  
                   console.log(filteredposts1);
                   this.state.filteredposts=filteredposts1;
                   this.setState({filteredposts:filteredposts1});
                   
                
                 }
+                else{
+                  this.setState({filteredposts:filteredposts1});
+                }
               },6000);
               }
             }).catch((reject)=>{
               console.log("on the route error");
             });
-            //setTimeout(()=>{console.log(onmywayresult);},6000);
+            
+          }
           
-          
-        }
      
       
         
     /* map loop */
    }) 
-  //  console.log(filteredposts1);
-   
-  //  console.log(this.state.filteredposts);
-   
-  // if(luggageValue || seatValue){
-  //   var filteredposts1=[];
-  //   console.log(this.state.filteredposts);
-  //   console.log(this.state.searchEmpty);
-  //   this.state.filteredposts=filteredposts1;
-  //   this.setState({filteredposts:filteredposts1});
-  //   filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]>=val1);
-  //   console.log(filteredposts1);
-    
-  //   console.log(this.state.filteredposts);
-    
-  // }
-  // if(viaValue){
-  //   var filteredposts1=[];
-  //   console.log(this.state.filteredposts);
-  //   console.log(this.state.searchEmpty);
-  //   filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
-  //   console.log(filteredposts1);
-  //   this.state.filteredposts=filteredposts1;
-  //   this.setState({filteredposts:filteredposts1});
-    
- 
-  // }
-   
-        
-      
-  //           console.log(filteredposts1);
-  //           this.state.filteredposts=filteredposts1;
-            
-  //           console.log(this.state.filteredposts);
-          }
 
-        // filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.props.allposts.filter(post => post[id1]==val1);
-        
-       
-      }
+          }
+          else{
+            console.log(this.state.searchEmpty);
+            console.log(this.state.posts);
+            console.log(this.state.filteredposts);
+            console.log(val1);
+            console.log(id1);
+            
+            setTimeout(()=>{var filteredvalues=(!this.state.searchEmpty && !this.state.filteredposts==undefined && !Array.isArray(this.state.filteredposts) && !this.state.filteredposts.length)?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
+            console.log(filteredvalues);
+            filteredvalues.map(x=>{
+            filteredposts1.push(x);
+            });
+          
+            console.log(filteredposts1);
+          this.state.filteredposts=filteredposts1;
+          this.setState({filteredposts:filteredposts1});
+        },6000);
+      
+          }
+}
       else{
         console.log(this.state.requests);
-        console.log(id1);
+        console.log(arrivalValue);
         console.log(originValue);
         if(originValue && id1=="arrival")
         {
@@ -575,7 +602,7 @@ getposts = (searchString) => {
           console.log(this.state.requests);
           this.state.requests.map(x=>{
             //   var x=this.state.posts[12];
-            console.log("my dest "+val1);
+            console.log("my dest "+viaValue);
             console.log("my origin "+originValue);
             console.log("post dest "+x.arrival);
             console.log("post origin "+x.origin);
@@ -585,13 +612,13 @@ getposts = (searchString) => {
              //console.log(this.onmyway(x.arrival,val1,originValue));
 
            // const onmywayresult= await this.onmyway(x.arrival,val1,originValue).then((result)=>{
-          if(x.origin==originValue){
-            const onmywayresult=(arrivalvalue,val1,originValue)=>
+          if(x.origin==originValue.toLowerCase()){
+            const onmywayresult=(postarrival,arrivalValue,originValue)=>
             {
               var promise=new Promise((resolve,reject)=>
               {
                
-                  const result=this.onmyway(arrivalvalue,val1,originValue);
+                  const result=this.onmyway(postarrival,arrivalValue,originValue);
                   console.log(result);
                   resolve(result);
               
@@ -600,7 +627,7 @@ getposts = (searchString) => {
               return promise;
             }
          
-        onmywayresult(x.arrival,val1,originValue)
+        onmywayresult(x.arrival,arrivalValue,originValue)
             .then(async(result)=>{
              // return await result;
             console.log(result);
@@ -639,7 +666,7 @@ getposts = (searchString) => {
                
                 console.log(this.state.filteredposts);
                 console.log(this.state.searchEmpty);
-                filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.requests.filter(post => post[id1]==viaValue);
+                filteredposts1=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post["via"]==viaValue):this.state.requests.filter(post => post["via"]==viaValue);
                 console.log(filteredposts1);
                 this.state.filteredposts=filteredposts1;
                 this.setState({filteredposts:filteredposts1});
@@ -652,54 +679,22 @@ getposts = (searchString) => {
             console.log("on the route error");
           });
           //setTimeout(()=>{console.log(onmywayresult);},6000);
-        
-        
-      }
-   
-    
-      
+          }    
   /* map loop */
  }) 
-//  console.log(filteredposts1);
- 
-//  console.log(this.state.filteredposts);
- 
-// if(luggageValue || seatValue){
-//   var filteredposts1=[];
-//   console.log(this.state.filteredposts);
-//   console.log(this.state.searchEmpty);
-//   this.state.filteredposts=filteredposts1;
-//   this.setState({filteredposts:filteredposts1});
-//   filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]>=val1);
-//   console.log(filteredposts1);
-  
-//   console.log(this.state.filteredposts);
-  
-// }
-// if(viaValue){
-//   var filteredposts1=[];
-//   console.log(this.state.filteredposts);
-//   console.log(this.state.searchEmpty);
-//   filteredposts1=!this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
-//   console.log(filteredposts1);
-//   this.state.filteredposts=filteredposts1;
-//   this.setState({filteredposts:filteredposts1});
-  
-
-// }
- 
-      
-    
-//           console.log(filteredposts1);
-//           this.state.filteredposts=filteredposts1;
-          
-//           console.log(this.state.filteredposts);
         }
+        else{
+          var filteredvalues=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post[id1]==val1):this.state.requests.filter(post => post[id1]==val1);
+          console.log(filteredvalues);
+          filteredvalues.map(x=>{
+          filteredposts1.push(x);
+          });
+          console.log(filteredposts1);
+        this.state.filteredposts=filteredposts1;
+        this.setState({filteredposts:filteredposts1});
 
-      // filteredposts1= this.state.filteredposts?this.state.filteredposts.filter(post => post[id1]==val1):this.props.allposts.filter(post => post[id1]==val1);
-      
-     
         }
+      }
         //this.state.filteredposts=filteredposts1;
         this.setState({filteredposts:filteredposts1});
         console.log(this.state.filteredposts);
@@ -709,9 +704,13 @@ getposts = (searchString) => {
         else{
           if(this.state.value=="Post")
           {
+            console.log(titleValue);
             console.log(this.state.filteredposts);
-            filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1].includes(val1)):this.state.posts.filter(post => post[id1].includes(val1));
-       
+            filteredvalues= (!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post["title"].toLowerCase().includes(titleValue)):this.state.posts.filter(post => post["title"].toLowerCase().includes(titleValue));
+            filteredvalues.map(x=>{
+              filteredposts1.push(x);
+              });
+            console.log(filteredposts1);
           //  filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
           this.state.filteredposts=filteredposts1; 
           this.setState({filteredposts:filteredposts1});
@@ -720,7 +719,11 @@ getposts = (searchString) => {
          }
          else{
           console.log(this.state.filteredposts);
-          filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1].includes(val1)):this.state.requests.filter(post => post[id1].includes(val1));
+          filteredvalues= (!this.state.searchEmpty && !this.state.filteredposts==undefined)?this.state.filteredposts.filter(post => post["title"].toLowerCase().includes(titleValue)):this.state.requests.filter(post => post["title"].toLowerCase.includes(titleValue));
+          filteredvalues.map(x=>{
+            filteredposts1.push(x);
+            });
+          console.log(filteredposts1);
           this.state.filteredposts=filteredposts1;
           this.setState({filteredposts:filteredposts1});
           console.log(this.state.filteredposts);
@@ -728,30 +731,42 @@ getposts = (searchString) => {
          }
 
          console.log(filteredposts1);
-         //this.state.filteredposts=filteredposts1;
-        //  this.setState({filteredposts:filteredposts1});
+         this.state.filteredposts=filteredposts1;
+        this.setState({filteredposts:filteredposts1});
          console.log(this.state);
          console.log("title");
        }
      });
      filteredpostsonmyroute=this.state.filteredposts;
-     resolve(filteredpostsonmyroute);
+     console.log(filteredpostsonmyroute);
+     
+         resolve(filteredpostsonmyroute);
+      
+     
   });
+
   let thenProm3=promise3.then(async(filteredpostsonmyroute)=>{
     console.log(filteredpostsonmyroute);
+   //resolve(filteredpostsonmyroute);
     return await filteredpostsonmyroute;
+// return this.state.filteredposts;
+
+    // 
+   
     
   }).catch((error)=>
   console.log(error)
   )
-  console.log(thenProm3);
-  setTimeout(()=>{
-    console.log(thenProm3);
-  },6000)
+  // console.log(thenProm3);
+  // thenProm3.then((filteredpostsonmyroute)=>
+  // {
+  //   return filteredpostsonmyroute;
+  //  } );
+  
 
    
-  this.state.filteredposts=filteredpostsonmyroute;
-return this.state.filteredposts;
+//  
+return thenProm3;
   }
 
   
@@ -859,25 +874,25 @@ handleLike = (post) => {
             <div className="main-container shadow">
               <div className="side-filters">
                 <div className="input-field">
-                  <textarea ref="arrival" id="arrival" className="materialize-textarea"  onKeyPress={this.handleEnter} onKeyDown={this.handleChange} ></textarea>
+                  <textarea ref="arrival" id="arrival" className="materialize-textarea"  onKeyPress={this.handleEnter}  ></textarea>
                   <label htmlFor="arrival">Arrival City</label>
                 </div>
                 <div className="input-field">
-                  <textarea ref="origin" id="origin" className="materialize-textarea" onKeyPress={this.handleEnter} onKeyDown={this.handleChange}></textarea>
+                  <textarea ref="origin" id="origin" className="materialize-textarea" onKeyPress={this.handleEnter} ></textarea>
                   <label htmlFor="origin">Origin City</label>
                 </div>
                 <div className="input-field">
-                  <textarea ref="via" id="via" className="materialize-textarea" onKeyPress={this.handleEnter} onKeyDown={this.handleChange}></textarea>
+                  <textarea ref="via" id="via" className="materialize-textarea" onKeyPress={this.handleEnter}></textarea>
                   <label htmlFor="via">Via</label>
                 </div>
                 <div className="input-field">
                   <input type="number" ref="luggage" id="luggage"  onKeyPress={event=>this.handleEnter(event)}
-                  min="0" max="5" onKeyDown={this.handleChange}></input>
+                  min="0" max="5" ></input>
                   <label htmlFor="luggage">Luggage space</label>
                 </div>
                 <div className="input-field">
                   <input type="number" ref="seats" id="seats"  onKeyPress={this.handleEnter}
-                  min="1" max="3" onKeyDown={this.handleChange}></input>
+                  min="1" max="3" ></input>
                   <label htmlFor="seats">Seats available</label>
         
                 </div>

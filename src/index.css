@@ -154,9 +154,22 @@ margin-bottom:20px !important;
 #dl{
   font-weight:bold;
 }
+.verified
+{
+display: inline-block;
+}
 .email{
   display:inline-block;
   padding-right:10px;
+}
+.phonenumber{
+  display:inline-block;
+  margin-right:10px;
+
+}
+.message{
+  display:inline-block;
+  margin-right:10px;
 }
 .searchInput{
 display: inline-block;
@@ -169,7 +182,7 @@ padding-top:0 !important;
 display: inline-block;
 margin-top:15px !important;
 }
-.fa-envelope{
+.fa-envelope,.fa-sms,.fa-phone{
   color:black;
 }
 .buttons{
@@ -181,6 +194,11 @@ margin-top:15px !important;
   margin-left:20px;
 display: block;
 }
+.fa-user-check{
+  
+margin-right:10px;
+}
+
 .fa-trash{
   background: none;
   color:black;
@@ -206,6 +224,11 @@ display: block;
   display:block;
 
 }
+.click-options div{
+  display:inline-block;
+
+}
+
 #myfavourites .click-options{
   display: none !important;
 }

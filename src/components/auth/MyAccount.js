@@ -99,7 +99,7 @@ onSignoutPress = () => {
     
     const currentuser=this.props.users.filter(u=>u.id==user.uid);
     console.log(currentuser);
-    (this.props.users.filter(u=>u.id==user.uid))[0].favourites.map((fav)=>
+    if(currentuser[0].favourites) currentuser[0].favourites.map((fav)=>
     {
       console.log(fav);
       const favouriteposts=this.props.myposts.filter(post=>post.id==fav)
