@@ -37,7 +37,7 @@ const PostList = (props) => {
       //   (posts!==undefined && posts.sort(function(x, y){
       //     return x.createdAt.timestamp - y.createdAt.timestamp;
       // }))
-      (posts) && posts.map(post => {
+      (posts) && posts.map(post => { if(post) {
         const email="mailto:"+post.email;
         const phonenumber="tel:"+post.phoneNumber;
         const message="sms:"+post.phoneNumber;
@@ -56,7 +56,7 @@ const PostList = (props) => {
             <button id="delete-btn" className="btn lighten-1" onClick={() =>  deletePost(post.id) } ><i className="fas fa-trash"/></button>
           </div>
           </div>
-          {(post.privacy=="public")?<div>Ride Posted By Me</div>:<div></div>}
+          {(post.privacy=="public")?<div class="me">Ride Posted By Me</div>:<div></div>}
           
           
           </div>
@@ -81,9 +81,18 @@ const PostList = (props) => {
         )
       }
       
-    
+      }
+      else
+      {
+        return (
+          <div>
+          <div class="post-box">No posts </div>
+            </div>
+        )
+      }
       }
       )
+    
   
       }  
     </div>

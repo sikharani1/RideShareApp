@@ -14,6 +14,9 @@ body {
   background-color:#95e8f3;
   min-height: 100%;
 }
+#root{
+  overflow-x: hidden;
+}
 form{padding:20px;margin-top:60px;margin-bottom: 30px;}
 form button,form h5{margin:20px 0}
 #age{
@@ -40,6 +43,8 @@ code {
   align-self: flex-start;
   margin: 4vw 4vw 4vw 0vw;
   width: 100%;
+ 
+  min-width:300px !important; 
 } 
 .main-container{
   display: flex;
@@ -66,6 +71,137 @@ code {
   margin-left:5%;
 }
 }
+
+/* smallest screen size */
+
+@media only screen and (max-width: 375px){
+nav ul a{
+  font-size: 1rem !important;
+}
+nav ul.right li a.link{
+  padding:0px 5px !important;
+}
+.brand-logo{
+left: 20% !important;
+font-size:1rem !important;
+}
+.fa-car-side{
+  line-height: 1.5 !important;
+  font-size: 24px !important;
+}
+.main-container.shadow{
+  max-width:340px !important; 
+  min-width:340px !important;
+}
+.post-list.section{ 
+  max-width: 350px !important;
+}
+.posts-container{
+max-width: 300px !important;
+margin: 4vw 0vw 4vw 0vw !important;
+}
+.side-filters{
+ margin:4vw 0vw !important;
+ max-width:100px !important;
+}
+
+.buttons{
+max-width:100px !important;
+width:100px !important;
+}
+/* div.card.notification-div{
+max-width: 150px;
+
+
+} */
+div.card.notification-div .card-title{
+font-size:14px !important;
+}
+.click-options{
+left:50px;
+}
+.MuiAppBar-root,.post-list{
+  max-width:240px !important;
+}
+/* .card.notification-div{
+max-width: 120px !important;
+} */
+.col.s12.m5.offset-m1.notifications{
+  width: 100% !important;
+  top:50px;
+  margin-right:10px;
+  position:fixed;
+
+}
+.col.s12.m6.dashboard {
+    width: 100% !important;
+    margin-top: 300px !important;
+
+}
+.post-link{
+  
+  margin-right:0px !important;
+
+}
+#delete-btn{
+  margin-right: 60px !important;
+}
+.post-summary{
+  max-width:146px !important;
+}
+.input-field label{
+  margin-right:-20px !important;
+}
+}
+
+/* medium screen size */
+
+@media only screen and (min-width:376px) and (max-width: 768px){
+  .main-container.shadow{
+    max-width:420px !important; 
+    min-width:420px !important;
+  }
+ .post-list.section{ 
+    max-width: 350px !important;
+ }
+ .posts-container{
+  max-width: 300px !important;
+  margin: 4vw 0vw 4vw 0vw !important;
+ }
+ .side-filters{
+   margin:4vw 0vw !important;
+   max-width:100px !important;
+ }
+ .brand-logo {
+    left:20% !important;
+ }
+ .buttons{
+  max-width:100px !important;
+  width:100px !important;
+}
+div.card.notification-div{
+  max-width: 150px;
+  
+
+}
+div.card.notification-div .card-title{
+  font-size:14px !important;
+}
+.click-options{
+left:50px;
+}
+nav ul a{
+  font-size: 1rem;
+}
+
+.input-field label{
+  margin-right:-20px !important;
+}
+}
+
+
+
+
 .shadow {
   -moz-box-shadow:    0 0 5px #000000;
   -webkit-box-shadow:  0 0 5px #000000;
@@ -149,7 +285,7 @@ margin-bottom:20px !important;
   color:red;
 }
 .input-field label{
-  margin-top: -10px !important;
+  margin-top: -20px !important;
 }
 #dl{
   font-weight:bold;
@@ -220,9 +356,16 @@ margin-right:10px;
   background: none;
   
 }
+.post-list > div{
+  position:relative;
+  margin-bottom: 50px !important;
+}
 .click-options{
   display:block;
-
+  margin-left:10px !important;
+  position:absolute;
+  left:0px;
+  padding-bottom:20px;
 }
 .click-options div{
   display:inline-block;
@@ -256,4 +399,24 @@ margin-right:20px;
 .signin,.signup{
   margin-bottom:30px;
   font-weight:bold;
+}
+div.main-container.shadow,.MuiTabs-flexContainer{
+  min-width:768px;
+  position: relative;
+}
+div.card{
+  min-width:100px;
+  margin-left:10px !important;
+  
+
+}
+
+.MuiTabPanel-root{
+  margin-left:0px !important;
+  padding-left:0px !important;
+}
+.notification-div{
+  top: 70px;
+    position: fixed;
+    background: rgba(255, 255, 255, 0.8);
 }

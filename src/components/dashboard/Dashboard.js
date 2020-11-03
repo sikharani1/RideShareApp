@@ -719,7 +719,7 @@ getposts = (searchString) => {
          }
          else{
           console.log(this.state.filteredposts);
-          filteredvalues= (!this.state.searchEmpty && !this.state.filteredposts==undefined)?this.state.filteredposts.filter(post => post["title"].toLowerCase().includes(titleValue)):this.state.requests.filter(post => post["title"].toLowerCase.includes(titleValue));
+          filteredvalues= (!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post["title"].toLowerCase().includes(titleValue)):this.state.requests.filter(post => post["title"].toLowerCase().includes(titleValue));
           filteredvalues.map(x=>{
             filteredposts1.push(x);
             });
