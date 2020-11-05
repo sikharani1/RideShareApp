@@ -27,6 +27,7 @@ import {SphericalUtil, PolyUtil} from "node-geometry-library";
 import { yellow } from '@material-ui/core/colors'
 import { Result } from 'react-lodash'
 import { resolve } from 'path'
+import { createSpam, deleteSpam } from '../../store/actions/reportSpamActions'
 
 var arrivalValue;
 var origlat=" ";
@@ -131,6 +132,12 @@ class Dashboard extends Component
         // this.setState({searchString: this.state.searchString});
       }
       this.getposts(this.state.searchString);
+      if(this.state.searchString["title"]==""){
+      this.setState({
+        filteredposts:this.props.allposts,
+        searchEmpty:true
+      })
+    }
   }
   keyPressed(event) {
     if (event.key === "Enter" && !event.shiftKey) { 
@@ -175,7 +182,7 @@ class Dashboard extends Component
         this.state.searchString[id]=val.toLowerCase();
       }
       else{
-      this.state.searchString=[...searchString,{[id]:val}];
+      this.state.searchString=[...searchString,{[id]:val.toLowerCase()}];
       }
    
       //this.setState({...this.state.elementsTriggered,id});
@@ -218,7 +225,8 @@ class Dashboard extends Component
      }
    }
    this.setState({
-    filteredposts:this.props.allposts
+    filteredposts:this.props.allposts,
+    searchEmpty:true
   })
     //this.setState({initialValue:''});
   }
@@ -496,7 +504,7 @@ getposts = (searchString) => {
                 console.log(this.state.filteredposts);
                 console.log(this.state.searchEmpty);
                
-                var filteredvalues=!this.state.searchEmpty?this.state.posts.filter(post => post["arrival"]==x.arrival):this.state.posts.filter(post => post["arrival"]==x.arrival);
+                var filteredvalues=!this.state.searchEmpty?this.state.posts.filter(post => post["arrival"].toLowerCase()==x.arrival):this.state.posts.filter(post => post["arrival"].toLowerCase()==x.arrival);
                 console.log(filteredvalues);
                 filteredvalues.map(x=>{
                 filteredposts1.push(x);
@@ -579,7 +587,7 @@ getposts = (searchString) => {
             console.log(val1);
             console.log(id1);
             
-            setTimeout(()=>{var filteredvalues=(!this.state.searchEmpty && !this.state.filteredposts==undefined && !Array.isArray(this.state.filteredposts) && !this.state.filteredposts.length)?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
+            setTimeout(()=>{var filteredvalues=(!this.state.searchEmpty && !this.state.filteredposts==undefined && !Array.isArray(this.state.filteredposts) && !this.state.filteredposts.length)?this.state.filteredposts.filter(post => post[id1].toLowerCase()==val1):this.state.posts.filter(post => post[id1].toLowerCase()==val1);
             console.log(filteredvalues);
             filteredvalues.map(x=>{
             filteredposts1.push(x);
@@ -666,7 +674,7 @@ getposts = (searchString) => {
                
                 console.log(this.state.filteredposts);
                 console.log(this.state.searchEmpty);
-                filteredposts1=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post["via"]==viaValue):this.state.requests.filter(post => post["via"]==viaValue);
+                filteredposts1=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post["via"].toLowerCase()==viaValue):this.state.requests.filter(post => post["via"].toLowerCase()==viaValue);
                 console.log(filteredposts1);
                 this.state.filteredposts=filteredposts1;
                 this.setState({filteredposts:filteredposts1});
@@ -684,7 +692,7 @@ getposts = (searchString) => {
  }) 
         }
         else{
-          var filteredvalues=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post[id1]==val1):this.state.requests.filter(post => post[id1]==val1);
+          var filteredvalues=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post[id1].toLowerCase()==val1):this.state.requests.filter(post => post[id1].toLowerCase()==val1);
           console.log(filteredvalues);
           filteredvalues.map(x=>{
           filteredposts1.push(x);
@@ -812,6 +820,29 @@ handleLike = (post) => {
     }
     this.forceUpdate();
   }
+  handleReport=(post)=>{
+    const posts = !this.state.searchEmpty?this.state.filteredposts: this.props.allposts ;
+    if(posts) {
+      console.log(typeof post);
+      const index = posts.indexOf(post);
+      const id=post.id;
+      console.log(index);
+    //posts[index] = posts[index];
+    
+    posts[index].spamReported = !posts[index].spamReported;
+    // posts[index] = { post };
+    
+    this.setState({filteredposts:posts});
+    this.setState({posts:posts});
+    console.log(posts[index]);
+    if(posts[index].spamReported)
+    this.props.createSpam(id,posts[index]);
+    else
+    this.props.deleteSpam(id,posts[index]);
+    
+    }
+    this.forceUpdate();
+  }
   
   handleChange1 = (event, newValue) => {
     this.setState({value:newValue})
@@ -917,10 +948,10 @@ handleLike = (post) => {
                     </AppBar>
                     
                     
-                      <TabPanel value="Post"><PostList onLike={this.handleLike.bind(this)} posts={this.state.posts} onBookmark={this.handleBookmark.bind(this)} /></TabPanel> 
+                      <TabPanel value="Post"><PostList onLike={this.handleLike.bind(this)} posts={this.state.posts} onBookmark={this.handleBookmark.bind(this)} onReport={this.handleReport.bind(this)} /></TabPanel> 
 
                       <TabPanel value="Request"> 
-                      <PostList onLike={this.handleLike.bind(this)} posts={this.state.requests} onBookmark={this.handleBookmark.bind(this)} />
+                      <PostList onLike={this.handleLike.bind(this)} posts={this.state.requests} onBookmark={this.handleBookmark.bind(this)} onReport={this.handleReport.bind(this)} />
                       </TabPanel>
                       </TabContext>
                       ):<TabContext value={this.state.value}>
@@ -929,7 +960,7 @@ handleLike = (post) => {
                         <Tab label="Filtered Rides"  />
                       </TabList>
                     </AppBar>
-                    <TabPanel value={this.state.value}><PostList onLike={this.handleLike.bind(this)} posts={this.state.filteredposts} onBookmark={this.handleBookmark.bind(this)} /></TabPanel> 
+                    <TabPanel value={this.state.value}><PostList onLike={this.handleLike.bind(this)} posts={this.state.filteredposts} onBookmark={this.handleBookmark.bind(this)} onReport={this.handleReport.bind(this)} /></TabPanel> 
 
                   </TabContext>
                   // <TabContext value={this.state.value}>
@@ -954,13 +985,23 @@ handleLike = (post) => {
 
 const mapStateToProps = (state) => {
   console.log(state);
+
+
+  // const initialposts=state.firestore.ordered.posts;
+  // const spamposts=state.firestore.ordered.spams;
+  // console.log(spamposts);
+  // console.log(initialposts);
+  //   const validposts=initialposts.filter(p=>!spamposts.includes(p));
+  // console.log(validposts);
+
+
   //const state=this.state;
   return {
-    allposts: state.firestore.ordered.posts,
-    //allrequests:state.firestore.ordered.requests,
+    allposts: state.firestore.ordered.posts.filter(p=>!state.firestore.ordered.spams.includes(p)),
+    allrequests:state.firestore.ordered.requests,
     auth:state.firebase.auth,
-    notifications: state.firestore.ordered.notifications
-    
+    notifications: state.firestore.ordered.notifications,
+    spams:state.firestore.ordered.spams
     //  loading: state.movies.loading
     
   }
@@ -971,12 +1012,15 @@ const mapDispatchToProps=(dispatch)=>{
   likePost: (postId,likedpost) => dispatch(updatePost(postId,likedpost)),
   bookmarkPost:(postId,starredpost)=>dispatch(bookmarkPost(postId,starredpost)),
   deleteBookmark:(postId,starredpost)=>dispatch(deleteBookmark(postId,starredpost)),
+  createSpam:(postId,spammedpost)=>dispatch(createSpam(postId,spammedpost)),
+  deleteSpam:(postId,spammedpost)=>dispatch(deleteSpam(postId,spammedpost))
   }
   
 }
 export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect([
   { collection: 'posts',orderBy:['createdAt','desc']},
   { collection: 'notifications', limit: 3,orderBy:['time','desc']},
-  { collection: 'users'}
+  { collection: 'users'},
+  { collection: 'spams'}
  ])
 )(Dashboard)                                                                                

@@ -23,6 +23,7 @@ exports.postCreated=functions.firestore
     const notification = {
       content: 'Added a new post',
       user: `${post.authorFirstName} ${post.authorLastName}`,
+      url:`${doc.id}`,
       time: admin.firestore.FieldValue.serverTimestamp()
     }
 
@@ -40,6 +41,7 @@ exports.userJoined = functions.auth.user()
         const notification = {
           content: 'Joined the Ride Share portal',
           user: `${newUser.firstName} ${newUser.lastName}`,
+          // url:`${newUser.id}`,
           time: admin.firestore.FieldValue.serverTimestamp()
         };
 

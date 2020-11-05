@@ -8,7 +8,7 @@ import SignUp from './components/auth/SignUp'
 import CreatePost from './components/posts/CreatePost'
 import MyAccount from './components/auth/MyAccount'
 import Fallback from './components/dashboard/Fallback'
-
+import AdminPanel from './components/dashboard/AdminPanel'
 
 class App extends Component {
   render() {
@@ -24,6 +24,7 @@ class App extends Component {
             <Route path='/signup' component={SignUp} />
             <Route path='/myaccount' component={MyAccount} />
             <Route path='/create' component={CreatePost} />
+            <Route path='/admin' component={AdminPanel} />
           </Switch>
         </div>
       </Router>
