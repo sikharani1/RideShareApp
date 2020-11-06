@@ -343,6 +343,9 @@ margin-right:10px;
   color:black;
   background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59)) !important;
 }
+.fa-bars{
+margin-top:20px;
+}
 .post-link{
   display: inline-block;
   width:85%;
@@ -419,7 +422,7 @@ div.card{
   padding-left:0px !important;
 }
 .notification-div{
-  top: 70px;
+  top: 100px;
     position: fixed;
     background: rgba(255, 255, 255, 0.8);
 }

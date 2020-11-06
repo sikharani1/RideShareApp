@@ -40,7 +40,7 @@ var originArr={};
 var filtdestArr={};
 var destArr={};
 // var finalArr=[];
-
+var validposts=[];
 
 var orig="";
 
@@ -54,6 +54,7 @@ const mapStyles = {
   width: '100%',
   height: '100%',
 };
+
 // var myPosition={lat: 40.73, lng: -73.93};
 
 class Dashboard extends Component 
@@ -82,7 +83,8 @@ class Dashboard extends Component
         value:"Post",
         filteredposts:[],
         searchEmpty:true,
-        initialValue:''
+        initialValue:'',
+        open:true
         
       })
   }
@@ -229,6 +231,11 @@ class Dashboard extends Component
     searchEmpty:true
   })
     //this.setState({initialValue:''});
+  }
+  handleMenu=()=>{
+    const isopen =!this.state.open;
+     this.setState({open:isopen})
+     console.log(this.state.open);
   }
   calculateLatLng=(dest,filtdest,orig)=>{
     var finalArr=[];
@@ -832,8 +839,8 @@ handleLike = (post) => {
     posts[index].spamReported = !posts[index].spamReported;
     // posts[index] = { post };
     
-    this.setState({filteredposts:posts});
-    this.setState({posts:posts});
+   
+
     console.log(posts[index]);
     if(posts[index].spamReported)
     this.props.createSpam(id,posts[index]);
@@ -841,6 +848,9 @@ handleLike = (post) => {
     this.props.deleteSpam(id,posts[index]);
     
     }
+
+    this.setState({filteredposts:posts});
+    this.setState({posts:posts});
     this.forceUpdate();
   }
   
@@ -974,9 +984,16 @@ handleLike = (post) => {
               </div>
             </div>
           </div>
-              <div className="col s12 m5 offset-m1 notifications">
-                              <Notifications notifications={notifications}/>
+          
+              <i class="fas fa-bars" onClick={this.handleMenu}></i>NOTIFICATIONS<div className="col s12 m5 offset-m1 notifications" >
+              {this.state.open?
+                              
+                              (<Notifications notifications={notifications}/>):null
+              }
               </div>
+
+
+              
           </div>
       </div>
     )
@@ -988,16 +1005,35 @@ const mapStateToProps = (state) => {
 
 
   // const initialposts=state.firestore.ordered.posts;
-  // const spamposts=state.firestore.ordered.spams;
-  // console.log(spamposts);
+   const spamreports=state.firestore.ordered.spams;
+   console.log(spamposts);
   // console.log(initialposts);
   //   const validposts=initialposts.filter(p=>!spamposts.includes(p));
   // console.log(validposts);
 
-
+var spamposts=[];
   //const state=this.state;
+  if(state.firestore.ordered.posts && spamreports)
+  {
+    spamreports.map((s)=>{
+      console.log(s);
+    
+ const spampost=state.firestore.ordered.posts.filter(p=>s.postId==p.id);
+ console.log(spampost);
+  spampost.map(x=>{
+    spamposts.push(x);
+    });
+    });
+  console.log(spamposts);
+  
+   validposts=state.firestore.ordered.posts.filter(p=>!(spamposts.includes(p)));
+  
+
+  console.log(validposts)
+  }
   return {
-    allposts: state.firestore.ordered.posts.filter(p=>!state.firestore.ordered.spams.includes(p)),
+     allposts: validposts,
+    //allposts: state.firestore.ordered.posts,
     allrequests:state.firestore.ordered.requests,
     auth:state.firebase.auth,
     notifications: state.firestore.ordered.notifications,
@@ -1005,7 +1041,9 @@ const mapStateToProps = (state) => {
     //  loading: state.movies.loading
     
   }
+
   
+
 }
 const mapDispatchToProps=(dispatch)=>{
   return {
