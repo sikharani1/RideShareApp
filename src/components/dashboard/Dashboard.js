@@ -1005,8 +1005,10 @@ const mapStateToProps = (state) => {
 
 
   // const initialposts=state.firestore.ordered.posts;
-   const spamreports=state.firestore.ordered.spams;
-   console.log(spamposts);
+  const totalspams=state.firestore.ordered.spams;
+  if(totalspams)
+    var spamreports= totalspams.filter(s=>s.isSpam==true);
+   console.log(spamreports);
   // console.log(initialposts);
   //   const validposts=initialposts.filter(p=>!spamposts.includes(p));
   // console.log(validposts);

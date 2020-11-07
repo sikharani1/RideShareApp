@@ -35,6 +35,7 @@ export const createSpam = (postId) => {
         firestore.collection('spams').add({
             
             postId:postId,
+            isSpam:false,
             spammed:true,
             authorFirstName:profile.firstName,
             authorLastName:profile.lastName,
@@ -87,7 +88,7 @@ export const createSpam = (postId) => {
   export const getASpam = (spamId) => {
     return (dispatch, getState, { getFirestore }) => {
    const firestore = getFirestore()
-     firestore.collection('spams').doc(spamId).get().then((doc) => {
+     firestore.collection('spams').doc(spamId).set().then((doc) => {
       if(doc.exists){
        const data = doc.data();
        dispatch({ type: 'GET_SPAM', data }) 
@@ -97,4 +98,32 @@ export const createSpam = (postId) => {
       
      })
     }
+   }
+
+   export const tickSpam=(postId)=>{
+    return (dispatch, getState, { getFirestore }) => {
+        const firestore = getFirestore()
+          firestore.collection('spams').doc(postId).update({
+              isSpam:true
+          }).then(()=>firestore.collection('spams').doc(postId).get().then((doc) => {
+            if(doc.exists){
+             const spam = doc.data();
+             console.log(spam)
+            }
+            }).then(() => {
+            
+           
+            console.log("ticked");
+            dispatch({ type: 'TICK_SPAM', postId }) ;
+           
+           
+          }).catch((err)=>{
+            dispatch({ type: 'TICK_SPAM_ERROR', err });
+        })
+          
+          )}
+
+
+
+
    }

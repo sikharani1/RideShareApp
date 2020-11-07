@@ -15,6 +15,10 @@
       case 'CREATE_SPAM_ERROR':
         console.log('reported post error',action.err);
         return state;
+      case 'TICK_SPAM':
+          console.log("ticked spam",action.postId);
+      case 'TICK_SPAM_ERROR':
+          console.log("ticked spam",action.err);
       case 'DELETE_SPAM':
         console.log('deleted spam ',action.postId);
         return state;

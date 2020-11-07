@@ -45,7 +45,7 @@ const PostList = (props) => {
         console.log(post.liked);
         console.log(post.spamReported);
         let user = firebase.auth().currentUser;    
-          if(post.authorId==user.uid)
+          if(user && post.authorId==user.uid)
           {
         return (
           <div>

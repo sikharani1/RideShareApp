@@ -10,6 +10,7 @@ const ReportSpam = props => {
       className={classes}
       aria-hidden="true"
       spamReported={props.spamReported}
+     
     />
   );
 };
