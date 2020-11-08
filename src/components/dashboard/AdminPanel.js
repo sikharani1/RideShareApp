@@ -38,9 +38,9 @@ tickSpam=(postId)=>{
   const defaulturl="www.google.com";
   const { spams } = this.props;
   return (
-    <div className="container">
-    <div className="section">
-      <div className="card notification-div z-depth-0">
+    <div className="container admin">
+   <div className="main-container shadow">
+      <div className="card z-depth-0">
         <div className="card-content">
           <span className="card-title">Spams</span>
           <ul className="online-users">
@@ -74,7 +74,7 @@ tickSpam=(postId)=>{
           </ul>
         </div>
       </div>
-    </div>
+      </div>
     </div>
   )
           }

@@ -56,10 +56,15 @@ code {
 .input-field{
   margin-bottom: 1.5rem;
 }
-@media only screen and (min-width: 993px){
+.brand-logo {
+  left:20% !important;
+  font-family: Helvetica;
+}
+@media only screen and (min-width: 992px){
 .container.main {
     width: 80%;
 }
+
 }
 .col.s12.m6.dashboard{
   width: 70%;
@@ -69,17 +74,22 @@ code {
   width: 25%;
 
 }
-@media only screen and (min-width: 601px){
+
+@media only screen and (min-width: 601px) {
 .row .col.offset-m1 {
   margin-left:5%;
 }
+/* nav ul a{
+  font-size: 0.7rem !important;
+} */
+
 }
 
 /* smallest screen size */
 
 @media only screen and (max-width: 375px){
 nav ul a{
-  font-size: 1rem !important;
+  font-size: 0.6rem !important;
 }
 nav ul.right li a.link{
   padding:0px 5px !important;
@@ -155,6 +165,14 @@ max-width: 120px !important;
 .input-field label{
   margin-right:-15px !important;
 }
+.admin-link{
+  margin-left: 5px !important;
+  margin-right:0px !important;
+  }
+  .account-link{
+    margin-left: 0px !important;
+  margin-right:0px !important;
+  }
 }
 
 /* medium screen size */
@@ -177,6 +195,8 @@ max-width: 120px !important;
  }
  .brand-logo {
     left:20% !important;
+    font-family: Helvetica;
+    font-size: 1.5rem;
  }
  .buttons{
   max-width:100px !important;
@@ -195,11 +215,16 @@ left:50px;
 }
 nav ul a{
   font-size: 1rem;
+  padding-left:5px !important;
+  margin-left:5px !important;
+  margin-right:0px !important;
+  padding-right:0px !important;
 }
 
 .input-field label{
   margin-right:-20px !important;
 }
+
 }
 
 
@@ -331,14 +356,15 @@ margin-top:15px !important;
 .fa-user-edit{
   margin-top:20px;
   margin-left:20px;
-display: block;
+  display: block;
 }
 .fa-user-check{
-  
-margin-right:10px;
+  display: inline-block;
+  margin-right:10px;
 }
 
 .fa-trash{
+  display: inline-block;
   background: none;
   color:black;
   background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59)) !important;
@@ -346,13 +372,21 @@ margin-right:10px;
 .fa-bars{
 margin-top:20px;
 }
+.fa-flag{
+  margin-left:10px;
+}
 .post-link{
   display: inline-block;
   width:85%;
 }
+#check,#delete{
+  display: inline-block !important;
+  margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+}
 #delete{
   display: inline-block;
-  margin-bottom:0 !important; 
+  
   margin-left:10px;
   vertical-align:middle;
 }
@@ -428,4 +462,14 @@ div.card{
     position: fixed;
     background: rgba(255, 255, 255, 0.8);
 }
+.admin{
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+
+
+
+
+
 

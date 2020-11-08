@@ -84,7 +84,8 @@ class Dashboard extends Component
         filteredposts:[],
         searchEmpty:true,
         initialValue:'',
-        open:true
+        open:true,
+        posts:this.props.allposts
         
       })
   }
@@ -93,8 +94,8 @@ class Dashboard extends Component
    await(this.props.allposts)
    console.log(this.props);
     this.setState({
-      filteredposts:'',
-      posts:this.props.allposts
+      filteredposts:''
+      // posts:this.props.allposts
     })
     console.log(this.state.filteredposts);
   //this.initialize();

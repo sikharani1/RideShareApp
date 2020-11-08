@@ -2,6 +2,7 @@
 import {connect} from 'react-redux'
 import {firestoreConnect} from 'react-redux-firebase'
 import {compose} from 'redux'
+import {db} from './db';
 // export const dbchange=(getFirestore)=>{
 //   const firestore=getFirestore();
       
@@ -135,6 +136,30 @@ export const createPost = (post) => {
      })
     }
    }
+
+  //  export const getOfflinedata=()=>{
+  //   return (dispatch, getState,{getFirebase,getFirestore}) => {
+  //   const firestore = getFirestore();
+  //   firestore.disableNetwork()
+  //   .then(function() {
+  //       // Do offline actions
+  //       // ...
+
+  //       db.collection("posts")
+  //     .onSnapshot({ includeMetadataChanges: true }, function(snapshot) {
+  //     snapshot.docChanges().forEach(function(change) {
+  //         if (change.type === "added") {
+  //             console.log("New post: ", change.doc.data());
+  //         }
+
+  //         var source = snapshot.metadata.fromCache ? "local cache" : "server";
+  //         console.log("Data came from " + source);
+  //     });
+  // });
+  //   });
+  // }
+
+  //  }
   
   
   

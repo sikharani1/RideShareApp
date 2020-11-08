@@ -35,19 +35,19 @@ const store = createStore(rootReducer,
       reduxFirestore(fbConfig) // redux bindings for firestore
     )
   );
-//db(getFirestore);
+db(getFirestore);
 store.firebaseAuthIsReady.then(()=>{
   ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
   //registerServiceWorker();
 
 
 
-  // if('serviceWorker' in navigator){
-  //   navigator.serviceWorker.register('/serviceWorker.js')
-  //     .then(reg => {
-  //       console.log('service worker registered')
-  //     })
-  //     .catch(err => console.log('service worker not registered', err));
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/serviceWorker.js')
+      .then(reg => {
+        console.log('service worker registered')
+      })
+      .catch(err => console.log('service worker not registered', err));
 
-  // }
+  }
 })
