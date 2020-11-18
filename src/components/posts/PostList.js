@@ -50,8 +50,11 @@ const PostList = (props) => {
         return (
           <div>
           <div className="post-box">
-          <Link className="post-link post-content" to={'/post/'+post.id} target="_blank" >
+          <Link className="post-link post-content" to={'/post/'+post.id} >
             <PostSummary post={post} key={post.id} />
+          </Link>
+          <Link className="update-link" to={'update/post/'+post.id}>
+          <i class="fas fa-edit"></i> 
           </Link>
           
           <div id="delete" className="post-content" className="input-field">
@@ -67,7 +70,7 @@ const PostList = (props) => {
       else{
         return(
           <div>
-          <Link  className="link" target="_blank" to={'/post/'+post.id}>
+          <Link  className="link" to={'/post/'+post.id}>
           <PostSummary post={post} key={post.id} />
           </Link>
         <div className="click-options">{(post.verified==true)?<div className="verified"><i className="fas fa-user-check"></i></div>:<div></div>}{(post.privacy=="public")?<div className="email"><a  href={email}><i className="fas fa-envelope"/></a></div>:<div></div>}{(post.phoneNumber)?<div className="phonenumber"><a  href={phonenumber}><i className="fas fa-phone"/></a></div>:<div></div>}{(post.phoneNumber)?<div class="message"><a  href={message}><i className="fas fa-sms"/></a></div>:<div></div>}

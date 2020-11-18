@@ -14,6 +14,7 @@ import TabList from '@material-ui/lab/TabList'
 import Tab from '@material-ui/core/Tab'
 import TabPanel from '@material-ui/lab/TabPanel'
 import AppBar from '@material-ui/core/AppBar'
+import ToolBar from '@material-ui/core/Toolbar'
 import PostSummary from '../posts/PostSummary'
 import {Link} from 'react-router-dom'
 import {updatePost} from '../../store/actions/postActions'
@@ -85,7 +86,7 @@ class Dashboard extends Component
         searchEmpty:true,
         initialValue:'',
         open:true,
-        posts:this.props.allposts
+        
         
       })
   }
@@ -103,21 +104,7 @@ class Dashboard extends Component
 
    
   }
-  
-  // createGoogleMap = () =>
-  //   new window.google.maps.Map(this.googleMapRef.current, {
-  //     zoom: 16,
-  //     center: 
-  //       myPosition
-  //     ,
-  //     disableDefaultUI: true,
-  //   })
 
-  // createMarker = () =>
-  //   new window.google.maps.Marker({
-  //     position: myPosition,
-  //     map: this.googleMap,
-  //   })
 
  onSearchInputChange = (event) => {
     const oldsearchString='';
@@ -185,7 +172,7 @@ class Dashboard extends Component
         this.state.searchString[id]=val.toLowerCase();
       }
       else{
-      this.state.searchString=[...searchString,{[id]:val.toLowerCase()}];
+      this.setState({searchString:[...searchString,{[id]:val.toLowerCase()}]});
       }
    
       //this.setState({...this.state.elementsTriggered,id});
@@ -300,14 +287,7 @@ class Dashboard extends Component
       }
    );
     resolve(finalArr);
- // resolve(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
-  
-  // (origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)
-  
-    //console.log(origlat+" "+origlng+" "+filtdestlat+" "+filtdestlng+" "+destlat+" "+destlng);
-    //resolve(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
-       // let onmyway=this.onTheRoute(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
-       // return onmyway;
+
   });
 
 let thenProm=promise.then(async(finalArr)=>{
@@ -315,14 +295,6 @@ let thenProm=promise.then(async(finalArr)=>{
   // finalArr=result;
   console.log(finalArr);
   return await finalArr;
-  //let onmyway=this.onTheRoute(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng);
-  
-  // if(finalArr)
-  // {
-    
-  // }
-  
- 
     }
     ).catch((error)=>
     console.log(error)
@@ -333,14 +305,7 @@ let thenProm=promise.then(async(finalArr)=>{
     })
      return  finalArr;
 }
-  // onmyway=async(dest,filtdest,orig) =>{
-  //   console.log(dest,filtdest,orig);
-  //   console.log(this.calculateLatLng(dest,filtdest,orig));
-  //     const finalArr=await this.calculateLatLng(dest,filtdest,orig);
-  //     console.log(finalArr);
-  //   if(finalArr) this.onTheRoute(finalArr);
-    
-  // }
+ 
 
   onmyway=(dest,filtdest,orig) =>{
     var promise=new Promise((resolve,reject)=>{
@@ -356,11 +321,6 @@ let thenProm=promise.then(async(finalArr)=>{
          resolve(resultontheroute);
         },3000);
     })
-    //     .then((result)=>{
-    //   console.log(result);
-    //   return result;
-    // }).catch(error=>
-    //   console.log(error));
     return promise;
   }
  
@@ -383,12 +343,7 @@ let thenProm=promise.then(async(finalArr)=>{
     console.log("filtdest"+filtdestlat+" "+filtdestlng)
     console.log("dest"+destlat+" "+destlng)
  
-
-
-
-
-
- let response =  PolyUtil.isLocationOnEdge(
+let response =  PolyUtil.isLocationOnEdge(
   {'lat':filtdestlat, 'lng': filtdestlng}, // point object {lat, lng}
   [
     // poligon arrays of object {lat, lng}
@@ -402,27 +357,11 @@ let thenProm=promise.then(async(finalArr)=>{
 );
 console.log(response);
 resolve(response);
-
-
- 
- 
-    
-    
-    
-    
-    
-    }).then((resolve)=>{
+ }).then((resolve)=>{
       console.log(resolve);
     return resolve;
     });
     
-   
- 
-// }).then((onmyroute)=>{ return onmyroute }).catch((err)=>{
-//      console.log("error");
-//    })
-
-//})
 }
   ispointwithinradius=()=>{
     var origlat=51.525;
@@ -461,17 +400,16 @@ getposts = (searchString) => {
        console.log(val1);
        console.log(id1);
        
-       console.log(("origin" in searchString));
        var filteredposts1=[];
-      if(id1!="title")  {
-        if(this.state.value=="Post")
-         {
+    if(id1!="title")  {
+      if(this.state.value=="Post")
+      {
           console.log(this.state.posts);
           console.log(arrivalValue);
           console.log(originValue);
          
-          if(originValue && id1=="arrival")
-          {
+        if(originValue && id1=="arrival")
+        {
             
             console.log(this.state.posts);
              this.state.posts.map(x=>{
@@ -765,23 +703,12 @@ getposts = (searchString) => {
     console.log(filteredpostsonmyroute);
    //resolve(filteredpostsonmyroute);
     return await filteredpostsonmyroute;
-// return this.state.filteredposts;
 
-    // 
-   
     
   }).catch((error)=>
   console.log(error)
   )
-  // console.log(thenProm3);
-  // thenProm3.then((filteredpostsonmyroute)=>
-  // {
-  //   return filteredpostsonmyroute;
-  //  } );
   
-
-   
-//  
 return thenProm3;
   }
 
@@ -884,18 +811,7 @@ handleLike = (post) => {
     if(!auth.uid) return <Redirect to='/signin'/>
     return (
       <div className="main container">
-        {/* <Map
-          google={this.props.google}
-          zoom={8}
-          style={mapStyles}
-          initialCenter={{ lat: 47.444, lng: -122.176}}
-        /> */}
-        {/* <div
-        id="google-map"
-        ref={this.googleMapRef}
-        style={{ width: '400px', height: '300px' }}
-      /> */}
-        {/* <MapContainer/> */}
+   
         <div className="row">
           <div className="col s12 m6 dashboard">
           {/* <SearchForm /> */}
@@ -985,8 +901,10 @@ handleLike = (post) => {
               </div>
             </div>
           </div>
-          
-              <i class="fas fa-bars" onClick={this.handleMenu}></i>NOTIFICATIONS<div className="col s12 m5 offset-m1 notifications" >
+          <ToolBar>
+              <i class="fas fa-bell" onClick={this.handleMenu}></i><span className="card-title" id="notification-title">NOTIFICATIONS</span></ToolBar>
+              <div className="col s12 m5 offset-m1 notifications" >
+                
               {this.state.open?
                               
                               (<Notifications notifications={notifications}/>):null

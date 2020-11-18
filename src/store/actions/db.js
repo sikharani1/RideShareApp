@@ -2,6 +2,8 @@
 export const db=(getFirestore)=>{
     getFirestore().enablePersistence().then(()=>{
     console.log("offline data enabled");
+    this.initTemplates();
+        this.initRouter();
 }
 )
   .catch(function(err) {

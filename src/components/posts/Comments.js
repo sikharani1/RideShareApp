@@ -8,9 +8,31 @@ class Comments extends Component {
     constructor() {
         super()
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.state = {
+            
+            
+            comments:[]
+        }
     }
     async componentDidMount() {
         await(this.props.comments)
+    }
+    componentDidUpdate(prevProps,prevState)  {
+        // Typical usage (don't forget to compare props):
+        console.log("Component did update")
+        console.log(prevProps);
+        console.log(this.props.comments);
+        if (this.props.comments !== prevProps.comments) {
+      
+          console.log("updated");
+          this.forceUpdate();
+          
+       // });
+      }
+      else{
+       
+        console.log("not updated");
+      }
     }
     handleSubmit(event) {
         event.preventDefault()
@@ -118,7 +140,8 @@ const mapStateToProps=(state)=>
  
   return{
 
-      auth:state.firebase.auth
+      auth:state.firebase.auth,
+      //comments:state.comments
   }
 }
 const mapDispatchToProps = dispatch => {

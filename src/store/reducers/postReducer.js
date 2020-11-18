@@ -39,6 +39,7 @@ const initState = {
       case 'GET_POST':
               console.log("got post",action.data);
               state=action.data;
+              console.log(state);
               return state;
         default:
           return state;

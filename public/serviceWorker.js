@@ -138,28 +138,33 @@
 
 
 
-const staticCacheName = 'site-static-v5';
-const dynamicCacheName = 'site-dynamic-v5';
+const staticCacheName = 'site-static-v6';
+const dynamicCacheName = 'site-dynamic-v6';
 const assets = [
   '/',
+  '/fallback',
   '/index.html',
+  '/post/',
   '/manifest.json',
   '../src/App.js',
   '../src/index.js',
   '../src/components/dashoboard/Dashoboard.js',
   '../src/components/dashoboard/PostDetails.js',
+  '../src/components/dashoboard/AdminPanel.js',
   '../src/components/posts/PostList.js',
   '../src/components/posts/PostSummary.js',
   '../src/components/posts/CreatePost.js',
-  '../src/components/posts/PostDetails.js',
   '../src/components/posts/Comments.js',
   '../src/components/layout/Navbar.js',
   '../src/components/layout/SignedOutLinks.js',
   '../src/components/layout/SignedInLinks.js',
+  '../src/components/dashoboard/Fallback.js',
   '../src/components/store/actions',
   '../src/components/store/reducers',
   '../src/index.css',
   '/image/ridesharebg.gif',
+  '/rideshare.ico',
+  '/rideshare_10.png',
   'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js',
   'https://fonts.googleapis.com/icon?family=Material+Icons',
   'https://kit.fontawesome.com/fbe9fc69ff.js',
@@ -227,9 +232,10 @@ self.addEventListener('fetch', evt => {
           return fetchRes;
         });
       }).catch(() => {
-        if(evt.request.url.indexOf('.html') > -1){
-          return caches.match('/fallback');
-        } 
+        console.log("fetch error");
+        // if(evt.request.url.indexOf('.html') > -1){
+          return caches.match('/src/components/dashoboard/Fallback.js');
+        // } 
       })
     );
   }

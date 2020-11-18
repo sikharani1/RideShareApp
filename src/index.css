@@ -22,6 +22,9 @@ form button,form h5{margin:20px 0}
 #age{
   display: block;
 }
+#dl{
+  margin-top: 40px !important;
+}
 .input-field.radiobutton input{
   opacity:1;
   position: relative;
@@ -87,7 +90,7 @@ code {
 
 /* smallest screen size */
 
-@media only screen and (max-width: 375px){
+@media only screen and (max-width: 414px){
 nav ul a{
   font-size: 0.6rem !important;
 }
@@ -122,14 +125,24 @@ margin: 4vw 0vw 4vw 0vw !important;
 max-width:100px !important;
 width:100px !important;
 }
-/* div.card.notification-div{
-max-width: 150px;
+#notification-title,.fa-bell
+{
+    top: 100px !important;
+    position: fixed;
+    display: inline-block;
+   
+    
+    line-height: 1.5 !important;
+}
+#notification-title{
+  padding-inline-start: 15px !important;
+}
 
 
-} */
 div.card.notification-div .card-title{
 font-size:14px !important;
 }
+
 .click-options{
 left:50px;
 }
@@ -177,7 +190,7 @@ max-width: 120px !important;
 
 /* medium screen size */
 
-@media only screen and (min-width:376px) and (max-width: 768px){
+@media only screen and (min-width:415px) and (max-width: 768px){
   .main-container.shadow{
     max-width:420px !important; 
     min-width:420px !important;
@@ -257,6 +270,7 @@ width: 100%;
 }
 .card-title{
   font-weight: bold !important;
+  
 }
 notification-container{
   font-weight: bold;
@@ -369,8 +383,8 @@ margin-top:15px !important;
   color:black;
   background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59)) !important;
 }
-.fa-bars{
-margin-top:20px;
+.fa-bell{
+margin-right:10px;
 }
 .fa-flag{
   margin-left:10px;
@@ -458,14 +472,23 @@ div.card{
   padding-left:0px !important;
 }
 .notification-div{
-  top: 100px;
+    top: 130px;
     position: fixed;
     background: rgba(255, 255, 255, 0.8);
 }
+
 .admin{
   margin-top:20px;
   margin-bottom:20px;
 }
+.MuiToolbar-gutters {
+  padding-left: 43px;
+  padding-right: 24px;
+}
+.me{
+  margin-left: 10px !important;
+}
+
 
 
 

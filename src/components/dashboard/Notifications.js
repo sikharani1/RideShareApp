@@ -8,7 +8,7 @@ const Notifications = (props) => {
     <div className="section">
       <div className="card notification-div z-depth-0">
         <div className="card-content">
-          <span className="card-title">Notifications</span>
+          
           <ul className="online-users">
           { notifications && notifications.map(item =>{
             if(item.url)
