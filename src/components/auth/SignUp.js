@@ -65,11 +65,14 @@ class SignUp extends Component {
       justifyContent: 'center',
       marginTop:'20px'
     };
-    const {auth}=this.props;
+    const {auth,authError}=this.props;
     if(auth.uid) return <Redirect to='/'/>
+    
+    
     return (
-      
       <div className="container">
+      
+     
         <form className="white" onSubmit={this.handleSubmit}>
           <h5 className="grey-text text-darken-3 signup">Sign Up</h5>
           <div className="input-field">
@@ -104,7 +107,10 @@ class SignUp extends Component {
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0 buttons">Sign Up</button>
           </div>
+          {(authError)?(
+      <div className="red-text center">{authError}</div>):null}
         </form>
+        
       </div>
     )
   }

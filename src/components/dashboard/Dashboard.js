@@ -42,7 +42,7 @@ var filtdestArr={};
 var destArr={};
 // var finalArr=[];
 var validposts=[];
-
+var searchString=[];
 var orig="";
 
  //Geocode.setApiKey("AIzaSyDjzMckE87fEvdaWGFcv7lsGNVhJY9-zNM");
@@ -63,7 +63,12 @@ class Dashboard extends Component
   googleMapRef = React.createRef()
   
   constructor(props){
+    console.log("constructor");
     super(props);
+    this.state=
+      {filteredposts:[]};
+      // posts:this.props.allposts
+    
     this.keyPressed = this.keyPressed.bind(this);
     this.handleLike=this.handleLike.bind(this);
     // this.handleChange=this.handleChange.bind(this);
@@ -82,7 +87,6 @@ class Dashboard extends Component
     this.setState({
         searchString:[],
         value:"Post",
-        filteredposts:[],
         searchEmpty:true,
         initialValue:'',
         open:true,
@@ -94,10 +98,7 @@ class Dashboard extends Component
  async componentDidMount() {
    await(this.props.allposts)
    console.log(this.props);
-    this.setState({
-      filteredposts:''
-      // posts:this.props.allposts
-    })
+    
     console.log(this.state.filteredposts);
   //this.initialize();
    console.log(this.ispointwithinradius()); 
@@ -108,17 +109,20 @@ class Dashboard extends Component
 
  onSearchInputChange = (event) => {
     const oldsearchString='';
+    
     if(this.state.searchString.title){
       const oldsearchString=this.state.searchString;
       }
       const val=event.target.value;
       
       if (val) {
-        this.state.searchString["title"]=val.toLowerCase();;
+        searchString["title"]=val.toLowerCase();
+        this.setState({searchString:searchString});
         // this.state.searchString[id]=val.toLowerCase();
         // this.setState({searchString:this.state.searchString});
       } else {
-        this.state.searchString["title"]=oldsearchString;
+        searchString["title"]=oldsearchString;
+        this.setState({searchString:searchString});
         // this.setState({searchString: this.state.searchString});
       }
       this.getposts(this.state.searchString);
@@ -179,7 +183,7 @@ class Dashboard extends Component
       console.log(this.state.searchString);
    
     } else {
-      this.state.searchString=oldsearchString;
+      this.setState({searchString:oldsearchString});
       // this.setState({searchString:this.state.searchString })
      
     }
@@ -204,6 +208,7 @@ class Dashboard extends Component
    setTimeout((x)=>{
    console.log("filtered fetch complete");
    this.setState({filteredposts:result});
+   alert("Filter complete");
   },3000);
   }
   handleReset=(e)=>{
@@ -530,19 +535,23 @@ getposts = (searchString) => {
             console.log(this.state.searchEmpty);
             console.log(this.state.posts);
             console.log(this.state.filteredposts);
+            
             console.log(val1);
             console.log(id1);
-            
-            setTimeout(()=>{var filteredvalues=(!this.state.searchEmpty && !this.state.filteredposts==undefined && !Array.isArray(this.state.filteredposts) && !this.state.filteredposts.length)?this.state.filteredposts.filter(post => post[id1].toLowerCase()==val1):this.state.posts.filter(post => post[id1].toLowerCase()==val1);
+            console.log(this.state.filteredposts.length);
+              var viafilteredposts=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && (this.state.filteredposts.length)!=0)?this.state.filteredposts.filter(post => post[id1]!=undefined):this.state.posts.filter(post => post[id1]!=undefined);
+              var filteredvalues=viafilteredposts.filter(post => post[id1].toLowerCase()==val1);
             console.log(filteredvalues);
             filteredvalues.map(x=>{
             filteredposts1.push(x);
             });
-          
+            setTimeout(()=>{
+            this.setState({filteredposts:filteredposts1});
             console.log(filteredposts1);
-          this.state.filteredposts=filteredposts1;
-          this.setState({filteredposts:filteredposts1});
-        },6000);
+            },3000);
+          //this.state.filteredposts=filteredposts1;
+         
+        
       
           }
 }
@@ -600,7 +609,7 @@ getposts = (searchString) => {
               console.log(filteredposts1);
               filteredposts1=[... new Set(filteredposts1)];
               //this.setState({filteredposts:filteredposts1});
-              setTimeout(()=>{
+              
               if(luggageValue || seatValue){
                // var filteredposts1=[];
                 console.log(this.state.filteredposts);
@@ -622,12 +631,12 @@ getposts = (searchString) => {
                 console.log(this.state.searchEmpty);
                 filteredposts1=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post["via"].toLowerCase()==viaValue):this.state.requests.filter(post => post["via"].toLowerCase()==viaValue);
                 console.log(filteredposts1);
-                this.state.filteredposts=filteredposts1;
+                //this.state.filteredposts=filteredposts1;
                 this.setState({filteredposts:filteredposts1});
                 
              
               }
-            },6000);
+            
             }
           }).catch((reject)=>{
             console.log("on the route error");
@@ -638,19 +647,20 @@ getposts = (searchString) => {
  }) 
         }
         else{
-          var filteredvalues=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && this.state.filteredposts.length)?this.state.filteredposts.filter(post => post[id1].toLowerCase()==val1):this.state.requests.filter(post => post[id1].toLowerCase()==val1);
-          console.log(filteredvalues);
-          filteredvalues.map(x=>{
-          filteredposts1.push(x);
-          });
-          console.log(filteredposts1);
-        this.state.filteredposts=filteredposts1;
-        this.setState({filteredposts:filteredposts1});
-
+          var viafilteredposts=(!this.state.searchEmpty && !this.state.filteredposts==undefined && Array.isArray(this.state.filteredposts) && (this.state.filteredposts.length)!=0)?this.state.filteredposts.filter(post => post[id1]!=undefined):this.state.requests.filter(post => post[id1]!=undefined);
+              var filteredvalues=viafilteredposts.filter(post => post[id1].toLowerCase()==val1);
+            console.log(filteredvalues);
+            filteredvalues.map(x=>{
+            filteredposts1.push(x);
+            });
+            setTimeout(()=>{
+            this.setState({filteredposts:filteredposts1});
+            console.log(filteredposts1);
+            },3000);
         }
       }
         //this.state.filteredposts=filteredposts1;
-        this.setState({filteredposts:filteredposts1});
+       // this.setState({filteredposts:filteredposts1});
         console.log(this.state.filteredposts);
        
           //this.props.allposts.map(currentpost => (console.log(currentpost[id])));
@@ -666,7 +676,7 @@ getposts = (searchString) => {
               });
             console.log(filteredposts1);
           //  filteredposts1= !this.state.searchEmpty?this.state.filteredposts.filter(post => post[id1]==val1):this.state.posts.filter(post => post[id1]==val1);
-          this.state.filteredposts=filteredposts1; 
+          //this.state.filteredposts=filteredposts1; 
           this.setState({filteredposts:filteredposts1});
           console.log(this.state.filteredposts);
 
@@ -678,23 +688,25 @@ getposts = (searchString) => {
             filteredposts1.push(x);
             });
           console.log(filteredposts1);
-          this.state.filteredposts=filteredposts1;
+          //this.state.filteredposts=filteredposts1;
           this.setState({filteredposts:filteredposts1});
           console.log(this.state.filteredposts);
 
          }
 
          console.log(filteredposts1);
-         this.state.filteredposts=filteredposts1;
+         //this.state.filteredposts=filteredposts1;
         this.setState({filteredposts:filteredposts1});
          console.log(this.state);
          console.log("title");
        }
      });
+     setTimeout(()=>{
      filteredpostsonmyroute=this.state.filteredposts;
      console.log(filteredpostsonmyroute);
      
          resolve(filteredpostsonmyroute);
+     },3000);
       
      
   });
@@ -787,6 +799,7 @@ handleLike = (post) => {
   };
   render() 
   {
+    console.log("render");
     // this.requests=[];
     // this.posts=[];
     const { history } = this.props;

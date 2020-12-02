@@ -51,3 +51,30 @@ store.firebaseAuthIsReady.then(()=>{
 
   }
 })
+window.addEventListener("load", () => {
+  function handleNetworkChange(event) {
+    if (navigator.onLine) {
+      alert("You are online now");
+      var x=document.getElementById("signal");
+      if(Array.from(x.childNodes).some(child => child.nodeType === child.TEXT_NODE)){
+      x.removeChild(x.childNodes[0]);
+      }
+      var textnode = document.createTextNode("ONLINE");  
+ //var icon = document.createElement("I");  
+       x.appendChild(textnode);
+    } else {
+      
+      alert("You are viewing this page in offline mode");
+      var x=document.getElementById("signal");
+      if(Array.from(x.childNodes).some(child => child.nodeType === child.TEXT_NODE)){
+        x.removeChild(x.childNodes[0]);
+        }
+      var textnode = document.createTextNode("OFFLINE");  
+ //var icon = document.createElement("I");  
+       x.appendChild(textnode);
+    }
+  }
+
+  window.addEventListener("online", handleNetworkChange);
+  window.addEventListener("offline", handleNetworkChange);
+});

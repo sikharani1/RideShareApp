@@ -32,6 +32,10 @@ form button,form h5{margin:20px 0}
  margin: 10px;
 
 }
+.spam-container{
+  width:500px;
+  margin:auto !important
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -466,6 +470,14 @@ div.card{
   
 
 }
+.collection-header{
+background-color: #26a69a !important;
+color: white !important;
+}
+.collection-item{
+  font-weight: bold !important;
+  font-size: 1.5em !important;
+}
 
 .MuiTabPanel-root{
   margin-left:0px !important;
@@ -489,10 +501,29 @@ div.card{
   margin-left: 10px !important;
 }
 
+#signal{
+  color: rgb(0, 41, 128);
+  font-weight: bold;
 
+}
+.fa-bars:before {
+  line-height: 1.9px !important;
+}
+#menu button{
 
+  right: 0px;
+  position: fixed;
+  color: white;
+  line-height: 1px !important;
 
-
-
-
-
+}
+.gototop
+{
+float:right;
+font-size:x-large;
+margin-top:10px;
+bottom:0;
+right:0;
+position:fixed;
+font-weight: bold;
+}

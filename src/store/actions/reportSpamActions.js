@@ -10,6 +10,7 @@ export const createSpam = (postId) => {
       console.log(authorId);
       var verified=false;
       var postContent="";
+      var postTitle="";
       firestore.collection('users').doc(authorId).get().then((doc) => {
         if(doc.exists){
          const user = doc.data();
@@ -26,11 +27,16 @@ export const createSpam = (postId) => {
          const post = doc.data();
          console.log(post);
          if(post.content)
-          {var postContent=post.content;}
+          {postContent=post.content;}
+        
+        if(post.title)
+          {postTitle=post.title;}
         }
         else{
           console.log("spam post error");
         }
+        
+        
       })).then(()=>
         firestore.collection('spams').add({
             
@@ -42,7 +48,8 @@ export const createSpam = (postId) => {
             authorId:authorId,
             createdAt:new Date(),
             verified:verified,
-            content:postContent
+            content:postContent,
+            title:postTitle
       
             
 

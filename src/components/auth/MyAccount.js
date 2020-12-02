@@ -9,7 +9,7 @@ import * as firebase from 'firebase';
 import MyRides from './MyRides';
 import PostList from '../posts/PostList'
 import { TextInput, Button, Alert } from 'react'
-
+import {HashLink} from 'react-router-hash-link'
 
 class MyAccount extends Component {
     constructor(props){
@@ -43,6 +43,7 @@ async componentDidMount() {
 // Occurs when signout is pressed...
 onSignoutPress = () => {
     this.props.signOut();
+    
   }
   reauthenticate = (currentPassword) => {
     console.log(this.props);
@@ -57,7 +58,7 @@ onSignoutPress = () => {
     this.reauthenticate(this.state.currentPassword).then(() => {
       var user = this.props.firebaseauth.currentUser;
       user.updatePassword(this.state.newPassword).then(() => {
-        Alert.alert("Password was changed");
+        alert("Password was changed");
       }).catch((error) => { console.log(error.message); });
     }).catch((error) => { console.log(error.message) });
   }
@@ -67,7 +68,7 @@ onSignoutPress = () => {
     this.reauthenticate(this.state.currentPassword).then(() => {
       var user = this.props.firebaseauth.currentUser;
       user.updateEmail(this.state.newEmail).then(() => {
-        Alert.alert("Email was changed");
+        alert("Email was changed");
       }).catch((error) => { console
         .log(error.message); });
     }).catch((error) => { console.log(error.message) });
@@ -117,7 +118,7 @@ onSignoutPress = () => {
     
       
         <div className="container">
-         
+         <div id="account">
           <button className="myaccount-btn signout btn pink lighten-1 z-depth-0" onClick={this.onSignoutPress}>Sign out</button> 
           <i class="fas fa-user-edit"></i>
           <h5 className="grey-text text-darken-3">Password Reset</h5>
@@ -132,6 +133,7 @@ onSignoutPress = () => {
            <input type="password" id='new password' autoCapitalize="none" secureTextEntry={true} onChange={(e)=>this.setState({newPassword: e.target.value})} />
           </div>
           <button className="myaccount-btn btn pink lighten-1 z-depth-0" onClick={this.onChangePasswordPress}>Change Password</button>
+          </div>
           {/* <div className="input-field">
        
        <label htmlFor="email">Email</label>
@@ -139,7 +141,7 @@ onSignoutPress = () => {
       </div>
       <button title="Change Email" onClick={this.onChangeEmailPress}>Change Email</button> */}
       {/* <MyRides myposts={this.props.posts} /> */}
-      <div className="main-container shadow">
+      <div id="rides" className="main-container shadow">
       <b><h6 id="myrides-header">MY RIDES</h6></b>
 <div className="posts-container" id="myrides">
      {/* <PostList posts={this.props.myposts.filter(this.checkUser(user.uid))} /> */}
@@ -147,7 +149,7 @@ onSignoutPress = () => {
       </div>
 
 </div>
-<div className="main-container shadow">
+<div id="favourites" className="main-container shadow">
       <b><h6 id="myrides-header">MY FAVOURITES</h6></b>
 <div className="posts-container" id="myfavourites">
      {/* <PostList posts={this.props.myposts.filter(this.checkUser(user.uid))} /> */}
@@ -155,6 +157,7 @@ onSignoutPress = () => {
       </div>
 
 </div>
+<HashLink className="gototop" to="/myaccount#" activeStyle={{ color: 'red' }}>GO TO TOP</HashLink>
         </div>
 
       

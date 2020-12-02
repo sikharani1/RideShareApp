@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router , Switch, Route } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
+import Signal from './components/layout/Signal'
 import Dashboard from './components/dashboard/Dashboard'
 import PostDetails from './components/posts/PostDetails'
 import PostView from './components/posts/PostView'
@@ -11,12 +12,17 @@ import MyAccount from './components/auth/MyAccount'
 import Fallback from './components/dashboard/Fallback'
 import AdminPanel from './components/dashboard/AdminPanel'
 
+var x = "Is the browser online? " + navigator.onLine;
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="App">
+        
+
+          <Signal/>
           <Navbar />
+          
           <Switch>
             <Route exact path='/'component={Dashboard} />
             <Route path='/fallback'component={Fallback} />

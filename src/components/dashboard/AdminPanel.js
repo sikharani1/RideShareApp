@@ -40,16 +40,20 @@ tickSpam=(postId)=>{
   return (
     <div className="container admin">
    <div className="main-container shadow">
-      <div className="card z-depth-0">
-        <div className="card-content">
-          <span className="card-title">Spams</span>
-          <ul className="online-users">
+     <div className="z-depth-0 spam-container container">
+        
+        
+      
+          <ul className="online-users collection with-header">
+          <li className="collection-header "><h4 className="card-title">Spams</h4></li>
           { spams && spams.map(item =>{
             if(item.url)
-              return <li key={item.id}><a href={`/post/${item.postId}`}>{item.postId}
-                <p className="pink-text">{item.authorFirstName} </p>
-                <p>{item.content}</p>
-                <div className="note-date grey-text">{item.createdAt.seconds}</div></a>
+              return <li className="collection-item pink-text darken-2" key={item.id}><a href={`/post/${item.postId}`}>
+                <p className="orange-text darken-2">{item.content}</p>
+                <p className="pink-text darken-2">{item.title}</p>
+                <p>{item.authorFirstName} </p>
+                
+                <div className="note-date grey-text darken-2">{item.createdAt.toDate().toDateString()}</div></a>
           <div id="check" className="post-content" className="input-field">
             <button id="check-btn" className="btn lighten-1" onClick={() =>  this.tickSpam(item.id) } ><i className="far fa-check-square"/></button>
           </div>
@@ -58,11 +62,13 @@ tickSpam=(postId)=>{
           </div>
               </li>
               else
-              return <li key={item.id}><a href={`/post/${item.postId}`}>{item.postId}
-                <p className="pink-text">{item.authorFirstName} </p>
-                <p>{item.content}</p>
+              return <li className="collection-item pink-text darken-2" key={item.id}><a href={`/post/${item.postId}`}>
+                <p className="orange-text darken-2">{item.title}</p>
+                <p className="pink-text darken-2">{item.content}</p>
+                <p>{item.authorFirstName} </p>
                 
-                <div className="note-date grey-text">{item.createdAt.seconds}</div></a>
+                
+                <div className="note-date grey-text darken-2">{item.createdAt.toDate().toDateString()}</div></a>
                 <div id="check" className="post-content" className="input-field">
             <button id="check-btn" className="btn lighten-1" onClick={() =>  this.tickSpam(item.id) } ><i className="far fa-check-square"/></button>
           </div>
@@ -73,7 +79,7 @@ tickSpam=(postId)=>{
             })}
           </ul>
         </div>
-      </div>
+      
       </div>
     </div>
   )
