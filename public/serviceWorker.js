@@ -138,8 +138,8 @@
 
 
 
-const staticCacheName = 'site-static-v6';
-const dynamicCacheName = 'site-dynamic-v6';
+const staticCacheName = 'site-static-v7';
+const dynamicCacheName = 'site-dynamic-v7';
 const assets = [
   '/',
   '/fallback',
