@@ -5,11 +5,7 @@
     switch (action.type) {
       case 'BOOKMARK_POST':
         console.log('added Bookmarked post to favourites', action.post);
-        // const totalposts=Object.entries(action.post);
-        // console.log(totalposts);
-        // //totalposts.push(action.post);
-        // Object.assign(state,totalposts);
-        // state=[...state,totalposts];
+        
         console.log(state);
         return state;
       case 'BOOKMARK_POST_ERROR':

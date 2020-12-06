@@ -63,11 +63,11 @@ class Dashboard extends Component
   googleMapRef = React.createRef()
   
   constructor(props){
-    console.log("constructor");
+    
     super(props);
     this.state=
       {filteredposts:[]};
-      // posts:this.props.allposts
+      
     
     this.keyPressed = this.keyPressed.bind(this);
     this.handleLike=this.handleLike.bind(this);
@@ -100,7 +100,7 @@ class Dashboard extends Component
    console.log(this.props);
     
     console.log(this.state.filteredposts);
-  //this.initialize();
+  
    console.log(this.ispointwithinradius()); 
 
    
@@ -118,12 +118,11 @@ class Dashboard extends Component
       if (val) {
         searchString["title"]=val.toLowerCase();
         this.setState({searchString:searchString});
-        // this.state.searchString[id]=val.toLowerCase();
-        // this.setState({searchString:this.state.searchString});
+       
       } else {
         searchString["title"]=oldsearchString;
         this.setState({searchString:searchString});
-        // this.setState({searchString: this.state.searchString});
+        
       }
       this.getposts(this.state.searchString);
       if(this.state.searchString["title"]==""){
@@ -179,12 +178,12 @@ class Dashboard extends Component
       this.setState({searchString:[...searchString,{[id]:val.toLowerCase()}]});
       }
    
-      //this.setState({...this.state.elementsTriggered,id});
+     
       console.log(this.state.searchString);
    
     } else {
       this.setState({searchString:oldsearchString});
-      // this.setState({searchString:this.state.searchString })
+     
      
     }
     console.log(this.state.searchString.length);
@@ -192,7 +191,7 @@ class Dashboard extends Component
   else{
     alert("please enter a valid value to filter");
   }
-   // this.getposts(this.state.searchString)
+  
   }
   }
   handleApply=(e)=>{
@@ -296,8 +295,7 @@ class Dashboard extends Component
   });
 
 let thenProm=promise.then(async(finalArr)=>{
-  // console.log(result);
-  // finalArr=result;
+ 
   console.log(finalArr);
   return await finalArr;
     }
@@ -331,13 +329,12 @@ let thenProm=promise.then(async(finalArr)=>{
  
    
 
- // onTheRoute=(origlat,origlng,filtdestlat,filtdestlng,destlat,destlng)=>{
+ 
   onTheRoute=async (finalArr)=>{
     return new Promise((resolve,reject)=>{
       origlat=finalArr[0][0];
     console.log(origlat);
-  // return new Promise(resolve=>{
-  //   console.log(finalArr);
+  
     
   origlng=finalArr[0][1];
   filtdestlat=finalArr[1][0];
@@ -418,17 +415,12 @@ getposts = (searchString) => {
             
             console.log(this.state.posts);
              this.state.posts.map(x=>{
-              //   var x=this.state.posts[12];
+              
               console.log("my dest "+arrivalValue);
               console.log("my origin "+originValue);
               console.log("post dest "+x.arrival);
               console.log("post origin "+x.origin);
-              // setTimeout(()=>{
-               //  this.onmyway(x.arrival,val1,originValue)},3000);
-             //const onmywayresult= await this.onmyway(x.arrival,val1,originValue).then((result)=>{
-               //console.log(this.onmyway(x.arrival,val1,originValue));
-
-             // const onmywayresult= await this.onmyway(x.arrival,val1,originValue).then((result)=>{
+              
             if(x.origin==originValue.toLowerCase()){
               const onmywayresult=(postarrival,arrivalValue,originValue)=>
               {
@@ -446,8 +438,7 @@ getposts = (searchString) => {
            
             onmywayresult(x.arrival,arrivalValue,originValue)
               .then(async(result)=>{
-               // return await result;
-              console.log(result);
+               
               if(await result)
               {
                 console.log("ontheroute");
@@ -462,10 +453,10 @@ getposts = (searchString) => {
                 });
                 console.log(filteredposts1);
                 filteredposts1=[... new Set(filteredposts1)];
-                //this.setState({filteredposts:filteredposts1});
+                
                 setTimeout(()=>{
                 if(luggageValue || seatValue){
-                 // var filteredposts1=[];
+                 
                   console.log(this.state.filteredposts);
                   console.log(this.state.searchEmpty);
                   
@@ -477,11 +468,8 @@ getposts = (searchString) => {
                   console.log(filteredposts1);
                   this.setState({filteredposts:filteredposts1});
                   console.log(this.state.filteredposts);
-                  
-                  
-                }
-
-                else if(viaValue){
+                  }
+                  else if(viaValue){
                  
                   console.log(this.state.filteredposts);
                   console.log(this.state.searchEmpty);
@@ -503,16 +491,10 @@ getposts = (searchString) => {
                     )
                   
                   }
-                  
-
-
-                  
-                  console.log(filteredposts1);
+                 
                   this.state.filteredposts=filteredposts1;
                   this.setState({filteredposts:filteredposts1});
-                  
-               
-                }
+                  }
                 else{
                   this.setState({filteredposts:filteredposts1});
                 }
@@ -523,11 +505,7 @@ getposts = (searchString) => {
             });
             
           }
-          
-     
-      
-        
-    /* map loop */
+          /* map loop */
    }) 
 
           }
@@ -550,10 +528,7 @@ getposts = (searchString) => {
             console.log(filteredposts1);
             },3000);
           //this.state.filteredposts=filteredposts1;
-         
-        
-      
-          }
+}
 }
       else{
         console.log(this.state.requests);
@@ -800,15 +775,14 @@ handleLike = (post) => {
   render() 
   {
     console.log("render");
-    // this.requests=[];
-    // this.posts=[];
+   
     const { history } = this.props;
     console.log(this.props);
     console.log(this.state);
     console.log(this.state.value);
     const {auth,allposts,notifications/*,loading*/} = this.props;
     console.log(allposts);
-    // this.props.allposts && this.props.allposts.map(post => { post.type=="Request"?this.requests.push(post):this.posts.push(post)});
+    
     var requests1=[];
     var posts1=[];
     this.props.allposts && this.props.allposts.map(post => { post.type=="Request"?requests1.push(post):posts1.push(post)});
@@ -820,7 +794,7 @@ handleLike = (post) => {
     console.log(this.state.requests);
     console.log(this.state.posts);
     console.log(this.state.filteredposts);
-    //console.log(allrequests);
+   
     if(!auth.uid) return <Redirect to='/signin'/>
     return (
       <div className="main container">
@@ -868,11 +842,11 @@ handleLike = (post) => {
         
                 </div>
                 <div className="input-field">
-                  <button className="btn pink lighten-1 buttons filter-buttons" onClick={this.handleApply} >Apply</button>
+                  <button className="btn black-text yellow darken-3 buttons filter-buttons" onClick={this.handleApply} >Apply</button>
                 </div>
                 
                 <div className="input-field">
-                  <button className="btn pink lighten-1 buttons filter-buttons" onClick={this.handleReset} >Reset</button>
+                  <button className="btn black-text yellow darken-3 buttons filter-buttons" onClick={this.handleReset} >Reset</button>
                 </div>
                 
               </div>
@@ -934,45 +908,32 @@ handleLike = (post) => {
 
 const mapStateToProps = (state) => {
   console.log(state);
-
-
-  // const initialposts=state.firestore.ordered.posts;
   const totalspams=state.firestore.ordered.spams;
   if(totalspams)
     var spamreports= totalspams.filter(s=>s.isSpam==true);
-   console.log(spamreports);
-  // console.log(initialposts);
-  //   const validposts=initialposts.filter(p=>!spamposts.includes(p));
-  // console.log(validposts);
-
-var spamposts=[];
-  //const state=this.state;
+    console.log(spamreports);
+    var spamposts=[];
+  
   if(state.firestore.ordered.posts && spamreports)
   {
     spamreports.map((s)=>{
       console.log(s);
     
  const spampost=state.firestore.ordered.posts.filter(p=>s.postId==p.id);
- console.log(spampost);
+ 
   spampost.map(x=>{
     spamposts.push(x);
     });
     });
-  console.log(spamposts);
-  
-   validposts=state.firestore.ordered.posts.filter(p=>!(spamposts.includes(p)));
-  
-
-  console.log(validposts)
-  }
+  validposts=state.firestore.ordered.posts.filter(p=>!(spamposts.includes(p)));
+   }
   return {
      allposts: validposts,
-    //allposts: state.firestore.ordered.posts,
+   
     allrequests:state.firestore.ordered.requests,
     auth:state.firebase.auth,
     notifications: state.firestore.ordered.notifications,
     spams:state.firestore.ordered.spams
-    //  loading: state.movies.loading
     
   }
 

@@ -45,7 +45,7 @@ validate(item,value){
   }
 
   if(regexvalid==true){
-  //check if title origin or arrival field values are just numeric and not text  
+  //check if title, origin or arrival field values are just numeric and not text  
   if(item=="title" || item=="origin" || item=="arrival"){
     if(validator.isNumeric(`${value}`)){
       valid=false;
@@ -98,11 +98,11 @@ render() {
         <div className="input-field" >
           <label htmlFor="post_or_request"></label>
           <select id="type" onChange={this.handleChange}>
-          <option value="Post">Post a Ride</option>
-          <option value="Request">Request a Ride</option>
+          <option value="Post">POST A RIDE</option>
+          <option value="Request">REQUEST A RIDE</option>
           </select>
           </div>
-          <h5 className="grey-text text-darken-3">Create a New Post</h5>
+          <h6 className="grey-text text-darken-3">CREATE A NEW POST</h6>
           <div className="input-field">
             <input type="text" id='title' required onChange={this.handleChange}  />
             <label htmlFor="title">Post Title</label>
@@ -237,7 +237,7 @@ render() {
                 </div>
          
                 <div className="input-field">
-                  <button className="btn pink lighten-1 buttons" >Create</button>
+                  <button className="btn yellow darken-3 black-text buttons" >Create</button>
                 </div>
         </form>
       </div>

@@ -15,14 +15,10 @@ class PostView extends Component {
   
   constructor(props){
     super(props);
-   // const updatedData={};
+   
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleChange=this.handleChange.bind(this);
-    this.handleChange1=this.handleChange1.bind(this);
-    //this.input = React.createRef();
-    
-    
-    
+    this.handleChange1=this.handleChange1.bind(this);  
   }
   
   componentWillMount(){
@@ -30,16 +26,9 @@ class PostView extends Component {
     console.log(id);
     this.props.getAPost(id)
     
-    // this.setState({
-    //   posts:this.props.posts,
-    //   loading: 'false'
-    // });
-    
-    
-    
   }
     componentDidUpdate(prevProps,prevState)  {
-    // Typical usage (don't forget to compare props):
+    
     console.log("Component did update")
     console.log(prevProps);
     console.log(this.props.posts);
@@ -47,7 +36,7 @@ class PostView extends Component {
   
       console.log("updated");
       this.forceUpdate();
-   // });
+   
   }
   else{
    
@@ -71,9 +60,7 @@ class PostView extends Component {
       this.setState(prevState => ({
         posts: { ...prevState.posts,  [e.target.id]: value }
       }))
-      // this.setState({
-      //   [e.target.id]: e.target.value
-      // })
+   
     } 
 
 
@@ -93,8 +80,6 @@ class PostView extends Component {
 
 }
 
-  
-// console.log(props.post(id).comments);
 render() { 
  
   console.log("rendered again");
@@ -118,7 +103,7 @@ render() {
         </div>
         <div className="card-action grey lighten-4 grey-text">
           <div>Posted by {posts.authorFirstName}{posts.authorLastName}</div>
-          {/* <div>{post.createdAt.toDate().toDateString()}</div> */}
+          
           <form onSubmit={this.handleUpdate} >
           <div className="input-field">
             <input type="text" /* ref={this.input}  key={this.state.posts.title ? 'notLoadedYet' : 'loaded'} */  id='title' onChange={this.handleChange1} value={posts.title} />
@@ -232,7 +217,7 @@ render() {
       
         
       <div className="input-field">
-      {(posts.authorId==user.uid)?<input type="submit" value="Submit" className="btn pink lighten-1" />:<input disabled type="submit" value="Submit" className="btn pink lighten-1" />
+      {(posts.authorId==user.uid)?<input type="submit" value="Submit" className="btn  black-text" />:<input disabled type="submit" value="Submit" className="btn yellow darken-3" />
   }
 </div>
 </form>
@@ -252,8 +237,6 @@ render() {
         </div>
       )
   }
-  //console.log(props);
- 
   }
 }
 
@@ -273,7 +256,7 @@ render() {
    auth:state.firebase.auth
   }
  }
- //export default connect(mapStateToProps, mapDispatchToProps)(singleGoal)
+
 const mapDispatchToProps = dispatch => {
   return {
     getAPost: (id) => { dispatch(getAPost(id))},
@@ -283,5 +266,5 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-//export default connect(mapStateToProps, mapDispatchToProps)(updatePost)
+
 export default connect(mapStateToProps,mapDispatchToProps)(PostView)

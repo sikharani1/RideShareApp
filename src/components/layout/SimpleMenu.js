@@ -6,14 +6,14 @@ import { Link } from 'react-router-dom'
 import {NavHashLink} from 'react-router-hash-link'
 
 export default function SimpleMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElement, setAnchorElement] = React.useState(null);
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorElement(event.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorElement(null);
   };
 
   return (
@@ -23,9 +23,9 @@ export default function SimpleMenu() {
      
       <Menu
         id="simple-menu"
-        anchorEl={anchorEl}
+        anchorElement={anchorElement}
         keepMounted
-        open={Boolean(anchorEl)}
+        open={Boolean(anchorElement)}
         onClose={handleClose}
       >
         <MenuItem onClick={handleClose}><NavHashLink to="/myaccount#account" activeClassName="selected" activeStyle={{ color: 'red' }}>My Account</NavHashLink></MenuItem>

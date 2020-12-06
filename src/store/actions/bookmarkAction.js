@@ -5,7 +5,7 @@ import {compose} from 'redux'
 export const bookmarkPost = (postId,updatedState) => {
   console.log(updatedState);
     return (dispatch, getState,{getFirebase,getFirestore}) => {
-      // make async call to database
+      // asynchronous call to the database
       const firestore=getFirestore();
       const firebase =getFirebase();
       const profile=getState().firebase.profile;
@@ -13,11 +13,9 @@ export const bookmarkPost = (postId,updatedState) => {
       console.log(getState().firebase.auth)
       const userId=getState().firebase.auth.uid;
       console.log(userId);
-      //const email=getState().firebase.auth.email;
-      //const postId=post.id;
-     //const phoneNumber=getState().firebase.auth.phoneNumber;
+      
      firestore.collection('posts').doc(postId).set({...updatedState})
-     //}) 
+   
            .then(()=>{
          console.log("updated bookmark");
       firestore.collection('users').doc(userId).update({
@@ -30,10 +28,7 @@ export const bookmarkPost = (postId,updatedState) => {
 
       }).catch((err)=>{
         dispatch({ type: 'BOOKMARK_POST_ERROR', err });
-      })
-
-    
-      
+      })   
     }
   };
 

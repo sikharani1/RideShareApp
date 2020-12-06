@@ -11,29 +11,26 @@ class AdminPanel extends Component {
   }
   deleteSpam=(postId)=>
   {
-  //   event.preventDefault();
-  //   if(event.target.value) 
-  //  {
-  //   const val=event.target.value;
-  //  }
+    
+  
   this.props.deleteSpam(postId);
   this.forceUpdate();
   }
 tickSpam=(postId)=>{
   const spams=this.props.spams;
-  console.log(spams);
+  
   const index = spams.findIndex(p => p.id == postId)
   spams[index]["isSpam"] = !spams[index].isSpam;
 
-    // posts[index] = { post };
-    console.log(spams[index]);
+    
+    
     const updatedspams=spams;
 
     if(updatedspams[index].isSpam)
     this.props.tickSpam(postId);
 }
   render() {
-    console.log(this.props);
+   
 
   const defaulturl="www.google.com";
   const { spams } = this.props;
@@ -88,7 +85,7 @@ tickSpam=(postId)=>{
 
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  
 
  
     return {

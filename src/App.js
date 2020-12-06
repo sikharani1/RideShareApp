@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router , Switch, Route } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
+import Footer from './components/layout/Footer'
 import Signal from './components/layout/Signal'
 import Dashboard from './components/dashboard/Dashboard'
 import PostDetails from './components/posts/PostDetails'
@@ -22,7 +23,7 @@ class App extends Component {
 
           <Signal/>
           <Navbar />
-          
+          <Footer />
           <Switch>
             <Route exact path='/'component={Dashboard} />
             <Route path='/fallback'component={Fallback} />
@@ -34,6 +35,7 @@ class App extends Component {
             <Route path='/create' component={CreatePost} />
             <Route path='/admin' component={AdminPanel} />
           </Switch>
+          
         </div>
       </Router>
     );

@@ -26,17 +26,15 @@ componentWillMount() {
     })
 }
 async componentDidMount() {
-  console.log(this.props);
+ 
    
   let user= this.props.firebaseauth.currentUser;  
-
-    console.log(user.uid);
    this.setState({
     currentUser:user,
      myposts:await this.props.myposts
  
    })
-   console.log(this.state.myposts);
+   
   }
   
 
@@ -46,7 +44,7 @@ onSignoutPress = () => {
     
   }
   reauthenticate = (currentPassword) => {
-    console.log(this.props);
+    
     var user = this.props.firebaseauth.currentUser;
     var cred = this.props.auth.EmailAuthProvider.credential(user.email, currentPassword);
     return user.reauthenticateWithCredential(cred);
@@ -54,7 +52,7 @@ onSignoutPress = () => {
 
   // Changes user's password...
   onChangePasswordPress = () => {
-    console.log(this.props);
+    
     this.reauthenticate(this.state.currentPassword).then(() => {
       var user = this.props.firebaseauth.currentUser;
       user.updatePassword(this.state.newPassword).then(() => {
@@ -75,8 +73,7 @@ onSignoutPress = () => {
   }
   checkUser(uid){
     return function(post){
-      console.log(post.authorId);
-      console.log(post.authorId==uid);
+      
       return post.authorId==uid ;
     }
   }
@@ -86,12 +83,8 @@ onSignoutPress = () => {
 
 
   render() {
-    console.log(this.props);
+   
     const {authError,auth,firebaseauth,myposts,users}=this.props;
-    
-    //const myposts=Object.entries(posts);
-    console.log(myposts);
-    console.log(users);
     let user=this.state.currentUser;
     user = firebase.auth().currentUser;
     const posts=this.props.myposts.filter(post=>post.authorId==user.uid);
@@ -99,27 +92,24 @@ onSignoutPress = () => {
     const posts1=[];
     
     const currentuser=this.props.users.filter(u=>u.id==user.uid);
-    console.log(currentuser);
+   
     if(currentuser[0].favourites) currentuser[0].favourites.map((fav)=>
     {
-      console.log(fav);
+      
       const favouriteposts=this.props.myposts.filter(post=>post.id==fav)
-      console.log(favouriteposts);
+      
     if(favouriteposts!=[]) posts1.push(favouriteposts[0]);
     }
     )
-    console.log(posts);
-    console.log(posts1);
-    
    
-  
-   // if(auth.uid) return <Redirect to='/'/>
+    
+
     return (
     
       
         <div className="container">
-         <div id="account">
-          <button className="myaccount-btn signout btn pink lighten-1 z-depth-0" onClick={this.onSignoutPress}>Sign out</button> 
+         <div id="account" class="main-container shadow">
+          <button className="myaccount-btn signout btn black-text yellow darken-3 z-depth-0" onClick={this.onSignoutPress}>Sign out</button> 
           <i class="fas fa-user-edit"></i>
           <h5 className="grey-text text-darken-3">Password Reset</h5>
           <div className="input-field">
@@ -132,7 +122,7 @@ onSignoutPress = () => {
            <label htmlFor="new password">New Password</label>
            <input type="password" id='new password' autoCapitalize="none" secureTextEntry={true} onChange={(e)=>this.setState({newPassword: e.target.value})} />
           </div>
-          <button className="myaccount-btn btn pink lighten-1 z-depth-0" onClick={this.onChangePasswordPress}>Change Password</button>
+          <button className="myaccount-btn btn yellow darken-3 black-text z-depth-0" onClick={this.onChangePasswordPress}>Change Password</button>
           </div>
           {/* <div className="input-field">
        
@@ -144,7 +134,7 @@ onSignoutPress = () => {
       <div id="rides" className="main-container shadow">
       <b><h6 id="myrides-header">MY RIDES</h6></b>
 <div className="posts-container" id="myrides">
-     {/* <PostList posts={this.props.myposts.filter(this.checkUser(user.uid))} /> */}
+     
      <PostList posts={posts} />
       </div>
 
@@ -152,7 +142,7 @@ onSignoutPress = () => {
 <div id="favourites" className="main-container shadow">
       <b><h6 id="myrides-header">MY FAVOURITES</h6></b>
 <div className="posts-container" id="myfavourites">
-     {/* <PostList posts={this.props.myposts.filter(this.checkUser(user.uid))} /> */}
+     
      <PostList posts={posts1} />
       </div>
 
@@ -166,7 +156,7 @@ onSignoutPress = () => {
 }
 
 const mapStateToProps=(state)=>{
-  console.log(state);
+  
   return{
     myposts: state.firestore.ordered.posts,
     users: state.firestore.ordered.users,
@@ -181,16 +171,6 @@ return {
   signOut:()=>dispatch(signOut())
 }
 }
-
-
-
-  // Reauthenticates the current user and returns a promise...
-  
-
-
-
-
-
 
   export default compose(connect(mapStateToProps,mapDispatchToProps),firestoreConnect([
     { collection: 'posts'}, { collection: 'users'}

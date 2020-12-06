@@ -18,7 +18,7 @@ class Comments extends Component {
         await(this.props.comments)
     }
     componentDidUpdate(prevProps,prevState)  {
-        // Typical usage (don't forget to compare props):
+       
         console.log("Component did update")
         console.log(prevProps);
         console.log(this.props.comments);
@@ -58,7 +58,7 @@ class Comments extends Component {
           comments.map(sgp=>{
          console.log(sgp);
          const authorName=sgp.authorFirstName;
-         // const commentList=sgp.singlepersoncomments;
+         
             if(Array.isArray(sgp.singlepersoncomments))
             {
                 
@@ -80,7 +80,7 @@ class Comments extends Component {
              });
             }
             else{
-               // console.log(this.props.comments[0].singlepersoncomments[0].value);
+              
                
                
                     commentsArray.push({authorName:authorName,comment:this.props.comments[0].singlepersoncomments[0].value});

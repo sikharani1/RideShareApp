@@ -1,33 +1,7 @@
-
-// export const dbchange=(getFirestore)=>{
-//   const firestore=getFirestore();
-      
-//       firestore.enablePersistence()
-//   .catch(function(err) {
-//     if (err.code == 'failed-precondition') {
-//       // probably multible tabs open at once
-//       console.log('persistance failed');
-//     } else if (err.code == 'unimplemented') {
-//       // lack of browser support for the feature
-//       console.log('persistance not available');
-//     }
-//   });
-//   firestore.collection('posts').onSnapshot(snapshot => {
-//     console.log(snapshot.docChanges());
-//     snapshot.docChanges().forEach(change => {
-//       if(change.type === 'added'){
-//         createPost(change.doc.data());
-//       }
-//       if(change.type === 'removed'){
-//         deletePost(change.doc.id);
-//       }
-//     });
-//   });
-// }
 export const createPost = (post) => {
   console.log(post);
     return (dispatch, getState,{getFirebase,getFirestore}) => {
-      // make async call to database
+     
       const firestore=getFirestore();
       const profile=getState().firebase.profile;
       console.log(profile);
@@ -71,13 +45,7 @@ export const createPost = (post) => {
           console.log("user error");
         }
       });
-      
-     
-       
-
-
-
-    }
+      }
   
   };
 
@@ -132,31 +100,5 @@ export const createPost = (post) => {
      })
     }
    }
-
-  //  export const getOfflinedata=()=>{
-  //   return (dispatch, getState,{getFirebase,getFirestore}) => {
-  //   const firestore = getFirestore();
-  //   firestore.disableNetwork()
-  //   .then(function() {
-  //       // Do offline actions
-  //       // ...
-
-  //       db.collection("posts")
-  //     .onSnapshot({ includeMetadataChanges: true }, function(snapshot) {
-  //     snapshot.docChanges().forEach(function(change) {
-  //         if (change.type === "added") {
-  //             console.log("New post: ", change.doc.data());
-  //         }
-
-  //         var source = snapshot.metadata.fromCache ? "local cache" : "server";
-  //         console.log("Data came from " + source);
-  //     });
-  // });
-  //   });
-  // }
-
-  //  }
-  
-  
   
  

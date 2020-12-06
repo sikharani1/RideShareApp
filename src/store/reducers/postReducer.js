@@ -11,11 +11,7 @@ const initState = {
     switch (action.type) {
       case 'CREATE_POST':
         console.log('created post', action.post);
-        // const totalposts=Object.entries(action.post);
-        // console.log(totalposts);
-        // //totalposts.push(action.post);
-        // Object.assign(state,totalposts);
-        // state=[...state,totalposts];
+        
         console.log(state);
         return state;
       case 'CREATE_POST_ERROR':
@@ -29,8 +25,7 @@ const initState = {
           return state;
       case 'UPDATE_POST':
             console.log('updated post',action.postId,action.updatedState);
-           //console.log([...state,data]);
-            //return [...state,data];
+           
             state=action.updatedState;
             return state;
       case 'UPDATE_POST_ERROR':

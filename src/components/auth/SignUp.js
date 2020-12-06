@@ -40,9 +40,9 @@ class SignUp extends Component {
     () => {
         // complete function ....
         storage().ref('images').child(image.name).getDownloadURL().then(url => {
-            console.log(url);
+           
             this.setState({url});
-            console.log(url);
+           
         })
     });
     }
@@ -53,7 +53,7 @@ class SignUp extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    
     this.props.signUp(this.state)
   }
   render() {
@@ -74,7 +74,7 @@ class SignUp extends Component {
       
      
         <form className="white" onSubmit={this.handleSubmit}>
-          <h5 className="grey-text text-darken-3 signup">Sign Up</h5>
+          <h5 className="grey-text text-darken-3 signup">SIGN UP</h5>
           <div className="input-field">
             <label htmlFor="email"><span id="asterisk">*</span> Email</label>
             <input type="email" id='email' onChange={this.handleChange} />
@@ -96,16 +96,16 @@ class SignUp extends Component {
             <input type="number" id='phoneNumber' onChange={this.handleChange} />
           </div>
           <div style={style}>
-          <label htmlFor="DL" id="dl">Please Upload You Valid Drivers Licence</label>
+          <label htmlFor="DL" id="dl">Please Upload Your Valid Drivers Licence</label>
       <progress value={this.state.progress} max="100"/>
       <br/>
         <input type="file" onChange={this.handleImageAsFile}/>
-        <button class="buttons btn pink lighten-1 z-depth-0" onClick={this.handleUpload}>Upload</button>
+        <button class="buttons btn yellow darken-3 black-text z-depth-0" onClick={this.handleUpload}>Upload</button>
         <br/>
         <img src={this.state.url || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400"/>
       </div>
           <div className="input-field">
-            <button className="btn pink lighten-1 z-depth-0 buttons">Sign Up</button>
+            <button className="btn yellow darken-3 black-text z-depth-0 buttons">Sign Up</button>
           </div>
           {(authError)?(
       <div className="red-text center">{authError}</div>):null}

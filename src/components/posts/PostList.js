@@ -13,31 +13,17 @@ import * as firebase from 'firebase';
 const PostList = (props) => {
   
   const {posts,onLike,onBookmark,deletePost,onReport}=props;
- //console.log(props);
+ 
   posts && posts.sort(function(x, y){
-    //console.log(x.createdAt);
-    //console.log(y.createdAt);
+    
     return y.createdAt - x.createdAt;
 })
-  
- // console.log(typeof posts);
-
-
-  
-  //const {}=props;
-  
-  
-
   
   return (
 <Route>
     <div className="post-list section">
       { 
-      //(
-        
-      //   (posts!==undefined && posts.sort(function(x, y){
-      //     return x.createdAt.timestamp - y.createdAt.timestamp;
-      // }))
+     
       (posts) && posts.map(post => { if(post) {
         const email="mailto:"+post.email;
         const phonenumber="tel:"+post.phoneNumber;
@@ -78,11 +64,7 @@ const PostList = (props) => {
           <Bookmark starred={post.starred} onClick={()=>onBookmark(post)} />
           <ReportSpam spamReported={post.spamReported} onClick={()=>onReport(post)}/>
           </div>
-       
-      
-     
-      
-      </div>
+       </div>
       
         )
       }
@@ -98,12 +80,7 @@ const PostList = (props) => {
     </div>
     </Route>
   )
-
-    
-
-  
 }
-
 const mapStateToProps = (state,ownProps) => {
   console.log(state);
   console.log(ownProps);
@@ -127,11 +104,8 @@ const mapDispatchToProps = dispatch => {
       
     )
     }
-    
-  }
+    }
 }
-
-
 export default compose(connect(null,mapDispatchToProps),firestoreConnect([
   { collection: 'posts', orderBy:['createdAt','desc']}
  ])

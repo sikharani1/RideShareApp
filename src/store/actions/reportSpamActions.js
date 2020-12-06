@@ -1,7 +1,7 @@
 export const createSpam = (postId) => {
   console.log(postId);
     return (dispatch, getState,{getFirebase,getFirestore}) => {
-      // make async call to database
+      
       const firestore=getFirestore();
       const profile=getState().firebase.profile;
       console.log(profile);

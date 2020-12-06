@@ -8,14 +8,41 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background:url(/image/ridesharebg.gif) no-repeat;
+  background:url(/image/rideshare.gif) no-repeat;
   background-size:100%;
-  background-position:bottom;
-  background-color:#95e8f3;
+  background-position:top;
+  background-color:#82b1ff ;
+  background-repeat: no-repeat;
   min-height: 100%;
+
+  
 }
+footer{
+  bottom:0 !important;
+position:fixed !important;
+z-index:10;
+width: 100% !important;
+}
+.footer-copyright .container
+{
+  text-align:center;
+}
+/* .MuiTouchRipple-root{
+  background-color:#2196F3 !important;
+} */
+.posts-container .MuiAppBar-colorPrimary {
+  background-color: #f9a825 !important;
+  color:#000 !important;
+}
+
 #root{
   overflow-x: hidden;
+}
+#account{
+  display:block;
+}
+.card{
+  background-color:#2196F3 !important;
 }
 form{padding:20px;margin-top:60px;margin-bottom: 30px;}
 form button,form h5{margin:20px 0}
@@ -25,6 +52,7 @@ form button,form h5{margin:20px 0}
 #dl{
   margin-top: 40px !important;
 }
+
 .input-field.radiobutton input{
   opacity:1;
   position: relative;
@@ -486,7 +514,7 @@ color: white !important;
 .notification-div{
     top: 130px;
     position: fixed;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.8) !important;
 }
 
 .admin{
@@ -516,6 +544,12 @@ color: white !important;
   color: white;
   line-height: 1px !important;
 
+}
+#simple-menu .MuiPaper-root{
+  right: 0px !important;
+  position: fixed !important;
+  top:100px !important;
+  left:unset !important;
 }
 .gototop
 {

@@ -5,11 +5,7 @@
     switch (action.type) {
       case 'CREATE_SPAM':
         console.log('reported post', action.postId);
-        // const totalposts=Object.entries(action.post);
-        // console.log(totalposts);
-        // //totalposts.push(action.post);
-        // Object.assign(state,totalposts);
-        // state=[...state,totalposts];
+        
         console.log(state);
         return state;
       case 'CREATE_SPAM_ERROR':

@@ -8,7 +8,7 @@ export const createComment = (comment,postId) => {
       const firestore=getFirestore();
       const profile=getState().firebase.profile;
       const authorId=getState().firebase.auth.uid;
-     // console.log(firestore.collection('posts').doc(postId).comments);
+     
      var oldcomments=[];
       firestore.collection('posts').doc(postId).get().then(function(doc) {
         // Document was found in the cache. If no cached document exists,
@@ -20,11 +20,7 @@ export const createComment = (comment,postId) => {
          oldcomments=doc.data().comments;
          console.log(oldcomments);
       
-        //return oldcomments;
-    
       }).then(()=>{
-
-      
         console.log(authorId);
         var mycomments=[];
         console.log(oldcomments);
@@ -59,13 +55,8 @@ export const createComment = (comment,postId) => {
         console.log(newcomments);
         oldcomments.singlepersoncomments=newcomments;
         console.log(oldcomments);
-
-     
-
-
         firestore.collection('posts').doc(postId).set({
-          
-          comments:oldcomments
+        comments:oldcomments
        }, { merge: true }).then(()=>{
         console.log(postId);
         firestore.collection('posts').doc(postId).get().then(function(doc) {
@@ -74,10 +65,7 @@ export const createComment = (comment,postId) => {
         console.log(doc.data().comments);
       });
     })
-
-
-
-      }
+}
         else{
           oldcomments=[];
           console.log(oldcomments);
@@ -95,12 +83,7 @@ export const createComment = (comment,postId) => {
             console.log(doc.data().comments);
           });
         })
-        
-      
-       
         }
-    
-  
     }).catch(function(error) {
         console.log("Error getting cached document:", error);
     
