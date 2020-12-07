@@ -15,13 +15,13 @@ const initState = {
         console.log(state);
         return state;
       case 'CREATE_POST_ERROR':
-        console.log('created post error',action.err);
+        
         return state;
       case 'DELETE_POST':
         console.log('deleted post',action.postId);
         return state;
       case 'DELETE_POST_ERROR':
-          console.log('delete post error',action.err);
+          
           return state;
       case 'UPDATE_POST':
             console.log('updated post',action.postId,action.updatedState);
@@ -29,12 +29,12 @@ const initState = {
             state=action.updatedState;
             return state;
       case 'UPDATE_POST_ERROR':
-              console.log('update post error',action.err);
+             
               return state;
       case 'GET_POST':
               console.log("got post",action.data);
               state=action.data;
-              console.log(state);
+              
               return state;
         default:
           return state;

@@ -13,15 +13,15 @@ const Notifications = (props) => {
           { notifications && notifications.map(item =>{
             if(item.url)
               return <li key={item.id}><a href={`/post/${item.url}`}>
-                <span className="pink-text">{item.user} </span>
-                <span>{item.content}</span>
-                <div className="grey-text">{moment(item.time.toDate()).fromNow()}</div></a>
+                <span className="black-text">{item.user} </span>
+                <span id="notification-content" className="white-text">{item.content}</span>
+                <div className="light-blue-text text-darken-3">{moment(item.time.toDate()).fromNow()}</div></a>
               </li>
               else
               return <li key={item.id}>
-                <span className="pink-text">{item.user} </span>
-                <span>{item.content}</span>
-                <div className="grey-text">{moment(item.time.toDate()).fromNow()}</div>
+                <span className="black-text">{item.user} </span>
+                <span id="notification-content" className="white-text">{item.content}</span>
+                <div className="light-blue-text text-darken-3">{moment(item.time.toDate()).fromNow()}</div>
               </li>
             })}
           </ul>

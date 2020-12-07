@@ -8,42 +8,31 @@ import Comments from './Comments'
 import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 import history from "../../utils/history";
 import * as firebase from 'firebase';
+import TextField from '@material-ui/core/TextField';
 
 
-
-class PostDetails extends Component {
+class PostView extends Component {
   
   constructor(props){
     super(props);
    
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleChange=this.handleChange.bind(this);
-    this.handleChange1=this.handleChange1.bind(this);
-    
-    this.state = {
-      loading: 'initial',
-      posts: this.props.posts
-    };
-     
+    this.handleChange1=this.handleChange1.bind(this);  
   }
   
   componentWillMount(){
     let {id}=this.props.match.params;
-    console.log(id);
+    
     this.props.getAPost(id)
-     
+    
   }
     componentDidUpdate(prevProps,prevState)  {
-    // Typical usage (don't forget to compare props):
-    console.log("Component did update")
-    console.log(prevProps);
-    console.log(this.props.posts);
+   
     if (this.props.posts !== prevProps.posts) {
   
-      console.log("updated");
       this.forceUpdate();
-      
-   // });
+   
   }
   else{
    
@@ -53,57 +42,40 @@ class PostDetails extends Component {
 
  handleChange = (e) => {
   e.persist();
-    console.log(e.target.id);
     
-   
     this.setState({
       [e.target.id]: e.target.value
     })
   } 
   handleChange1 = (e) => {
     e.persist();
-      console.log(e.target.id);
+     
       let value=e.target.value;
       this.setState(prevState => ({
         posts: { ...prevState.posts,  [e.target.id]: value }
       }))
-     
+   
     } 
 
 
   handleUpdate(e) {
     e.preventDefault();
-    
-   
-    console.log(this);
- 
-  
-    console.log(this.props);
-    console.log(this.state);
     this.props.updatePost(this.props.id,this.state);
-
-   
     this.props.history.push("/");
 
 }
 
-  
-
 render() { 
  
-  console.log("rendered again");
   const {posts,auth,comments} = this.props;
-  console.log(this.state);
   
-  console.log(this.props);
   if(!auth.uid) return <Redirect to='/signin'/>
   let user = firebase.auth().currentUser;  
   
-  if(this.state.posts){
+  if(this.props.posts){
     
       return(
-      
-     
+    
     <div className="container section post-details">
       <div className="card z-depth-0">
         <div className="card-content">
@@ -112,50 +84,74 @@ render() {
         </div>
         <div className="card-action grey lighten-4 grey-text">
           <div>Posted by {posts.authorFirstName}{posts.authorLastName}</div>
-         
+          
           <form onSubmit={this.handleUpdate} >
           <div className="input-field">
-            <input type="text" /* ref={this.input}  key={this.state.posts.title ? 'notLoadedYet' : 'loaded'} */  id='title' onInputChange={this.handleChange1} defaultValue={posts.title} readonly/>
+            <input type="text" /* ref={this.input}  key={this.state.posts.title ? 'notLoadedYet' : 'loaded'} */  id='title' onChange={this.handleChange1} value={posts.title} />
           </div>
           <div className="input-field">
           <label htmlFor="content">Post Content</label>
-            <textarea id="content" className="materialize-textarea" defaultValue={posts.content} onChange={this.handleChange}></textarea>
+            <textarea id="content" className="materialize-textarea" value={posts.content} onChange={this.handleChange}></textarea>
             
           </div>
           <div className="input-field">
-            <textarea id="origin" className="materialize-textarea" defaultValue={posts.origin} onChange={this.handleChange}></textarea>
+            <textarea id="origin" className="materialize-textarea" value={posts.origin} onChange={this.handleChange}></textarea>
             <label htmlFor="origin">Origin City</label>
           </div>
           <div className="input-field">
-            <textarea id="arrival" className="materialize-textarea" defaultValue={posts.arrival} onChange={this.handleChange}></textarea>
+            <textarea id="arrival" className="materialize-textarea" value={posts.arrival} onChange={this.handleChange}></textarea>
             <label htmlFor="arrival">Arrival City</label>
           </div>
           <div className="input-field">
+    <TextField
+    id="start_datetime_local"
+    label="Start Date Time"
+    type="datetime-local"
+    defaultValue={posts.start_datetime_local}
+    onChange={this.handleChange}
+    InputLabelProps={{
+      shrink: true,
+    }}
+  />
+  </div>
+  <div className="input-field">
+  <TextField
+    id="return_datetime_local"
+    label="Return Date Time"
+    type="datetime-local"
+    defaultValue={posts.return_datetime_local}
+    onChange={this.handleChange}
+    InputLabelProps={{
+      shrink: true,
+    }}
+  />
+  </div>
+          {/* <div className="input-field">
           <label htmlFor="start">Dep time:</label>
           <input type="time" id="deptime" name="deptime"
-       min="09:00" max="18:00" defaultValue={posts.deptime} required/>
+       min="09:00" max="18:00" value={posts.deptime} required/>
          </div>
          <div className="input-field">
          <label htmlFor="start">Return time:</label>
           <input type="time" id="returntime" name="returntime"
-       min="09:00" max="18:00" defaultValue={posts.returntime} />
+       min="09:00" max="18:00" value={posts.returntime} />
          </div>
          
          <label htmlFor="start">Start date:</label>
          <div className="input-field">
          <input type="date" id="startdate" name="trip-start"
-       defaultValue={posts.startdate}
+       value={posts.startdate}
        min="2020-01-01" max="2020-12-31"></input>
        </div>
       
          <label htmlFor="start">Return date:</label>
          <div className="input-field">
          <input type="date" id="returndate" name="trip-start"
-       defaultValue={posts.returndate}
+       value={posts.returndate}
        min="2020-01-01" max="2020-12-31"></input>
-       </div>
+       </div> */}
           <div className="input-field">
-            <textarea id="via" className="materialize-textarea" defaultValue={posts.via} onChange={this.handleChange}></textarea>
+            <textarea id="via" className="materialize-textarea" value={posts.via} onChange={this.handleChange}></textarea>
             <label htmlFor="via">Via</label>
           </div>
           <label htmlFor="gender">RIT Student</label>
@@ -178,7 +174,7 @@ render() {
             
           
           <div className="input-field">
-          <select id="ethnicity" defaultValue="Asian">
+          <select id="ethnicity" value="Asian">
   <option value="Asian" >Asian</option>
   <option value="African">African</option>
   <option value="White">White</option>
@@ -188,12 +184,12 @@ render() {
           <label htmlFor="Ethnicity"></label>
           </div>
           <div className="input-field">
-          <input type="number" id="luggage" defaultValue={posts.luggage} onChange={this.handleChange}
+          <input type="number" id="luggage" value={posts.luggage} onChange={this.handleChange}
        min="0" max="5"></input>
         <label htmlFor="luggage">No of luggage space available</label>
        </div>
        <div className="input-field">
-       <input type="number" id="seats" defaultValue={posts.seats} onChange={this.handleChange}
+       <input type="number" id="seats" value={posts.seats} onChange={this.handleChange}
        min="1" max="3"></input>
         <label htmlFor="seats">No of seats available</label>
         
@@ -202,7 +198,7 @@ render() {
        <div className="input-field">
        
 
-<select id="age" defaultValue="20-30">
+<select id="age" value="20-30">
   <option value="20-30">20-30</option>
   <option value="30-40">30-40</option>
   <option value="40-50">40-50</option>
@@ -226,8 +222,7 @@ render() {
       
         
       <div className="input-field">
-      {(posts.authorId==user.uid)?<input type="submit" value="Submit" className="btn  black-text
-      " />:<input disabled type="submit" value="Submit" className="btn yellow darken-3 black-text" />
+      {(posts.authorId==user.uid)?<input type="submit" value="Submit" className="btn yellow darken-3 black-text buttons" />:<input disabled type="submit" value="Submit" className="btn yellow darken-3 black-text buttons" />
   }
 </div>
 </form>
@@ -247,18 +242,16 @@ render() {
         </div>
       )
   }
-  
- 
   }
 }
 
 
 
  const mapStateToProps = (state,ownProps) => {
-   console.log(state);
+   
    const id=ownProps.match.params.id;
    const posts=state.posts;
-   const comments=posts?posts.comments:null;
+   const comments=state?posts.comments:null;
 
   return {
    posts: posts,
@@ -267,7 +260,7 @@ render() {
    auth:state.firebase.auth
   }
  }
- 
+
 const mapDispatchToProps = dispatch => {
   return {
     getAPost: (id) => { dispatch(getAPost(id))},
@@ -278,4 +271,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(PostDetails)
+export default connect(mapStateToProps,mapDispatchToProps)(PostView)

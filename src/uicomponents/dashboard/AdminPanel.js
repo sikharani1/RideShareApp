@@ -11,46 +11,34 @@ class AdminPanel extends Component {
   }
   deleteSpam=(postId)=>
   {
-    
-  
-  this.props.deleteSpam(postId);
+    this.props.deleteSpam(postId);
   this.forceUpdate();
   }
 tickSpam=(postId)=>{
   const spams=this.props.spams;
-  
   const index = spams.findIndex(p => p.id == postId)
   spams[index]["isSpam"] = !spams[index].isSpam;
-
-    
-    
-    const updatedspams=spams;
-
-    if(updatedspams[index].isSpam)
+const updatedspams=spams;
+if(updatedspams[index].isSpam)
     this.props.tickSpam(postId);
 }
   render() {
-   
-
   const defaulturl="www.google.com";
   const { spams } = this.props;
   return (
     <div className="container admin">
-   <div className="main-container shadow">
+   <div className="main-container">
      <div className="z-depth-0 spam-container container">
-        
-        
-      
-          <ul className="online-users collection with-header">
+        <ul className="online-users collection with-header">
           <li className="collection-header "><h4 className="card-title">Spams</h4></li>
           { spams && spams.map(item =>{
             if(item.url)
-              return <li className="collection-item pink-text darken-2" key={item.id}><a href={`/post/${item.postId}`}>
-                <p className="orange-text darken-2">{item.content}</p>
-                <p className="pink-text darken-2">{item.title}</p>
-                <p>{item.authorFirstName} </p>
+              return <li className="collection-item white-text darken-2" key={item.id}><a href={`/post/${item.postId}`}>
+                <p className="white-text darken-2">{item.content}</p>
+                <p className="white-text darken-2">{item.title}</p>
+                <p className="white-text darken-2">{item.authorFirstName} </p>
                 
-                <div className="note-date grey-text darken-2">{item.createdAt.toDate().toDateString()}</div></a>
+                <div className="note-date black-text darken-2">{item.createdAt.toDate().toDateString()}</div></a>
           <div id="check" className="post-content" className="input-field">
             <button id="check-btn" className="btn lighten-1" onClick={() =>  this.tickSpam(item.id) } ><i className="far fa-check-square"/></button>
           </div>
@@ -59,13 +47,13 @@ tickSpam=(postId)=>{
           </div>
               </li>
               else
-              return <li className="collection-item pink-text darken-2" key={item.id}><a href={`/post/${item.postId}`}>
-                <p className="orange-text darken-2">{item.title}</p>
-                <p className="pink-text darken-2">{item.content}</p>
-                <p>{item.authorFirstName} </p>
+              return <li className="collection-item white-text darken-2" key={item.id}><a href={`/post/${item.postId}`}>
+                <p className="white-text darken-2">{item.title}</p>
+                <p className="white-text darken-2">{item.content}</p>
+                <p className="white-text darken-2">{item.authorFirstName} </p>
                 
                 
-                <div className="note-date grey-text darken-2">{item.createdAt.toDate().toDateString()}</div></a>
+                <div className="note-date black-text darken-2">{item.createdAt.toDate().toDateString()}</div></a>
                 <div id="check" className="post-content" className="input-field">
             <button id="check-btn" className="btn lighten-1" onClick={() =>  this.tickSpam(item.id) } ><i className="far fa-check-square"/></button>
           </div>
@@ -82,13 +70,8 @@ tickSpam=(postId)=>{
   )
           }
         }
-
-
 const mapStateToProps = (state) => {
-  
-
- 
-    return {
+  return {
    spams: state.firestore.ordered.spams
   
   }

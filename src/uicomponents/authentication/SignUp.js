@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Redirect} from 'react-router-dom'
-import {connect} from 'react-redux'
 import {signUp} from '../../store/actions/authActions'
+import {connect} from 'react-redux'
 import {storage} from "firebase"
 
 class SignUp extends Component {
@@ -11,37 +11,33 @@ class SignUp extends Component {
     firstName: '',
     lastName: '',
     image:null,
-    url:'',
+    imageurl:'',
     phoneNumber:0,
-    progress: 0
+    uploadprogress: 0
   }
   handleImageAsFile = e => {
   
-    console.log('start of upload');
+    
     if(e.target.files[0]){
       const image=e.target.files[0];
       this.setState(()=>({image}))
     }
   }
-    handleUpload = (e) => {
+  handleUpload = (e) => {
       e.preventDefault();
       const {image}=this.state;
-      const uploadTask=storage().ref(`images/${image.name}`).put(image);
-      uploadTask.on('state_changed', 
-      (snapshot) => {
-        // progrss function ....
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        this.setState({progress});
+      const uploadtask=storage().ref(`images/${image.name}`).put(image);
+      uploadtask.on('state_changed', 
+      (snap) => {
+        const uploadprogress = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+        this.setState({uploadprogress});
       }, 
       (error) => {
-           // error function ....
-        console.log(error);
+          console.log(error);
       }, 
     () => {
-        // complete function ....
-        storage().ref('images').child(image.name).getDownloadURL().then(url => {
-           
-            this.setState({url});
+       storage().ref('images').child(image.name).getDownloadURL().then(imageurl => {
+           this.setState({imageurl});
            
         })
     });
@@ -57,14 +53,7 @@ class SignUp extends Component {
     this.props.signUp(this.state)
   }
   render() {
-    const style = {
-      height: '50vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop:'20px'
-    };
+  
     const {auth,authError}=this.props;
     if(auth.uid) return <Redirect to='/'/>
     
@@ -74,7 +63,7 @@ class SignUp extends Component {
       
      
         <form className="white" onSubmit={this.handleSubmit}>
-          <h5 className="grey-text text-darken-3 signup">SIGN UP</h5>
+          <h5 className="light-blue-text text-darken-3 signup">SIGN UP</h5>
           <div className="input-field">
             <label htmlFor="email"><span id="asterisk">*</span> Email</label>
             <input type="email" id='email' onChange={this.handleChange} />
@@ -95,20 +84,20 @@ class SignUp extends Component {
             <label htmlFor="phoneNumber"><span id="asterisk">*</span> Mobile Number</label>
             <input type="number" id='phoneNumber' onChange={this.handleChange} />
           </div>
-          <div style={style}>
+          <div id="imageupload">
           <label htmlFor="DL" id="dl">Please Upload Your Valid Drivers Licence</label>
-      <progress value={this.state.progress} max="100"/>
+      <progress value={this.state.uploadprogress} max="100"/>
       <br/>
         <input type="file" onChange={this.handleImageAsFile}/>
         <button class="buttons btn yellow darken-3 black-text z-depth-0" onClick={this.handleUpload}>Upload</button>
         <br/>
-        <img src={this.state.url || 'http://via.placeholder.com/400x300'} alt="Uploaded images" height="300" width="400"/>
+        <img src={this.state.imageurl || 'http://via.placeholder.com/400x300'} alt="Uploaded image" height="300" width="400"/>
       </div>
           <div className="input-field">
-            <button className="btn yellow darken-3 black-text z-depth-0 buttons">Sign Up</button>
+            <button className="btn yellow darken-3 black-text z-depth-0 buttons">SIGN UP</button>
           </div>
           {(authError)?(
-      <div className="red-text center">{authError}</div>):null}
+      <div className="red-text text-darken-1 center">{authError}</div>):null}
         </form>
         
       </div>

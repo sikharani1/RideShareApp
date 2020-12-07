@@ -18,13 +18,10 @@ class Comments extends Component {
         await(this.props.comments)
     }
     componentDidUpdate(prevProps,prevState)  {
-       
-        console.log("Component did update")
-        console.log(prevProps);
-        console.log(this.props.comments);
+     
         if (this.props.comments !== prevProps.comments) {
       
-          console.log("updated");
+        
           this.forceUpdate();
           
        // });
@@ -36,73 +33,40 @@ class Comments extends Component {
     }
     handleSubmit(event) {
         event.preventDefault()
-        console.log(event);
         const comment = event.target.elements.comment.value
-        console.log(comment);
-        console.log(this.props.id);
         this.props.createComment(comment, this.props.id)
         event.target.elements.comment.value = ''
         
     }
 
     render() {
-        
-       const comments=this.props.comments;
+        const comments=this.props.comments;
         const commentsArrayList=[];
         const commentsArray=[];
-      
-           
-                if(Array.isArray(comments))
+      if(Array.isArray(comments))
         {
-            console.log(comments);
+           
           comments.map(sgp=>{
-         console.log(sgp);
+         
          const authorName=sgp.authorFirstName;
          
             if(Array.isArray(sgp.singlepersoncomments))
             {
-                
-                
                 sgp.singlepersoncomments.map((comment,) => 
                 {
-                    console.log(comment);
-                
-                
-                    return (
+                   return (
                         
-                    
                         commentsArray.push({authorName:authorName,comment:comment.value})
-                        
-                    
-                    )
-                    
-                 
-             });
+                        )
+                     });
             }
             else{
-              
-               
-               
-                    commentsArray.push({authorName:authorName,comment:this.props.comments[0].singlepersoncomments[0].value});
-        
-                    
-                    
+                    commentsArray.push({authorName:authorName,comment:this.props.comments[0].singlepersoncomments[0].value});    
                 }
                 return commentsArray;
            })
-            console.log(commentsArray);
-            // if(commentsArray && commentsArray.length==0){
-        
-            //     console.log("no comments");
-               
-                 
-            //     //     <div>
-            //     commentsArray.push("No Comments");
-            //     }
-        }
+         }
 
-    
-    
         return (    
         <div>
          
@@ -124,24 +88,15 @@ class Comments extends Component {
         
             
         )
-       
-        
-      
-    
-    
-       
-
-
-}
+       }
 }
 const mapStateToProps=(state)=>
 {
-  //console.log(state);
- 
+  
   return{
 
-      auth:state.firebase.auth,
-      //comments:state.comments
+      auth:state.firebase.auth
+      
   }
 }
 const mapDispatchToProps = dispatch => {
@@ -152,4 +107,3 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments)
 
-//export default Comments

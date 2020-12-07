@@ -1,23 +1,22 @@
 export const createSpam = (postId) => {
-  console.log(postId);
+  
     return (dispatch, getState,{getFirebase,getFirestore}) => {
       
       const firestore=getFirestore();
       const profile=getState().firebase.profile;
-      console.log(profile);
-      console.log(getState().firebase.auth)
+      
       const authorId=getState().firebase.auth.uid;
-      console.log(authorId);
+      
       var verified=false;
       var postContent="";
       var postTitle="";
       firestore.collection('users').doc(authorId).get().then((doc) => {
         if(doc.exists){
          const user = doc.data();
-         console.log(user);
+         
          if(user.image)
           verified=true;
-          console.log(verified);
+          
 
         }
         else
@@ -25,7 +24,7 @@ export const createSpam = (postId) => {
         }).then(()=>firestore.collection('posts').doc(postId).get().then((doc) => {
         if(doc.exists){
          const post = doc.data();
-         console.log(post);
+         
          if(post.content)
           {postContent=post.content;}
         
@@ -56,10 +55,10 @@ export const createSpam = (postId) => {
       })
       )
     .then(()=>{
-        console.log("created spam");
+        
         dispatch({ type: 'CREATE_SPAM', postId});
       }).catch((err)=>{
-        console.log("create spam error",err);
+        
         dispatch({ type: 'CREATE_SPAM_ERROR', err });
       })
     }
@@ -79,8 +78,7 @@ export const createSpam = (postId) => {
   export const deleteSpam=(postId)=>{
     return (dispatch,getState,{getFirebase,getFirestore})=>{
       const firestore=getFirestore();
-      const profile=getState().firebase.profile;
-      const authorId=getState().firebase.auth.uid;
+      
       
       firestore.collection('spams').doc(postId).delete().then(function() {
         console.log("Spam successfully deleted!");

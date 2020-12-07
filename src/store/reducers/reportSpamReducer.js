@@ -5,11 +5,9 @@
     switch (action.type) {
       case 'CREATE_SPAM':
         console.log('reported post', action.postId);
-        
-        console.log(state);
         return state;
       case 'CREATE_SPAM_ERROR':
-        console.log('reported post error',action.err);
+        
         return state;
       case 'TICK_SPAM':
           console.log("ticked spam",action.postId);
@@ -19,7 +17,7 @@
         console.log('deleted spam ',action.postId);
         return state;
       case 'DELETE_SPAM_ERROR':
-          console.log('deleted report error',action.err);
+          
           return state;
      
         default:

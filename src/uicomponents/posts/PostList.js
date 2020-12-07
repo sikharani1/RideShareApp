@@ -44,7 +44,7 @@ const PostList = (props) => {
           </Link>
           
           <div id="delete" className="post-content" className="input-field">
-            <button id="delete-btn" className="btn lighten-1" onClick={() =>  deletePost(post.id) } ><i className="fas fa-trash"/></button>
+            <button id="delete-btn" className="btn" onClick={() =>  deletePost(post.id) } ><i className="fas fa-trash"/></button>
           </div>
           </div>
           {(post.privacy=="public")?<div className="me">Ride Posted By Me</div>:<div></div>}
@@ -82,8 +82,7 @@ const PostList = (props) => {
   )
 }
 const mapStateToProps = (state,ownProps) => {
-  console.log(state);
-  console.log(ownProps);
+
   if(ownProps.posts)
   {
     return {

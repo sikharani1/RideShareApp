@@ -31,13 +31,12 @@ handleChange=(e)=>{
 validate(item,value){
   var valid=true;
   var regexvalid=true;  
-  console.log(item,value);
-
+ 
   // Check if field value is empty or contains unallowed characters
   if (validator.isEmpty(`${value}`) && !inputRegex.test(value)){
     regexvalid=false;
     alert(`please enter valid values for ${item}`);
-    console.log(`please enter valid values for ${item}`);
+    
     valid=false;
   }
   else{
@@ -50,7 +49,7 @@ validate(item,value){
     if(validator.isNumeric(`${value}`)){
       valid=false;
       alert(`${item} field is not valid`);
-      console.log(`Please enter a valid ${item}`);
+    
     }
   }
 }
@@ -61,8 +60,7 @@ handleSubmit = (e) => {
     var validinputs=false;
     var validinputsArray=[];
     e.preventDefault();
-    console.log(this.type);
-    console.log(this.state);
+   
     const iterator1 = Object.entries(this.state);
     var isValid=false;
     iterator1.forEach(item=>
@@ -70,7 +68,7 @@ handleSubmit = (e) => {
       {isValid=this.validate(item[0],item[1]);
         if(isValid==false){
           validinputsArray.push(false);
-          console.log("not valid");
+          
         }
       }
     )
@@ -78,7 +76,7 @@ handleSubmit = (e) => {
         console.log("invalid inputs");
     }
     else{
-      console.log("all validinputs");
+      
       this.props.createPost(this.state,this.type);
       this.props.history.push('/');
     }
@@ -122,32 +120,35 @@ render() {
             <textarea id="arrival" className="materialize-textarea" required onChange={this.handleChange}></textarea>
             <label htmlFor="arrival">Arrival City</label>
           </div>
-
-          <TextField
-    id="datetime-local"
-    label="Departure Date Time"
+  <div className="input-field">
+    <TextField
+    id="start_datetime_local"
+    label="Start Date Time"
     type="datetime-local"
     defaultValue="2017-05-24T10:30"
-    
+    onChange={this.handleChange}
     InputLabelProps={{
       shrink: true,
     }}
   />
+  </div>
+  <div className="input-field">
   <TextField
-    id="datetime-local"
-    label="Arrival Date Time"
+    id="return_datetime_local"
+    label="Return Date Time"
     type="datetime-local"
     defaultValue="2017-05-24T10:30"
-    
+    onChange={this.handleChange}
     InputLabelProps={{
       shrink: true,
     }}
   />
-
+  </div>
+{/* 
           <div className="input-field">
             <label htmlFor="start">Dep time:</label>
             <input type="time" id="deptime" name="dep-time"
-            min="09:00" max="18:00" required onChange={this.handleChange} />
+            min="09:00" max="18:00"  onChange={this.handleChange} />
          </div>
 
          <div className="input-field">
@@ -160,7 +161,7 @@ render() {
          <div className="input-field">
          <input type="date" id="startdate" name="trip-start"
           //  defaultValue={new Date()} 
-          min="2020-01-01" max="2020-12-31" required onChange={this.handleChange}></input>
+          min="2020-01-01" max="2020-12-31" onChange={this.handleChange}></input>
           </div>
       
          <label htmlFor="start">Return date:</label>
@@ -168,7 +169,7 @@ render() {
          <input type="date" id="returndate" name="trip-end"
           //  defaultValue={new Date()}
           min="2020-01-01" max="2020-12-31" onChange={this.handleChange}></input>
-          </div>
+          </div> */}
 
           <div className="input-field">
             <textarea id="via" className="materialize-textarea" onKeyPress={this.handleEnter}></textarea>
@@ -246,7 +247,7 @@ render() {
 }
 const mapStateToProps=(state)=>
 {
-  console.log(state);
+  
   return{
       auth:state.firebase.auth
   }

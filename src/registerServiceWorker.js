@@ -108,7 +108,7 @@ const isLocalhost = Boolean(
       })
       .catch(() => {
         console.log(
-          'No internet connection found. App is running in offline mode.'
+          'No internet connection is found. Application is running in offline mode.'
         );
       });
   }

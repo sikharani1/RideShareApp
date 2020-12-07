@@ -27,14 +27,28 @@ width: 100% !important;
 {
   text-align:center;
 }
-/* .MuiTouchRipple-root{
-  background-color:#2196F3 !important;
-} */
+
 .posts-container .MuiAppBar-colorPrimary {
   background-color: #f9a825 !important;
   color:#000 !important;
 }
-
+.collection-header {
+  background-color: #f9a825 !important;
+}
+.collection-item{
+  background-color:#039be5 !important ;
+}
+.btn.submit{
+  border-radius: 24px;
+  width: 200px !important;
+  margin:30px 0;
+}
+.Mui-selected:focus{
+background-color:#039be5 ;
+}
+.admin .main-container{
+  padding-bottom: 50px !important;
+}
 #root{
   overflow-x: hidden;
 }
@@ -86,7 +100,7 @@ code {
   padding:10px;
   align-items: flex-start;
   flex: 2 1 auto;
-  /* flex-flow: row nowrap; */
+  
 }
 .input-field{
   margin-bottom: 1.5rem;
@@ -114,9 +128,7 @@ code {
 .row .col.offset-m1 {
   margin-left:5%;
 }
-/* nav ul a{
-  font-size: 0.7rem !important;
-} */
+
 
 }
 
@@ -181,9 +193,7 @@ left:50px;
 .MuiAppBar-root,.post-list{
   max-width:240px !important;
 }
-/* .card.notification-div{
-max-width: 120px !important;
-} */
+
 .col.s12.m5.offset-m1.notifications{
   width: 100% !important;
   top:50px;
@@ -282,7 +292,7 @@ nav ul a{
 }
 .main-container.shadow{
   background: #ffffff;
-  opacity: 0.9;
+  opacity: 0.95 !important;
 }
 .card.z-depth-0.post-summary{
 background:#ee6e73;
@@ -352,9 +362,7 @@ margin-bottom:20px !important;
   display: block;
   font-weight:bold;
 }
-/* .myaccount-btn{
-  width:180
-} */
+
 #asterisk{
   color:red;
 }
@@ -437,7 +445,7 @@ margin-right:10px;
   vertical-align:middle;
 }
 #delete-btn,#check-btn{
-  /* position: relative; */
+  
   
   background-color: white;
   color:#000;
@@ -472,15 +480,11 @@ margin-right:10px;
   display: flex;
 }
 .post-link{
-/* width:70%;
-float:left; */
+
 margin-right:20px;
 
 }
-/* #delete{
-  /* width:20%;
-  float:left; */
-/* } */ 
+
 .post-content{
   flex:4 1;
 }
@@ -499,8 +503,8 @@ div.card{
 
 }
 .collection-header{
-background-color: #26a69a !important;
-color: white !important;
+
+color: black !important;
 }
 .collection-item{
   font-weight: bold !important;
@@ -514,7 +518,14 @@ color: white !important;
 .notification-div{
     top: 130px;
     position: fixed;
-    background: rgba(255, 255, 255, 0.8) !important;
+    background-color: #f9a825 !important;
+    opacity:0.95 !important;
+}
+#notification-content{
+  font-size: larger;
+}
+button:focus{
+  background-color:#039be5 !important ;
 }
 
 .admin{
@@ -556,8 +567,19 @@ color: white !important;
 float:right;
 font-size:x-large;
 margin-top:10px;
-bottom:0;
+bottom:60px;
 right:0;
 position:fixed;
 font-weight: bold;
+}
+.input-field>label{
+  color:#039be5 !important;
+}
+#imageupload{
+  height: '50vh';
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+  justify-content: 'center';
+  margin-top:'20px'
 }

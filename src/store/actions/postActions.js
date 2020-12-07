@@ -1,25 +1,24 @@
 export const createPost = (post) => {
-  console.log(post);
+  
     return (dispatch, getState,{getFirebase,getFirestore}) => {
      
       const firestore=getFirestore();
       const profile=getState().firebase.profile;
-      console.log(profile);
-      console.log(getState().firebase.auth)
+      
       const authorId=getState().firebase.auth.uid;
-      console.log(authorId);
+      
       var verified=false;
       firestore.collection('users').doc(authorId).get().then((doc) => {
         if(doc.exists){
          const user = doc.data();
-         console.log(user);
+         
          if(user.image)
           verified=true;
      
           const phoneNumber=user.phoneNumber;
      
           const email=getState().firebase.auth.email;
-          console.log(phoneNumber,email,verified);
+          
           firestore.collection('posts').add({
             ...post,
             liked:false,
@@ -52,11 +51,8 @@ export const createPost = (post) => {
   export const deletePost=(postId)=>{
     return (dispatch,getState,{getFirebase,getFirestore})=>{
       const firestore=getFirestore();
-      const profile=getState().firebase.profile;
-      const authorId=getState().firebase.auth.uid;
-      
       firestore.collection('posts').doc(postId).delete().then(function() {
-        console.log("Document successfully deleted!");
+        
     }).then(()=> {
         dispatch({type:'DELETE_POST', postId});
     }).catch((err)=>{
@@ -66,17 +62,13 @@ export const createPost = (post) => {
   };
 
   export const updatePost = (postId,updatedState) => {
-    console.log(updatedState);
+    
     return (dispatch, getState,{getFirebase,getFirestore}) => {
-      // make async call to database
+     
       
       const firestore=getFirestore();
-      const profile=getState().firebase.profile;
-      const authorId=getState().firebase.auth.uid;
-      let newposts='';
-
-    firestore.collection('posts').doc(postId).set({...updatedState},{ merge: true })
-    //}) 
+      firestore.collection('posts').doc(postId).set({...updatedState},{ merge: true })
+    
           .then(()=>{
         dispatch({ type: 'UPDATE_POST', postId,updatedState});
       }).catch((err)=>{
@@ -88,7 +80,7 @@ export const createPost = (post) => {
   
   export const getAPost = (postId) => {
     return (dispatch, getState, { getFirestore }) => {
-   const firestore = getFirestore()
+    const firestore = getFirestore()
      firestore.collection('posts').doc(postId).get().then((doc) => {
       if(doc.exists){
        const data = doc.data();

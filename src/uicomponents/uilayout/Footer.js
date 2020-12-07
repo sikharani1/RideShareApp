@@ -7,7 +7,7 @@ return (
       <div className="container"></div>
       <div className="footer-copyright">
             <div className="container">
-      <Link to='/' className="brand-logo"><i className="fas fa-car-side"></i>RIDESHARE</Link>
+      <Link to='/' className="brand-logo"><i className="fas fa-car-side"></i> RIDESHARE</Link>
          &nbsp; All rights reserved. © 2020 SIKHA RANI. 
         </div>
       </div>
