@@ -1,0 +1,50 @@
+To run this project
+The initial setup of the project was done using “Create React App” (developed by Facebook) using the 
+
+npx create-react-app “appname” 
+cd “appname”
+
+command which sets up the development environment and will autogenerate the initial files like index.html, index.css, app.js, index.js etc. required for our react app.
+
+Open the editor, go to the terminal and run the command
+npm start
+
+Now, it will run on your localhost:3000 server (where 3000 is the port by default)
+Whenever one makes any changes it will be automatically updated on the localhost and the view will be updated.
+
+To build the project run
+npm run build
+
+The data was stored in the cloud firestore provided by firebase
+
+To setup a new project on firebase
+
+Create an account on firebase. 
+
+Paste the firebase configuration file contents in your config file.
+
+Setup access rules for your database on firebase console.
+
+
+To install the firebase cli 
+npm install -g firebase-tools
+
+To login into your firebase run
+firebase login
+
+To initialize a new firebase project run the command
+firebase init
+
+Now select the desired firebase products to setup in your firebase project like hosting, cloud firestore, real-time database etc.
+ 
+Select a default Firebase project
+
+To deploy the project on firebase 
+First copy all the contents from the build folder to the dist folder (because the distribution folder will be the one which will be deployed)
+
+Then, run command
+firebase deploy
+
+you will get an url where the application is deployed.
+
+I have utilized different node modules in my project for different purposes for example for redux we use the react-redux module to use react redux with firebase we use react-redux-firebase, redux-thunk to delay the dispatch of an action in an asynchronous function. I used external libraries like dompurify for sanitization and validator for validation, moment for date-time formatting, react-geocode and node-geometry-library for rides route mapping, material-ui for using Material UI components, react-router-dom and react-router-hash-link for url linking and routing.
